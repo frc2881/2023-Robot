@@ -6,7 +6,6 @@ package frc.robot.subsystems.drive;
 
 import com.ctre.phoenix.sensors.CANCoder;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.MotorFeedbackSensor;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
@@ -106,10 +105,10 @@ public class SwerveModule {
     m_turningSparkMax.burnFlash();
 
     m_chassisAngularOffset = chassisAngularOffset;
-    m_desiredState.angle = new Rotation2d(m_canCoder.getAbsolutePosition() - m_chassisAngularOffset);
+    m_desiredState.angle = new Rotation2d(m_canCoder.getAbsolutePosition() + m_chassisAngularOffset);
     m_drivingEncoder.setPosition(0);
-    m_turningEncoder.setPosition(m_canCoder.getAbsolutePosition() - m_chassisAngularOffset);
-
+    m_turningEncoder.setPosition(m_canCoder.getAbsolutePosition() + m_chassisAngularOffset);
+    
   }
 
   /**
@@ -162,5 +161,9 @@ public class SwerveModule {
   /** Zeroes all the SwerveModule encoders. */
   public void resetEncoders() {
     m_drivingEncoder.setPosition(0);
+  }
+
+  public double getSteeringPosition(){
+   return m_turningEncoder.getPosition();
   }
 }

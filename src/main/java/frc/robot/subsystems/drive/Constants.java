@@ -4,13 +4,10 @@
 
 package frc.robot.subsystems.drive;
 
-import javax.xml.crypto.KeySelector;
-
 import com.revrobotics.CANSparkMax.IdleMode;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 
 /**
@@ -82,7 +79,7 @@ public final class Constants {
     public static final double kDriveWheelFreeSpeedRps = (kDrivingMotorFreeSpeedRps * kWheelCircumferenceMeters)
         / kDrivingMotorReduction;
 
-    public static final double kSteeringMotorReduction = 7.0/150.0;
+    public static final double kSteeringMotorReduction = 150.0 / 7.0;
 
     public static final double kDrivingEncoderPositionFactor = (kWheelDiameterMeters * Math.PI)
         / kDrivingMotorReduction; // meters
@@ -102,9 +99,9 @@ public final class Constants {
     public static final double kDrivingMinOutput = -1;
     public static final double kDrivingMaxOutput = 1;
 
-    public static final double kTurningP = 0.005;
+    public static final double kTurningP = 2.295;
     public static final double kTurningI = 0;
-    public static final double kTurningD = 0.0005;
+    public static final double kTurningD = 0.2295;
     public static final double kTurningFF = 0;
     public static final double kTurningMinOutput = -1;
     public static final double kTurningMaxOutput = 1;
