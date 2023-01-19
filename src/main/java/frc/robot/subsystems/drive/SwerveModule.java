@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems.drive;
 
+import java.util.concurrent.TimeUnit;
+
 import com.ctre.phoenix.sensors.CANCoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -103,11 +105,16 @@ public class SwerveModule {
     // operation, it will maintain the above configurations.
     m_drivingSparkMax.burnFlash();
     m_turningSparkMax.burnFlash();
-
+    try {
+      TimeUnit.SECONDS.sleep(1);
+    } catch (InterruptedException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
     m_chassisAngularOffset = chassisAngularOffset;
-    m_desiredState.angle = new Rotation2d(m_canCoder.getAbsolutePosition() + m_chassisAngularOffset);
+    m_desiredState.angle = new Rotation2d(Math.toRadians(m_canCoder.getAbsolutePosition()));
     m_drivingEncoder.setPosition(0);
-    m_turningEncoder.setPosition(m_canCoder.getAbsolutePosition() + m_chassisAngularOffset);
+    m_turningEncoder.setPosition(Math.toRadians(m_canCoder.getAbsolutePosition()));
     
   }
 
@@ -163,7 +170,11 @@ public class SwerveModule {
     m_drivingEncoder.setPosition(0);
   }
 
-  public double getSteeringPosition(){
+  public double getSteeringRelativePosition(){
    return m_turningEncoder.getPosition();
+  }
+
+  public double getSteeringAbsolutePosition(){
+    return m_canCoder.getAbsolutePosition();
   }
 }
