@@ -21,25 +21,25 @@ public class Drive extends SubsystemBase {
   private final SwerveModule m_frontLeft = new SwerveModule(
       DriveConstants.kFrontLeftDrivingCanId,
       DriveConstants.kFrontLeftTurningCanId,
-      DriveConstants.kFrontLeftTurningCanId,
+      DriveConstants.kFrontLeftTurningCanId, //TODO Same value for the Turning Can ID, but would be beneficial to make a new constant for it to prevent confusion.
       DriveConstants.kFrontLeftChassisAngularOffset);
 
   private final SwerveModule m_frontRight = new  SwerveModule(
       DriveConstants.kFrontRightDrivingCanId,
       DriveConstants.kFrontRightTurningCanId,
-      DriveConstants.kFrontRightTurningCanId,
+      DriveConstants.kFrontRightTurningCanId, //TODO
       DriveConstants.kFrontRightChassisAngularOffset);
 
   private final SwerveModule m_rearLeft = new  SwerveModule(
       DriveConstants.kRearLeftDrivingCanId,
       DriveConstants.kRearLeftTurningCanId,
-      DriveConstants.kRearLeftTurningCanId,
+      DriveConstants.kRearLeftTurningCanId, //TODO
       DriveConstants.kBackLeftChassisAngularOffset);
 
   private final SwerveModule m_rearRight = new  SwerveModule(
       DriveConstants.kRearRightDrivingCanId,
       DriveConstants.kRearRightTurningCanId,
-      DriveConstants.kRearRightTurningCanId,
+      DriveConstants.kRearRightTurningCanId, //TODO
       DriveConstants.kBackRightChassisAngularOffset);
 
   // The gyro sensor
@@ -80,11 +80,6 @@ public class Drive extends SubsystemBase {
             m_rearRight.getPosition()
         });
 
-        setModuleStates(new SwerveModuleState[]
-                  {new SwerveModuleState(0, new Rotation2d(0)), 
-                    new SwerveModuleState(0, new Rotation2d(0)), 
-                    new SwerveModuleState(0, new Rotation2d(0)), 
-                    new SwerveModuleState(0, new Rotation2d(0))});
   }
 
   /**
