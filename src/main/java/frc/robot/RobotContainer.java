@@ -8,6 +8,8 @@ package frc.robot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.drive.DriveWithJoysticks;
 import frc.robot.subsystems.drive.Drive;
 
@@ -19,11 +21,17 @@ public class RobotContainer {
   private final DriveWithJoysticks m_driveWithJoysticks = new DriveWithJoysticks(
       m_drive,
       () -> applyDeadband(-m_driverController.getLeftY()),
-      () -> applyDeadband(m_driverController.getRightX()));
+      () -> applyDeadband(-m_driverController.getLeftX()),
+      () -> applyDeadband(-m_driverController.getRightX()));
 
   public RobotContainer() {
     configureBindings();
     m_drive.setDefaultCommand(m_driveWithJoysticks);
+
+    new Trigger(m_driverController::getBackButton)
+    // No requirements because we don't need to interrupt anything
+    .whileTrue(new RunCommand(m_drive::zeroHeading, m_drive));
+
   }
 
   public double applyDeadband(double input) {

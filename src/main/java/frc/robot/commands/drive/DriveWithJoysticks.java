@@ -12,25 +12,31 @@ import frc.robot.subsystems.drive.Drive;
 
 public class DriveWithJoysticks extends CommandBase {
   private final Drive m_drive;
-  private final DoubleSupplier m_speed;
-  private final DoubleSupplier m_rotation;
+  private final DoubleSupplier m_translationXSupplier;
+  private final DoubleSupplier m_translationYSupplier;
+  private final DoubleSupplier m_rotationSupplier;
 
-  public DriveWithJoysticks(Drive drive, DoubleSupplier speed, DoubleSupplier rotation) {
+  public DriveWithJoysticks(Drive drive,
+  DoubleSupplier translationXSupplier,
+  DoubleSupplier translationYSupplier,
+  DoubleSupplier rotationSupplier) {
     m_drive = drive;
-    m_speed = speed;
-    m_rotation = rotation;
+    m_translationXSupplier = translationXSupplier;
+    m_translationYSupplier = translationYSupplier;
+    m_rotationSupplier = rotationSupplier;
+
     
     addRequirements(m_drive);
   }
 
   @Override
   public void execute() {
-   // m_drive.arcadeDrive(m_speed.getAsDouble(), m_rotation.getAsDouble());
+   m_drive.drive(m_translationXSupplier.getAsDouble(), m_translationYSupplier.getAsDouble(), m_rotationSupplier.getAsDouble(), true);
   }
 
   @Override
   public void end(boolean interrupted) {
-   // m_drive.arcadeDrive(0.0, 0.0);
+   m_drive.drive(0, 0, 0, true);
   }
 
   @Override
