@@ -26,7 +26,7 @@ public class NavX extends AHRS {
   // to be a positive angle, so this handles that difference.
   @Override
   public double getAngle() {
-    return -super.getAngle();
+    return super.getAngle();
   }
 
   @Override
