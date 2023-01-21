@@ -20,7 +20,6 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     if(Constants.kEnableAllTelemetry){
       LiveWindow.enableAllTelemetry();
-      System.out.println("enable telemetry");
     }
 
     Log.start();
