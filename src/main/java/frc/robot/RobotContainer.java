@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.drive.DriveWithJoysticks;
-import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.Drive;
 
 public class RobotContainer {
   private final XboxController m_driverController = new XboxController(0);

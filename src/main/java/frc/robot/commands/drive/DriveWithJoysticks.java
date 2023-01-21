@@ -8,7 +8,7 @@ package frc.robot.commands.drive;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.drive.Drive;
+import frc.robot.subsystems.Drive;
 
 public class DriveWithJoysticks extends CommandBase {
   private final Drive m_drive;
