@@ -13,6 +13,8 @@ import edu.wpi.first.math.util.Units;
 
 /** Add your docs here. */
 public class Constants {
+    public static final boolean kEnableAllTelemetry = true;
+
     public static final class Arm {
 
     }
