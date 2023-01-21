@@ -70,6 +70,9 @@ public class Drive extends SubsystemBase {
     SmartDashboard.putNumber("Drive/Swerve/RearLeft/SteeringAbsolutePosition", m_rearLeft.getSteeringAbsolutePosition());
     SmartDashboard.putNumber("Drive/Swerve/RearRight/SteeringRelativePosition", m_rearRight.getSteeringRelativePosition());
     SmartDashboard.putNumber("Drive/Swerve/RearRight/SteeringAbsolutePosition", m_rearRight.getSteeringAbsolutePosition());
+    SmartDashboard.putNumber("Drive/NavX/Angle", m_gyro.getAngle());
+    SmartDashboard.putNumber("Drive/NavX/Yaw", m_gyro.getYaw());
+    
     // Update the odometry in the periodic block
     m_odometry.update(
         Rotation2d.fromDegrees(m_gyro.getAngle()),

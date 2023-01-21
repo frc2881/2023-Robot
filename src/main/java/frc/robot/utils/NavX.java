@@ -18,7 +18,7 @@ public class NavX extends AHRS {
 
   @Override
   public float getYaw() {
-    return super.getYaw();
+    return -super.getYaw();
   }
 
   // Override the method for retrieving the angle from the NavX. What the NavX
