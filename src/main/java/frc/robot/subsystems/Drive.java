@@ -119,18 +119,6 @@ public class Drive extends SubsystemBase {
         pose);
   }
   
-  public Command FollowTrajectory (PathPlannerTrajectory path) {
-    return new PPSwerveControllerCommand(
-      path,
-      this::getPose,
-      new PIDController(Constants.Trajectory.xP, Constants.Trajectory.xI, Constants.Trajectory.xD),
-      new PIDController(Constants.Trajectory.yP, Constants.Trajectory.yI, Constants.Trajectory.yD),
-      new PIDController(Constants.Trajectory.tP, Constants.Trajectory.tI, Constants.Trajectory.tD),
-      this::setModuleStates, // Needs to have a supplier
-      true,
-      this 
-      );
-  }
 
   /**
    * Method to drive the robot using joystick info.
