@@ -6,6 +6,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -31,6 +32,10 @@ public class RobotContainer {
     new Trigger(m_driverController::getBackButton)
     // No requirements because we don't need to interrupt anything
     .whileTrue(new RunCommand(m_drive::zeroHeading, m_drive));
+
+    if(Constants.kEnableAllTelemetry){
+      LiveWindow.enableAllTelemetry();
+    }
 
   }
 

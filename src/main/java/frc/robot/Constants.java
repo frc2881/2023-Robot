@@ -1,6 +1,7 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
+// Copyright (c) 2023 FRC Team 2881 - The Lady Cans
+//
+// Open Source Software; you can modify and/or share it under the terms of BSD
+// license file in the root directory of this project.
 
 package frc.robot;
 
@@ -12,15 +13,17 @@ import edu.wpi.first.math.util.Units;
 
 /** Add your docs here. */
 public class Constants {
-    public static final class ArmConstants {
+    public static final boolean kEnableAllTelemetry = true;
+
+    public static final class Arm {
 
     }
 
-    public static final class ClampsConstants {
+    public static final class Clamps {
 
     }
 
-    public static final class DriveConstants {
+    public static final class Drive {
         // Driving Parameters - Note that these are not the maximum capable speeds of
         // the robot, rather the allowed maximum speeds
         public static final double kMaxSpeedMetersPerSecond = 4.8;
@@ -53,6 +56,11 @@ public class Constants {
         public static final int kRearLeftTurningCanId = 4;
         public static final int kFrontRightTurningCanId = 6;
         public static final int kRearRightTurningCanId = 8;
+
+        public static final int kFrontLeftCanCoderId = 2;
+        public static final int kRearLeftCanCoderId = 4;
+        public static final int kFrontRightCanCoderId = 6;
+        public static final int kRearRightCanCoderId = 8;
     
         public static final boolean kGyroReversed = false;
       }
