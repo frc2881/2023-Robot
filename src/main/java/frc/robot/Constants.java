@@ -137,28 +137,19 @@ public class Constants {
       }
 
       public static final class Trajectory {
-    
-        public static final double xP = 0.125;
-    
-        public static final double xI = 0;
-    
-        public static final double xD = 0;
-    
-    
-    
-        public static final double yP = 0.1875;
-    
-        public static final double yI = 0;
-    
-        public static final double yD = 0;
-    
-    
-    
-        public static final double tP = 0;
-    
-        public static final double tI = 0;
-    
-        public static final double tD = 0;
+
+        // X controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
+        // Y controller (usually the same values as X controller)
+        // We are using one set of constants for both PID Controllers
+        public static final double kTrajectoryXYP = 0.04;
+        public static final double kTrajectoryXYI = 0;
+        public static final double kTrajectoryXYD = 0; 
+
+        //TODO tune rotation
+        // Rotation controller. Tune these values for your robot. Leaving them 0 will only use feedforwards.
+        public static final double kTrajectoryRP = 2.295; 
+        public static final double kTrajectoryRI = 0;
+        public static final double kTrajectoryRD = 0.2295;
     
       }
 
