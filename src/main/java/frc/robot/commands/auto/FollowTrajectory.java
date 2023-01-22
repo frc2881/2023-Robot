@@ -4,29 +4,37 @@
 
 package frc.robot.commands.auto;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
+import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 
-public class FollowTrajectory extends CommandBase {
-  /** Creates a new FollowTrajectory. */
-  public FollowTrajectory() {
-    // Use addRequirements() here to declare subsystem dependencies.
-  }
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Constants;
+import frc.robot.subsystems.Drive;
 
-  // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {}
-
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {}
-
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {}
-
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return false;
-  }
+/** Add your docs here. */
+public class FollowTrajectory extends SequentialCommandGroup {
+    public FollowTrajectory (PathPlannerTrajectory trajectory, boolean isFirstPath, Drive drive) {
+        addCommands(
+            new InstantCommand(() -> {
+                // Reset odometry for the first path you run during auto
+                if(isFirstPath){
+                    drive.resetOdometry(new Pose2d());
+                }
+              }),
+            new PPSwerveControllerCommand(
+                trajectory, 
+                drive::getPose, 
+                Constants.Drive.kDriveKinematics, 
+                new PIDController(Constants.Trajectory.kTrajectoryXYP, Constants.Trajectory.kTrajectoryXYI, Constants.Trajectory.kTrajectoryXYD),
+                new PIDController(Constants.Trajectory.kTrajectoryXYP, Constants.Trajectory.kTrajectoryXYI, Constants.Trajectory.kTrajectoryXYD),
+                new PIDController(Constants.Trajectory.kTrajectoryRP, Constants.Trajectory.kTrajectoryRI, Constants.Trajectory.kTrajectoryRD),
+                drive::setModuleStates, 
+                true, 
+                drive
+                )
+        );
+    }
 }
