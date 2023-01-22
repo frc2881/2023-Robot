@@ -28,9 +28,10 @@ public class FollowTrajectory extends SequentialCommandGroup {
                 trajectory, 
                 drive::getPose, 
                 Constants.Drive.kDriveKinematics, 
-                new PIDController(Constants.Trajectory.kTrajectoryXYP, Constants.Trajectory.kTrajectoryXYI, Constants.Trajectory.kTrajectoryXYD),
-                new PIDController(Constants.Trajectory.kTrajectoryXYP, Constants.Trajectory.kTrajectoryXYI, Constants.Trajectory.kTrajectoryXYD),
-                new PIDController(Constants.Trajectory.kTrajectoryRP, Constants.Trajectory.kTrajectoryRI, Constants.Trajectory.kTrajectoryRD),
+                //The PID controllers set to 0 work best since the swerve modules are already being tuned in the Drive PID Controllers.
+                new PIDController(0,0,0),
+                new PIDController(0,0,0),
+                new PIDController(0,0,0),
                 drive::setModuleStates, 
                 true, 
                 drive
