@@ -16,6 +16,7 @@ import com.revrobotics.SparkMaxPIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Constants;
 
 public class SwerveModule {
@@ -106,13 +107,8 @@ public class SwerveModule {
     // operation, it will maintain the above configurations.
     m_drivingSparkMax.burnFlash();
     m_turningSparkMax.burnFlash();
-    try {
-      TimeUnit.SECONDS.sleep(1);
-    } catch (InterruptedException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
-    //m_chassisAngularOffset = chassisAngularOffset;
+    Timer.delay(1);
+    //m_chassisAngularOffset = chassisAngularOffset; //This is commented out because it is already being calculated by the canncoders
     m_desiredState.angle = new Rotation2d(Math.toRadians(m_canCoder.getAbsolutePosition()));
     m_drivingEncoder.setPosition(0);
     m_turningEncoder.setPosition(Math.toRadians(-m_canCoder.getAbsolutePosition()));
