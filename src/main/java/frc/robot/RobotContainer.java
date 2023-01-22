@@ -5,18 +5,22 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.PathPlanner;
+import com.pathplanner.lib.PathPlannerTrajectory;
+
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.auto.FollowTrajectory;
 import frc.robot.commands.drive.DriveWithJoysticks;
 import frc.robot.subsystems.Drive;
 
 public class RobotContainer {
   private final XboxController m_driverController = new XboxController(0);
   private final XboxController m_manipulatorController = new XboxController(1);
+  private final PathPlannerTrajectory simplePath = PathPlanner.loadPath("SimplePath", 1, 1);
   Drive m_drive = new Drive();
 
   private final DriveWithJoysticks m_driveWithJoysticks = new DriveWithJoysticks(
@@ -51,6 +55,6 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    return Commands.print("No autonomous command configured");
+    return new FollowTrajectory(simplePath, true, m_drive);
   }
 }
