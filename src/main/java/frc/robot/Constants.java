@@ -11,6 +11,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
 
+
 /** Add your docs here. */
 public class Constants {
     public static final boolean kEnableAllTelemetry = true;
@@ -76,13 +77,13 @@ public class Constants {
         public static final boolean kTurningEncoderInverted = true;
     
         // Calculations required for driving motor conversion factors and feed forward
-        public static final double kNeoMotorFreeSpeedRpm = 5676;
+        public static final double kNeoMotorFreeSpeedRpm = 5676 * 0.9;
 
         public static final double kDrivingMotorFreeSpeedRps = kNeoMotorFreeSpeedRpm / 60;
-        public static final double kWheelDiameterMeters = 0.0762;
+        public static final double kWheelDiameterMeters = 0.1016; //Units.inchesToMeters(4.0);
         public static final double kWheelCircumferenceMeters = kWheelDiameterMeters * Math.PI;
         // 45 teeth on the wheel's bevel gear, 22 teeth on the first-stage spur gear, 15 teeth on the bevel pinion
-        public static final double kDrivingMotorReduction = (45.0 * 22) / (kDrivingMotorPinionTeeth * 15);
+        public static final double kDrivingMotorReduction = (50.0 * 17.0 * 45.0) / (kDrivingMotorPinionTeeth * 27.0 * 15.0);
         public static final double kDriveWheelFreeSpeedRps = (kDrivingMotorFreeSpeedRps * kWheelCircumferenceMeters)
             / kDrivingMotorReduction;
     
@@ -99,9 +100,9 @@ public class Constants {
         public static final double kTurningEncoderPositionPIDMinInput = 0; // radians
         public static final double kTurningEncoderPositionPIDMaxInput = kTurningEncoderPositionFactor; // radians
     
-        public static final double kDrivingP = 0.04;
+        public static final double kDrivingP = 0.0; // TODO: Tune PID
         public static final double kDrivingI = 0;
-        public static final double kDrivingD = 0;
+        public static final double kDrivingD = 0.0;
         public static final double kDrivingFF = 1 / kDriveWheelFreeSpeedRps;
         public static final double kDrivingMinOutput = -1;
         public static final double kDrivingMaxOutput = 1;

@@ -17,6 +17,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 
 public class SwerveModule {
@@ -156,6 +157,8 @@ public class SwerveModule {
         new Rotation2d(-m_turningEncoder.getPosition()));
 
     // Command driving and turning SPARKS MAX towards their respective setpoints.
+    m_drivingPIDController.setP(SmartDashboard.getNumber("P", Constants.SwerveModule.kDrivingP));
+    m_drivingPIDController.setD(SmartDashboard.getNumber("D", Constants.SwerveModule.kDrivingD));
     m_drivingPIDController.setReference(-optimizedDesiredState.speedMetersPerSecond, CANSparkMax.ControlType.kVelocity);
     m_turningPIDController.setReference(-optimizedDesiredState.angle.getRadians(), CANSparkMax.ControlType.kPosition);
 
@@ -173,5 +176,13 @@ public class SwerveModule {
 
   public double getSteeringAbsolutePosition(){
     return m_canCoder.getAbsolutePosition();
+  }
+
+  public double getDrivingRelativePosition(){
+    return m_drivingEncoder.getPosition();
+  }
+
+  public double getDrivingVelocity(){
+    return m_drivingEncoder.getVelocity();
   }
 }
