@@ -6,16 +6,21 @@
 package frc.robot.commands.suction;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.Suction;
 
 public class ReleaseSuction extends CommandBase {
+  private Suction m_suction;
   /** Creates a new ReleaseSuction. */
-  public ReleaseSuction() {
+  public ReleaseSuction(Suction suction) {
+    this.m_suction = suction;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    m_suction.release();
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override

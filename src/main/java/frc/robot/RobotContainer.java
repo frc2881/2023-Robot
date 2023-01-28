@@ -12,16 +12,21 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.auto.FollowTrajectory;
 import frc.robot.commands.drive.DriveWithJoysticks;
+import frc.robot.commands.suction.ReleaseSuction;
+import frc.robot.commands.suction.RunSuction;
 import frc.robot.subsystems.Drive;
+import frc.robot.subsystems.Suction;
 
 public class RobotContainer {
   private final XboxController m_driverController = new XboxController(0);
   private final XboxController m_manipulatorController = new XboxController(1);
   private final PathPlannerTrajectory simplePath = PathPlanner.loadPath("SimplePath", 1, 1);
   Drive m_drive = new Drive();
+  Suction m_suction = new Suction();
 
   private final DriveWithJoysticks m_driveWithJoysticks = new DriveWithJoysticks(
       m_drive,
@@ -52,6 +57,13 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
+
+    new JoystickButton(m_manipulatorController, XboxController.Button.kA.value).
+    whileTrue(new RunSuction(m_suction));
+
+    new JoystickButton(m_manipulatorController, XboxController.Button.kB.value).
+    whileTrue(new ReleaseSuction(m_suction));
+
   }
 
   public Command getAutonomousCommand() {
