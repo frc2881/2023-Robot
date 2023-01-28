@@ -5,8 +5,6 @@
 
 package frc.robot.utils;
 
-import java.util.concurrent.TimeUnit;
-
 import com.ctre.phoenix.sensors.CANCoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -49,6 +47,10 @@ public class SwerveModule {
     m_drivingSparkMax.restoreFactoryDefaults();
     m_turningSparkMax.restoreFactoryDefaults();
 
+    // SDS Module is inverted relative to the MAXSwerve
+    m_drivingSparkMax.setInverted(true);;
+    m_turningSparkMax.setInverted(true);;
+
     // Setup encoders and PID controllers for the driving and turning SPARKS MAX.
     m_drivingEncoder = m_drivingSparkMax.getEncoder();
     m_turningEncoder = m_turningSparkMax.getEncoder();
@@ -56,6 +58,7 @@ public class SwerveModule {
     m_drivingPIDController = m_drivingSparkMax.getPIDController();
     m_turningPIDController = m_turningSparkMax.getPIDController();
     m_drivingPIDController.setFeedbackDevice(m_drivingEncoder);
+    m_turningPIDController.setFeedbackDevice(m_turningEncoder);
 
     // Apply position and velocity conversion factors for the driving encoder. The
     // native units for position and velocity are rotations and RPM, respectively,
@@ -68,10 +71,6 @@ public class SwerveModule {
     // APIs.
     m_turningEncoder.setPositionConversionFactor(Constants.SwerveModule.kTurningEncoderPositionFactor);
     m_turningEncoder.setVelocityConversionFactor(Constants.SwerveModule.kTurningEncoderVelocityFactor);
-
-    // Invert the turning encoder, since the output shaft rotates in the opposite direction of
-    // the steering motor in the MAXSwerve Module.
-    //m_turningEncoder.setInverted(ModuleConstants.kTurningEncoderInverted);
 
     // Enable PID wrap around for the turning motor. This will allow the PID
     // controller to go through 0 to get to the setpoint i.e. going from 350 degrees
@@ -108,11 +107,15 @@ public class SwerveModule {
     // operation, it will maintain the above configurations.
     m_drivingSparkMax.burnFlash();
     m_turningSparkMax.burnFlash();
+
+    // This allows time for the absolute position to be sent by the CANcoder (we know this isn't the best solution, we'll fix it later)
     Timer.delay(1);
-    //m_chassisAngularOffset = chassisAngularOffset; //This is commented out because it is already being calculated by the canncoders
+
+    // This is commented out because it is already being calculated by the CANcoder
+    // m_chassisAngularOffset = chassisAngularOffset; 
     m_desiredState.angle = new Rotation2d(Math.toRadians(m_canCoder.getAbsolutePosition()));
     m_drivingEncoder.setPosition(0);
-    m_turningEncoder.setPosition(Math.toRadians(-m_canCoder.getAbsolutePosition()));
+    m_turningEncoder.setPosition(Math.toRadians(m_canCoder.getAbsolutePosition()));
     
   }
 
@@ -125,7 +128,7 @@ public class SwerveModule {
     // Apply chassis angular offset to the encoder position to get the position
     // relative to the chassis.
     return new SwerveModuleState(m_drivingEncoder.getVelocity(),
-        new Rotation2d(-m_turningEncoder.getPosition() - m_chassisAngularOffset));
+        new Rotation2d(m_turningEncoder.getPosition() - m_chassisAngularOffset));
   }
 
   /**
@@ -138,7 +141,7 @@ public class SwerveModule {
     // relative to the chassis.
     return new SwerveModulePosition(
         m_drivingEncoder.getPosition(),
-        new Rotation2d(-m_turningEncoder.getPosition() - m_chassisAngularOffset));
+        new Rotation2d(m_turningEncoder.getPosition() - m_chassisAngularOffset));
   }
 
   /**
@@ -154,15 +157,16 @@ public class SwerveModule {
 
     // Optimize the reference state to avoid spinning further than 90 degrees.
     SwerveModuleState optimizedDesiredState = SwerveModuleState.optimize(correctedDesiredState,
-        new Rotation2d(-m_turningEncoder.getPosition()));
+        new Rotation2d(m_turningEncoder.getPosition()));
 
     // Command driving and turning SPARKS MAX towards their respective setpoints.
     m_drivingPIDController.setP(SmartDashboard.getNumber("P", Constants.SwerveModule.kDrivingP));
     m_drivingPIDController.setD(SmartDashboard.getNumber("D", Constants.SwerveModule.kDrivingD));
-    m_drivingPIDController.setReference(-optimizedDesiredState.speedMetersPerSecond, CANSparkMax.ControlType.kVelocity);
-    m_turningPIDController.setReference(-optimizedDesiredState.angle.getRadians(), CANSparkMax.ControlType.kPosition);
+    m_drivingPIDController.setReference(optimizedDesiredState.speedMetersPerSecond, CANSparkMax.ControlType.kVelocity);
+    m_turningPIDController.setReference(optimizedDesiredState.angle.getRadians(), CANSparkMax.ControlType.kPosition);
 
     m_desiredState = desiredState;
+
   }
 
   /** Zeroes all the SwerveModule encoders. */
@@ -171,7 +175,7 @@ public class SwerveModule {
   }
 
   public double getSteeringRelativePosition(){
-   return -m_turningEncoder.getPosition();
+   return m_turningEncoder.getPosition();
   }
 
   public double getSteeringAbsolutePosition(){
