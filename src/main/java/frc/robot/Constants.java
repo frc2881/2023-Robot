@@ -130,14 +130,24 @@ public class Constants {
 
     public static final class Suction {
         /**
-         * The CAN ID of the suction motor.
+         * The CAN ID of the first suction motor.
          */
-        public static final int kMotorId = 40;
+        public static final int kMotor1Id = 40;
 
         /**
-         * The pneumatic hub channel ID of the suction solenoid.
+         * The CAN ID of the second suction motor.
          */
-        public static final int kSolenoidId = 0;
+        public static final int kMotor2Id = 41; //TODO check the actual ID number
+
+        /**
+         * The pneumatic hub channel ID of the first suction solenoid.
+         */
+        public static final int kSolenoid1Id = 0;
+
+        /**
+         * The pneumatic hub channel ID of the second suction solenoid.
+         */
+        public static final int kSolenoid2Id = 1;
 
         /**
          * The maximum current to send to the suction motor.
@@ -147,7 +157,7 @@ public class Constants {
         /**
          * The maximum speed that the suction motor runs.
          */
-        public static final double kMaxSpeed = 0.50;
+        public static final double kMaxSpeed = 0.25;
       }
 
       public static final class VisionTracking {
