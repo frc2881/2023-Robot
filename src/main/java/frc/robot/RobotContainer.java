@@ -23,7 +23,7 @@ import frc.robot.commands.auto.FollowTrajectory;
 import frc.robot.commands.drive.DriveWithJoysticks;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Suction;
-
+import frc.robot.subsystems.Arm;
 import frc.robot.utils.Log;
 
 public class RobotContainer {
@@ -31,7 +31,8 @@ public class RobotContainer {
   private final XboxController m_manipulatorController = new XboxController(1);
   private final PathPlannerTrajectory simplePath = PathPlanner.loadPath("SimplePath", 1, 1);
   Drive m_drive = new Drive();
-  //Suction m_suction = new Suction();
+  Suction m_suction = new Suction();
+  Arm m_arm = new Arm();
 
   private final DriveWithJoysticks m_driveWithJoysticks = new DriveWithJoysticks(
       m_drive,
@@ -78,12 +79,17 @@ public class RobotContainer {
       .whileTrue(new RunCommand(m_drive::zeroHeading, m_drive));
 
     //MANIPULATOR
-    /*new Trigger(m_manipulatorController::getAButtonPressed)
+    new Trigger(m_manipulatorController::getAButtonPressed)
       .onTrue(new InstantCommand(() -> { m_suction.enable(); }));
 
     new Trigger(m_manipulatorController::getBButtonPressed)
-      .onTrue(new InstantCommand(() -> { m_suction.disable(); }));*/
+      .onTrue(new InstantCommand(() -> { m_suction.disable(); }));
 
+    new Trigger(m_manipulatorController::getYButtonPressed)
+      .whileTrue(new InstantCommand(() -> { m_arm.extend(0.2); }));
+
+    new Trigger(m_manipulatorController::getXButtonPressed)
+      .whileTrue(new InstantCommand(() -> { m_arm.retract(0.2); }));
   }
 
   public Command getAutonomousCommand() {

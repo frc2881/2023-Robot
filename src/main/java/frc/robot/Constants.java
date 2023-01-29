@@ -17,7 +17,10 @@ public class Constants {
     public static final boolean kEnableAllTelemetry = true;
 
     public static final class Arm {
-
+        /**
+         * The CAN ID of the extension motor.
+         */
+        public static final int kExtensionMotorId = 41;
     }
 
     public static final class Clamps {

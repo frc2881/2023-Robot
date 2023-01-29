@@ -12,10 +12,11 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Arm extends SubsystemBase {
-  private final CANSparkMax m_extendarm;
+  private final CANSparkMax m_extensionMotor;
+
   /** Creates a new Arm. */
   public Arm() {
-    m_extendarm = new CANSparkMax(Constants.Arm.kArmMotor, MotorType.kBrushless);
+    m_extensionMotor = new CANSparkMax(Constants.Arm.kExtensionMotorId, MotorType.kBrushless);
   }
 
   @Override
@@ -23,7 +24,11 @@ public class Arm extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
-  public void extendArm(double speed) {
-    m_extendarm.set(speed);
+  public void extend(double speed) {
+    m_extensionMotor.set(speed);
+  }
+
+  public void retract(double speed) {
+    m_extensionMotor.set(-speed);
   }
 }
