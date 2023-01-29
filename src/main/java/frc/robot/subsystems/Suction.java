@@ -13,6 +13,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -23,6 +24,9 @@ public class Suction extends SubsystemBase {
   //private final CANSparkMax m_motor2;
   private final Solenoid m_solenoid1;
   //private final Solenoid m_solenoid2;
+  private boolean m_isEnabled = false;
+  private boolean m_hasVacuum = false;
+  
 
   public Suction() {
     m_motor1 = new CANSparkMax(Constants.Suction.kMotor1Id, MotorType.kBrushless);
@@ -45,29 +49,46 @@ public class Suction extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    double pressure1 = m_pneumaticHub.getPressure(Constants.Suction.kPressureSensor1Id);
+    //double pressure2 = m_pneumaticHub.getPressure(Constants.Suction.kPressureSensor2Id);
+    double pressure = pressure1;
+
+    //Automated reenabling of the suction system
+    if (m_isEnabled) {
+      m_solenoid1.set(false);
+      //m_solenoid2.set(false);
+      if (!m_hasVacuum) {
+        if (pressure > Constants.Suction.kTargetPressure) {
+          m_motor1.set(Constants.Suction.kMaxSpeed);
+          //m_motor2.set(Constants.Suction.kMaxSpeed);
+        } else {
+          m_motor1.set(0);
+          //m_motor2.set(0);
+          m_hasVacuum = true;
+        }
+      } else {
+        if (pressure > Constants.Suction.kMinimumPressure) {
+          m_hasVacuum = false;
+        }
+      }
+    } else {
+      m_motor1.set(0);
+      //m_motor2.set(0);
+      m_solenoid1.set(true);
+      //m_solenoid2.set(true);
+      m_hasVacuum = false;
+    }
+
+    SmartDashboard.putNumber("Suction/Pressure/0", pressure);
+    SmartDashboard.putNumber("Suction/Pressure/1", pressure1);
+    //SmartDashboard.putNumber("Suction/Pressure/2", pressure2);
   }
 
-  public void run(double speed) {
-    speed = speed > Constants.Suction.kMaxSpeed ? Constants.Suction.kMaxSpeed : speed;
-    m_solenoid1.set(false);
-    //m_solenoid2.set(false);
-    m_motor1.set(speed);
-    //m_motor2.set(speed);
+  public void enable() {  
+    m_isEnabled = true;
   }
 
-  public void release() {
-    m_motor1.set(0);
-    //m_motor2.set(0);
-    m_solenoid1.set(true);
-    //m_solenoid2.set(true);
+  public void disable() {
+    m_isEnabled = false;
   }
-
-  public void reset() {
-    m_motor1.set(0);
-    //m_motor2.set(0);
-    m_solenoid1.set(false);
-    //m_solenoid2.set(false);
-  }
-
 }

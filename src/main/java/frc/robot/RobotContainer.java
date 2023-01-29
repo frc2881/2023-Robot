@@ -9,15 +9,12 @@ import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.auto.FollowTrajectory;
 import frc.robot.commands.drive.DriveWithJoysticks;
-import frc.robot.commands.suction.ReleaseSuction;
-import frc.robot.commands.suction.RunSuction;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Suction;
 
@@ -35,17 +32,8 @@ public class RobotContainer {
       () -> applyDeadband(-m_driverController.getRightX()));
 
   public RobotContainer() {
-    configureBindings();
+    configureControllers();
     m_drive.setDefaultCommand(m_driveWithJoysticks);
-
-    new Trigger(m_driverController::getBackButton)
-    // No requirements because we don't need to interrupt anything
-    .whileTrue(new RunCommand(m_drive::zeroHeading, m_drive));
-
-    if(Constants.kEnableAllTelemetry){
-      LiveWindow.enableAllTelemetry();
-    }
-
   }
 
   public double applyDeadband(double input) {
@@ -56,13 +44,18 @@ public class RobotContainer {
     }
   }
 
-  private void configureBindings() {
+  private void configureControllers() {
 
-    new JoystickButton(m_manipulatorController, XboxController.Button.kA.value).
-    whileTrue(new RunSuction(m_suction));
+    //DRIVER
+    new Trigger(m_driverController::getBackButton)
+      .whileTrue(new RunCommand(m_drive::zeroHeading, m_drive));
 
-    new JoystickButton(m_manipulatorController, XboxController.Button.kB.value).
-    whileTrue(new ReleaseSuction(m_suction));
+    //MANIPULATOR
+    new Trigger(m_manipulatorController::getAButtonPressed)
+      .onTrue(new InstantCommand(() -> { m_suction.enable(); }));
+
+    new Trigger(m_manipulatorController::getBButtonPressed)
+      .onTrue(new InstantCommand(() -> { m_suction.disable(); }));
 
   }
 

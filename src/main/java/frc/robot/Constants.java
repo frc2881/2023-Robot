@@ -157,7 +157,28 @@ public class Constants {
         /**
          * The maximum speed that the suction motor runs.
          */
-        public static final double kMaxSpeed = 0.25;
+        public static final double kMaxSpeed = 0.33;
+
+        /**
+         * The pneumatic hub channel ID of the first pressure sensor.
+         */
+        public static final int kPressureSensor1Id = 0;
+
+        /**
+         * The pneumatic hub channel ID of the first pressure sensor.
+         */
+        public static final int kPressureSensor2Id = 1;
+
+        /*
+         * The target pressure for vacuum state
+         */
+        public static final double kTargetPressure = 17;
+
+        /*
+         * The minimum pressure for vacuum state
+         */
+        public static final double kMinimumPressure = 20;
+
       }
 
       public static final class VisionTracking {
