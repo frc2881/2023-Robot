@@ -22,6 +22,8 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 import frc.robot.commands.auto.FollowTrajectory;
 import frc.robot.commands.drive.DriveWithJoysticks;
+import frc.robot.commands.suction.DisableSuction;
+import frc.robot.commands.suction.EnableSuction;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Suction;
 import frc.robot.subsystems.Arm;
@@ -75,10 +77,10 @@ public class RobotContainer {
 
     //MANIPULATOR
     new JoystickButton(m_manipulatorController, XboxController.Button.kA.value)
-      .onTrue(new InstantCommand(() -> { m_suction.enable(); }));
+      .onTrue(new EnableSuction(m_suction));
 
     new JoystickButton(m_manipulatorController, XboxController.Button.kB.value)
-      .onTrue(new InstantCommand(() -> { m_suction.disable(); }));
+      .onTrue(new DisableSuction(m_suction));
 
     new JoystickButton(m_manipulatorController, XboxController.Button.kY.value)
       .whileTrue(new ExtendArm(m_arm, 0));
