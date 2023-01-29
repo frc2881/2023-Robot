@@ -23,7 +23,7 @@ public class RobotContainer {
   private final XboxController m_manipulatorController = new XboxController(1);
   private final PathPlannerTrajectory simplePath = PathPlanner.loadPath("SimplePath", 1, 1);
   Drive m_drive = new Drive();
-  Suction m_suction = new Suction();
+  //Suction m_suction = new Suction();
 
   private final DriveWithJoysticks m_driveWithJoysticks = new DriveWithJoysticks(
       m_drive,
@@ -51,16 +51,16 @@ public class RobotContainer {
       .whileTrue(new RunCommand(m_drive::zeroHeading, m_drive));
 
     //MANIPULATOR
-    new Trigger(m_manipulatorController::getAButtonPressed)
+    /*new Trigger(m_manipulatorController::getAButtonPressed)
       .onTrue(new InstantCommand(() -> { m_suction.enable(); }));
 
     new Trigger(m_manipulatorController::getBButtonPressed)
-      .onTrue(new InstantCommand(() -> { m_suction.disable(); }));
+      .onTrue(new InstantCommand(() -> { m_suction.disable(); }));*/
 
   }
 
   public Command getAutonomousCommand() {
-    return new DriveWithJoysticks(m_drive, () -> -1.0/Constants.Drive.kMaxSpeedMetersPerSecond, () -> 0, () -> 0);
-    //return new FollowTrajectory(simplePath, true, m_drive);
+    //return new DriveWithJoysticks(m_drive, () -> -1.0/Constants.Drive.kMaxSpeedMetersPerSecond, () -> 0, () -> 0);
+    return new FollowTrajectory(simplePath, true, m_drive);
   }
 }
