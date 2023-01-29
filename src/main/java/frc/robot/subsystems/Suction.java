@@ -19,7 +19,7 @@ import frc.robot.Constants;
 
 public class Suction extends SubsystemBase {
   
-  private final PneumaticHub m_pneumaticHub = new PneumaticHub();
+  private final PneumaticHub m_pneumaticHub;
   private final CANSparkMax m_motor1;
   //private final CANSparkMax m_motor2;
   private final Solenoid m_solenoid1;
@@ -29,6 +29,7 @@ public class Suction extends SubsystemBase {
   
 
   public Suction() {
+    m_pneumaticHub = new PneumaticHub();
     m_motor1 = new CANSparkMax(Constants.Suction.kMotor1Id, MotorType.kBrushless);
     m_motor1.restoreFactoryDefaults();
     m_motor1.setInverted(false);
