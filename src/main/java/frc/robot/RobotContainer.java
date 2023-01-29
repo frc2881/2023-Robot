@@ -55,7 +55,7 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    //return new DriveWithJoysticks(m_drive, () -> 1.0/Constants.Drive.kMaxSpeedMetersPerSecond, () -> 0, () -> 0);
-    return new FollowTrajectory(simplePath, true, m_drive);
+    return new DriveWithJoysticks(m_drive, () -> -1.0/Constants.Drive.kMaxSpeedMetersPerSecond, () -> 0, () -> 0);
+    //return new FollowTrajectory(simplePath, true, m_drive);
   }
 }

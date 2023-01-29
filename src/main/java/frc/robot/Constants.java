@@ -80,7 +80,7 @@ public class Constants {
         public static final double kNeoMotorFreeSpeedRpm = 5676 * 0.9;
 
         public static final double kDrivingMotorFreeSpeedRps = kNeoMotorFreeSpeedRpm / 60;
-        public static final double kWheelDiameterMeters = 0.09652; // 0.1016; //Units.inchesToMeters(4.0);
+        public static final double kWheelDiameterMeters = 0.1016; // 3 : 0.0762; // 3.75 : 0.09525; //3.8 : 0.09652; // 4 : 0.1016; //Units.inchesToMeters(4.0);
         public static final double kWheelCircumferenceMeters = kWheelDiameterMeters * Math.PI;
         // 45 teeth on the wheel's bevel gear, 22 teeth on the first-stage spur gear, 15 teeth on the bevel pinion
         public static final double kDrivingMotorReduction = (50.0 * 17.0 * 45.0) / (kDrivingMotorPinionTeeth * 27.0 * 15.0);
