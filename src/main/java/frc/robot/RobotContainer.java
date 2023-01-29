@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 import frc.robot.commands.auto.FollowTrajectory;
@@ -24,6 +25,8 @@ import frc.robot.commands.drive.DriveWithJoysticks;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Suction;
 import frc.robot.subsystems.Arm;
+import frc.robot.commands.arm.ExtendArm;
+import frc.robot.commands.arm.RetractArm;
 import frc.robot.utils.Log;
 
 public class RobotContainer {
@@ -42,15 +45,8 @@ public class RobotContainer {
 
   public RobotContainer() {
     configureControllers();
+
     m_drive.setDefaultCommand(m_driveWithJoysticks);
-
-    new Trigger(m_driverController::getBackButton)
-    // No requirements because we don't need to interrupt anything
-    .whileTrue(new RunCommand(m_drive::zeroHeading, m_drive));
-
-    if(Constants.kEnableAllTelemetry){
-      LiveWindow.enableAllTelemetry();
-    }
 
     CommandScheduler.getInstance().
       onCommandInitialize(command -> Log.init(command));
@@ -59,9 +55,8 @@ public class RobotContainer {
     CommandScheduler.getInstance().
       onCommandFinish(command -> Log.end(command, false));
 
-      DataLogManager.start();
-      DriverStation.startDataLog(DataLogManager.getLog());
-
+    DataLogManager.start();
+    DriverStation.startDataLog(DataLogManager.getLog());
   }
 
   public double applyDeadband(double input) {
@@ -75,21 +70,21 @@ public class RobotContainer {
   private void configureControllers() {
 
     //DRIVER
-    new Trigger(m_driverController::getBackButton)
-      .whileTrue(new RunCommand(m_drive::zeroHeading, m_drive));
+    new JoystickButton(m_driverController, XboxController.Button.kBack.value)
+      .onTrue(new RunCommand(m_drive::zeroHeading, m_drive));
 
     //MANIPULATOR
-    new Trigger(m_manipulatorController::getAButtonPressed)
+    new JoystickButton(m_manipulatorController, XboxController.Button.kA.value)
       .onTrue(new InstantCommand(() -> { m_suction.enable(); }));
 
-    new Trigger(m_manipulatorController::getBButtonPressed)
+    new JoystickButton(m_manipulatorController, XboxController.Button.kB.value)
       .onTrue(new InstantCommand(() -> { m_suction.disable(); }));
 
-    new Trigger(m_manipulatorController::getYButtonPressed)
-      .whileTrue(new InstantCommand(() -> { m_arm.extend(0.2); }));
+    new JoystickButton(m_manipulatorController, XboxController.Button.kY.value)
+      .whileTrue(new ExtendArm(m_arm, 0));
 
-    new Trigger(m_manipulatorController::getXButtonPressed)
-      .whileTrue(new InstantCommand(() -> { m_arm.retract(0.2); }));
+    new JoystickButton(m_manipulatorController, XboxController.Button.kX.value)
+      .whileTrue(new RetractArm(m_arm, 0));
   }
 
   public Command getAutonomousCommand() {
