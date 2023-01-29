@@ -5,14 +5,30 @@
 
 package frc.robot.subsystems;
 
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class Arm extends SubsystemBase {
+  private final CANSparkMax m_extensionMotor;
+
   /** Creates a new Arm. */
-  public Arm() {}
+  public Arm() {
+    m_extensionMotor = new CANSparkMax(Constants.Arm.kExtensionMotorId, MotorType.kBrushless);
+  }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+  }
+
+  public void extend(double speed) {
+    m_extensionMotor.set(speed);
+  }
+
+  public void retract(double speed) {
+    m_extensionMotor.set(-speed);
   }
 }

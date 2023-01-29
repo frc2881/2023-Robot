@@ -17,13 +17,18 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 import frc.robot.commands.auto.FollowTrajectory;
 import frc.robot.commands.drive.DriveWithJoysticks;
+import frc.robot.commands.suction.DisableSuction;
+import frc.robot.commands.suction.EnableSuction;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Suction;
-
+import frc.robot.subsystems.Arm;
+import frc.robot.commands.arm.ExtendArm;
+import frc.robot.commands.arm.RetractArm;
 import frc.robot.utils.Log;
 
 public class RobotContainer {
@@ -31,7 +36,8 @@ public class RobotContainer {
   private final XboxController m_manipulatorController = new XboxController(1);
   private final PathPlannerTrajectory simplePath = PathPlanner.loadPath("SimplePath", 1, 1);
   Drive m_drive = new Drive();
-  //Suction m_suction = new Suction();
+  Suction m_suction = new Suction();
+  Arm m_arm = new Arm();
 
   private final DriveWithJoysticks m_driveWithJoysticks = new DriveWithJoysticks(
       m_drive,
@@ -41,15 +47,8 @@ public class RobotContainer {
 
   public RobotContainer() {
     configureControllers();
+
     m_drive.setDefaultCommand(m_driveWithJoysticks);
-
-    new Trigger(m_driverController::getBackButton)
-    // No requirements because we don't need to interrupt anything
-    .whileTrue(new RunCommand(m_drive::zeroHeading, m_drive));
-
-    if(Constants.kEnableAllTelemetry){
-      LiveWindow.enableAllTelemetry();
-    }
 
     CommandScheduler.getInstance().
       onCommandInitialize(command -> Log.init(command));
@@ -58,9 +57,8 @@ public class RobotContainer {
     CommandScheduler.getInstance().
       onCommandFinish(command -> Log.end(command, false));
 
-      DataLogManager.start();
-      DriverStation.startDataLog(DataLogManager.getLog());
-
+    DataLogManager.start();
+    DriverStation.startDataLog(DataLogManager.getLog());
   }
 
   public double applyDeadband(double input) {
@@ -74,16 +72,21 @@ public class RobotContainer {
   private void configureControllers() {
 
     //DRIVER
-    new Trigger(m_driverController::getBackButton)
-      .whileTrue(new RunCommand(m_drive::zeroHeading, m_drive));
+    new JoystickButton(m_driverController, XboxController.Button.kBack.value)
+      .onTrue(new RunCommand(m_drive::zeroHeading, m_drive));
 
     //MANIPULATOR
-    /*new Trigger(m_manipulatorController::getAButtonPressed)
-      .onTrue(new InstantCommand(() -> { m_suction.enable(); }));
+    new JoystickButton(m_manipulatorController, XboxController.Button.kA.value)
+      .onTrue(new EnableSuction(m_suction));
 
-    new Trigger(m_manipulatorController::getBButtonPressed)
-      .onTrue(new InstantCommand(() -> { m_suction.disable(); }));*/
+    new JoystickButton(m_manipulatorController, XboxController.Button.kB.value)
+      .onTrue(new DisableSuction(m_suction));
 
+    new JoystickButton(m_manipulatorController, XboxController.Button.kY.value)
+      .whileTrue(new ExtendArm(m_arm, 0));
+
+    new JoystickButton(m_manipulatorController, XboxController.Button.kX.value)
+      .whileTrue(new RetractArm(m_arm, 0));
   }
 
   public Command getAutonomousCommand() {

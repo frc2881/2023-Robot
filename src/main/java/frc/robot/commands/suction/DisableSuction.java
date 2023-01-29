@@ -3,25 +3,23 @@
 // Open Source Software; you can modify and/or share it under the terms of BSD
 // license file in the root directory of this project.
 
-package frc.robot.commands.arm;
+package frc.robot.commands.suction;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Arm;
+import frc.robot.subsystems.Suction;
 
-public class ExtendArm extends CommandBase {
-  private Arm m_arm;
-  private double m_position;
-  /** Creates a new Lower. */
-  public ExtendArm(Arm arm, double position) {
-    // Use addRequirements() here to declare subsystem dependencies.
-    m_arm = arm;
-    m_position = position;
+public class DisableSuction extends CommandBase {
+  private Suction m_suction;
+
+  public DisableSuction(Suction suction) {
+    addRequirements(suction);
+    m_suction = suction;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_arm.extend(0.5);
+    m_suction.disable();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -30,9 +28,7 @@ public class ExtendArm extends CommandBase {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    m_arm.extend(0);
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override
