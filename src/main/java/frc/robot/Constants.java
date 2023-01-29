@@ -128,7 +128,56 @@ public class Constants {
 
       }
 
-      public static final class Suction {
+    public static final class Suction {
+        /**
+         * The CAN ID of the first suction motor.
+         */
+        public static final int kMotor1Id = 40;
+
+        /**
+         * The CAN ID of the second suction motor.
+         */
+        public static final int kMotor2Id = 41; //TODO check the actual ID number
+
+        /**
+         * The pneumatic hub channel ID of the first suction solenoid.
+         */
+        public static final int kSolenoid1Id = 0;
+
+        /**
+         * The pneumatic hub channel ID of the second suction solenoid.
+         */
+        public static final int kSolenoid2Id = 1;
+
+        /**
+         * The maximum current to send to the suction motor.
+         */
+        public static final int kCurrentLimit = 30;
+
+        /**
+         * The maximum speed that the suction motor runs.
+         */
+        public static final double kMaxSpeed = 0.33;
+
+        /**
+         * The pneumatic hub channel ID of the first pressure sensor.
+         */
+        public static final int kPressureSensor1Id = 0;
+
+        /**
+         * The pneumatic hub channel ID of the first pressure sensor.
+         */
+        public static final int kPressureSensor2Id = 1;
+
+        /*
+         * The target pressure for vacuum state
+         */
+        public static final double kTargetPressure = 17;
+
+        /*
+         * The minimum pressure for vacuum state
+         */
+        public static final double kMinimumPressure = 20;
 
       }
 
