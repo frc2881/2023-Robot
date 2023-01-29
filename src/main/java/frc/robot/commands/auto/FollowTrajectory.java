@@ -9,6 +9,7 @@ import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
@@ -17,6 +18,12 @@ import frc.robot.subsystems.Drive;
 /** Add your docs here. */
 public class FollowTrajectory extends SequentialCommandGroup {
     public FollowTrajectory (PathPlannerTrajectory trajectory, boolean isFirstPath, Drive drive) {
+        PIDController xPidController = new PIDController(0.01, 0, 0);
+        PIDController yPidController = new PIDController(0.01, 0, 0);
+        PIDController tPidController = new PIDController(5, 0, 0);
+        SmartDashboard.putData("X PID",xPidController);
+        SmartDashboard.putData("Y PID",yPidController);
+        SmartDashboard.putData("Theta PID",tPidController);
         addCommands(
             new InstantCommand(() -> {
                 // Reset odometry for the first path you run during auto
@@ -29,9 +36,9 @@ public class FollowTrajectory extends SequentialCommandGroup {
                 drive::getPose, 
                 Constants.Drive.kDriveKinematics, 
                 //The PID controllers set to 0 work best since the swerve modules are already being tuned in the Drive PID Controllers.
-                new PIDController(0,0,0),
-                new PIDController(0,0,0),
-                new PIDController(0,0,0),
+                xPidController,
+                yPidController,
+                tPidController,
                 drive::setModuleStates, 
                 true, 
                 drive

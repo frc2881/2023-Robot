@@ -13,6 +13,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -48,6 +49,8 @@ public class Drive extends SubsystemBase {
   // The gyro sensor
   private final NavX m_gyro = new NavX();
 
+  private final Field2d m_fieldSim = new Field2d();
+
   // Odometry class for tracking robot pose
   SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(
       Constants.Drive.kDriveKinematics,
@@ -61,6 +64,9 @@ public class Drive extends SubsystemBase {
 
   /** Creates a new DriveSubsystem. */
   public Drive() {
+    SmartDashboard.putData("Field", m_fieldSim);
+    SmartDashboard.setDefaultNumber("P", Constants.SwerveModule.kDrivingP);
+    SmartDashboard.setDefaultNumber("D", Constants.SwerveModule.kDrivingD);
   }
 
   @Override
@@ -75,7 +81,10 @@ public class Drive extends SubsystemBase {
     SmartDashboard.putNumber("Drive/Swerve/RearRight/SteeringAbsolutePosition", m_rearRight.getSteeringAbsolutePosition());
     SmartDashboard.putNumber("Drive/NavX/Angle", m_gyro.getAngle());
     SmartDashboard.putNumber("Drive/NavX/Yaw", m_gyro.getYaw());
-    
+    SmartDashboard.putNumber("Front Left Relative Position", m_frontLeft.getDrivingRelativePosition());
+    SmartDashboard.putNumber("Front Left Velocity", m_frontLeft.getDrivingVelocity());
+  
+
     // Update the odometry in the periodic block
     m_odometry.update(
         Rotation2d.fromDegrees(m_gyro.getAngle()),
@@ -85,6 +94,8 @@ public class Drive extends SubsystemBase {
             m_rearLeft.getPosition(),
             m_rearRight.getPosition()
         });
+
+    m_fieldSim.setRobotPose(m_odometry.getPoseMeters());
 
   }
 

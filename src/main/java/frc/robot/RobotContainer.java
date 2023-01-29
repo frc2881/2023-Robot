@@ -40,7 +40,7 @@ public class RobotContainer {
     if (Math.abs(input) < 0.1) {
       return 0.0;
     } else {
-      return input;
+      return Math.copySign((Math.abs(input) - 0.1) / 0.9, input);
     }
   }
 
@@ -60,6 +60,7 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    return new FollowTrajectory(simplePath, true, m_drive);
+    return new DriveWithJoysticks(m_drive, () -> -1.0/Constants.Drive.kMaxSpeedMetersPerSecond, () -> 0, () -> 0);
+    //return new FollowTrajectory(simplePath, true, m_drive);
   }
 }
