@@ -7,7 +7,10 @@ package frc.robot;
 
 import com.revrobotics.CANSparkMax.IdleMode;
 
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
 
@@ -190,7 +193,24 @@ public class Constants {
 
       }
 
-      public static final class VisionTracking {
+      public static final class Field {
+        public static final double kLength = Units.feetToMeters(54);
+        public static final double kWidth = Units.feetToMeters(27);
+        }
+
+      public static final class Vision {
+
+        public static final String kLeftCameraName = "LEFT";
+        public static final Transform3d kLeftRobotToCam =
+            new Transform3d(
+                new Translation3d(0.5, 0.0, 0.5),
+                new Rotation3d(0, 0,0)); 
+
+        public static final String kRightCameraName = "RIGHT";
+        public static final Transform3d kRightRobotToCam =
+            new Transform3d(
+                new Translation3d(0.5, 0.0, 0.5),
+                new Rotation3d(0, 0,0)); 
 
       }
 
