@@ -5,6 +5,10 @@
 
 package frc.robot.subsystems;
 
+import java.util.Optional;
+
+import org.photonvision.EstimatedRobotPose;
+
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -51,7 +55,7 @@ public class Drive extends SubsystemBase {
   // The gyro sensor
   private final NavX m_gyro = new NavX();
 
-  public PhotonCameraWrapper m_lefPhotonCamera = new PhotonCameraWrapper(Constants.Vision.kLeftCameraName);
+  public PhotonCameraWrapper m_leftPhotonCamera = new PhotonCameraWrapper(Constants.Vision.kLeftCameraName);
   public PhotonCameraWrapper m_rightPhotonCamera = new PhotonCameraWrapper(Constants.Vision.kRightCameraName);
 
   private final SwerveDrivePoseEstimator m_poseEstimator = 
@@ -101,7 +105,17 @@ public class Drive extends SubsystemBase {
         m_rearRight.getPosition()
     });
 
-    // TODO: Add vision measurement from Photon camera
+    Optional<EstimatedRobotPose> leftCameraResult = m_leftPhotonCamera.getEstimatedGlobalPose(m_poseEstimator.getEstimatedPosition());
+    if (leftCameraResult.isPresent()) {
+      EstimatedRobotPose camPose = leftCameraResult.get();
+      m_poseEstimator.addVisionMeasurement(camPose.estimatedPose.toPose2d(), camPose.timestampSeconds);
+    }
+
+    Optional<EstimatedRobotPose> rightCameraResult = m_rightPhotonCamera.getEstimatedGlobalPose(m_poseEstimator.getEstimatedPosition());
+    if (rightCameraResult.isPresent()) {
+      EstimatedRobotPose camPose = rightCameraResult.get();
+      m_poseEstimator.addVisionMeasurement(camPose.estimatedPose.toPose2d(), camPose.timestampSeconds);
+    }
 
     m_fieldSim.setRobotPose(m_poseEstimator.getEstimatedPosition());
   }
