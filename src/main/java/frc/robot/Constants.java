@@ -14,7 +14,12 @@ import edu.wpi.first.math.util.Units;
 
 /** Add your docs here. */
 public class Constants {
-    public static final boolean kEnableAllTelemetry = true;
+
+    public static final class Controllers {
+        public static final int kDriverControllerPort = 0; 
+        public static final int kManipulatorControllerPort = 1; 
+        public static final double kDeadband = 0.1; 
+    }
 
     public static final class Arm {
         /**
