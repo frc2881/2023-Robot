@@ -193,11 +193,6 @@ public class Constants {
 
       }
 
-      public static final class Field {
-        public static final double kLength = Units.feetToMeters(54);
-        public static final double kWidth = Units.feetToMeters(27);
-        }
-
       public static final class Vision {
 
         public static final String kLeftCameraName = "LEFT";
