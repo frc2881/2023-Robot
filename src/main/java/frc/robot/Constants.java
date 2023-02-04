@@ -25,7 +25,44 @@ public class Constants {
         /**
          * The CAN ID of the extension motor.
          */
-        public static final int kExtensionMotorId = 41;
+        public static final int kExtensionMotorId = 41; // TODO: Fix
+
+        /*
+         * The CAN ID of the elevation motor.
+         */
+        public static final int kElevationMotorId = 41; // TODO: Fix
+
+        /*
+         * The gear ratio for the arm that converts motor rotations into inches
+         * of extension of the arm.
+         */
+        public static final double kExtendRotationsToInches = (1.0 / 2.0) / 3.0; // TODO: Make sure conversion factor is correct
+
+        /*
+         * The gear ratio for the arm that converts motor rotations into inches
+         * of elevation of the arm.
+         */
+        public static final double kElevateRotationsToInches = (1.0 / 2.0) / 3.0; // TODO: Make sure conversion factor is correct
+
+        /*
+         * The maximum distance (in inches) that the arm can extend.
+         */
+        public static final double kExtendForwardLimit = 0; // TODO: UPDATE
+
+         /*
+         * The maximum distance (in inches) that the arm can retract.
+         */
+        public static final double kExtendReverseLimit = 0; // TODO: UPDATE
+
+         /*
+         * The maximum distance (in inches) that the arm can elevate.
+         */
+        public static final double kElevateForwardLimit = 0; // TODO: UPDATE
+
+         /*
+         * The maximum distance (in inches) that the arm can go down.
+         */
+        public static final double kElevateReverseLimit = 0; // TODO: UPDATE
     }
 
     public static final class Clamps {

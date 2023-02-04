@@ -13,7 +13,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 import frc.robot.commands.arm.ExtendArm;
-import frc.robot.commands.arm.RetractArm;
 import frc.robot.commands.auto.FollowTrajectory;
 import frc.robot.commands.drive.DriveWithJoysticks;
 import frc.robot.commands.drive.ZeroHeading;
@@ -56,8 +55,8 @@ public class RobotContainer {
     //MANIPULATOR
     new Trigger(m_manipulatorController::getAButton).onTrue(new EnableSuction(m_suction));
     new Trigger(m_manipulatorController::getBButton).onTrue(new DisableSuction(m_suction));
-    new Trigger(m_manipulatorController::getYButton).whileTrue(new ExtendArm(m_arm, 0));
-    new Trigger(m_manipulatorController::getXButton).whileTrue(new RetractArm(m_arm, 0));
+    new Trigger(m_manipulatorController::getYButton).whileTrue(new ExtendArm(m_arm, 0.5));
+    new Trigger(m_manipulatorController::getXButton).whileTrue(new ExtendArm(m_arm, -0.5));
   }
 
   public Command getAutonomousCommand() {
