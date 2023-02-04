@@ -5,24 +5,25 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DataLogManager;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.utils.Log;
+import frc.robot.utils.Telemetry;
 
 public class Robot extends TimedRobot {
+  private static Robot m_robotInstance;
   private Command m_autonomousCommand;
-
   private RobotContainer m_robotContainer;
 
   @Override
   public void robotInit() {
-    Log.start();
+    m_robotInstance = this;
+    setupLogging();
+    Telemetry.start(); 
     m_robotContainer = new RobotContainer();    
-    if(Constants.kEnableAllTelemetry){
-      LiveWindow.enableAllTelemetry();
-    }
   }
 
   @Override
@@ -81,4 +82,24 @@ public class Robot extends TimedRobot {
 
   @Override
   public void testExit() {}
+
+   /** This function provides static access to create a custom periodic function in the current robot instance. */
+   public static void addCustomPeriodic(Runnable callback, double periodSeconds) {
+    m_robotInstance.addPeriodic(callback, periodSeconds, 0.333);
+  }
+
+  private void setupLogging() {
+    DataLogManager.start();
+    DriverStation.startDataLog(DataLogManager.getLog());
+
+    CommandScheduler.getInstance().
+      onCommandInitialize(command -> Log.init(command));
+    CommandScheduler.getInstance().
+      onCommandInterrupt(command -> Log.end(command, true));
+    CommandScheduler.getInstance().
+      onCommandFinish(command -> Log.end(command, false));
+
+    Log.start();
+  }
+  
 }
