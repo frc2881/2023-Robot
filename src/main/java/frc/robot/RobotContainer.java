@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 import frc.robot.commands.auto.FollowTrajectory;
 import frc.robot.commands.drive.DriveWithJoysticks;
+import frc.robot.commands.drive.ZeroHeading;
 import frc.robot.commands.suction.DisableSuction;
 import frc.robot.commands.suction.EnableSuction;
 import frc.robot.subsystems.Drive;
@@ -73,7 +74,7 @@ public class RobotContainer {
 
     //DRIVER
     new JoystickButton(m_driverController, XboxController.Button.kBack.value)
-      .onTrue(new RunCommand(m_drive::zeroHeading, m_drive));
+      .onTrue(new ZeroHeading(m_drive));
 
     //MANIPULATOR
     new JoystickButton(m_manipulatorController, XboxController.Button.kA.value)
