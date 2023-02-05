@@ -5,8 +5,8 @@
 package frc.robot.commands.drive;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+
 import frc.robot.subsystems.Drive;
-import frc.robot.utils.Log;
 
 public class ZeroHeading extends CommandBase {
   private final Drive m_drive;
