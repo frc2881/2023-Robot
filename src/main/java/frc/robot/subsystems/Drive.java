@@ -22,9 +22,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.robot.Constants;
-import frc.robot.utils.NavX;
-import frc.robot.utils.PhotonCameraWrapper;
-import frc.robot.utils.SwerveModule;
+import frc.robot.lib.NavX;
+import frc.robot.lib.PhotonCameraWrapper;
+import frc.robot.lib.SwerveModule;
 
 public class Drive extends SubsystemBase {
   // Create SwerveModules

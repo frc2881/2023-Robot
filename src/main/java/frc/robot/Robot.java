@@ -5,23 +5,22 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.DataLogManager;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.utils.Log;
-import frc.robot.utils.Telemetry;
+
+import frc.robot.lib.DataLog;
+import frc.robot.lib.Telemetry;
 
 public class Robot extends TimedRobot {
   private static Robot m_robotInstance;
-  private Command m_autonomousCommand;
   private RobotContainer m_robotContainer;
+  private Command m_autonomousCommand;
 
   @Override
   public void robotInit() {
     m_robotInstance = this;
-    setupLogging();
+    DataLog.start();
     Telemetry.start(); 
     m_robotContainer = new RobotContainer();    
   }
@@ -33,7 +32,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledInit() {
-    Log.mode("DISABLED");
+    DataLog.mode("DISABLED");
   }
 
   @Override
@@ -44,7 +43,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    Log.mode("AUTONOMOUS");
+    DataLog.mode("AUTONOMOUS");
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     if (m_autonomousCommand != null) {
@@ -60,7 +59,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    Log.mode("TELEOP");
+    DataLog.mode("TELEOP");
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
@@ -86,20 +85,6 @@ public class Robot extends TimedRobot {
    /** This function provides static access to create a custom periodic function in the current robot instance. */
    public static void addCustomPeriodic(Runnable callback, double periodSeconds) {
     m_robotInstance.addPeriodic(callback, periodSeconds, 0.333);
-  }
-
-  private void setupLogging() {
-    DataLogManager.start();
-    DriverStation.startDataLog(DataLogManager.getLog());
-
-    CommandScheduler.getInstance().
-      onCommandInitialize(command -> Log.init(command));
-    CommandScheduler.getInstance().
-      onCommandInterrupt(command -> Log.end(command, true));
-    CommandScheduler.getInstance().
-      onCommandFinish(command -> Log.end(command, false));
-
-    Log.start();
   }
   
 }
