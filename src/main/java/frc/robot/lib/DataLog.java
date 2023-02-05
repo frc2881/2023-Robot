@@ -3,24 +3,35 @@
 // Open Source Software; you can modify and/or share it under the terms of BSD
 // license file in the root directory of this project.
 
-package frc.robot.utils;
+package frc.robot.lib;
 
 import static java.util.stream.Collectors.joining;
 
 import java.util.stream.Stream;
 
 import edu.wpi.first.wpilibj.DataLogManager;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 /**
  * This class provides methods for logging messages to the RioLog as the robot
  * starts, the robot mode changes, and as commands start and end.
  */
-public final class Log {
-  /**
-   * The time that the robot code started.
-   */
-  private static final long startTime = System.currentTimeMillis();
+public final class DataLog {
+
+  static {
+    DataLogManager.start();
+    DriverStation.startDataLog(DataLogManager.getLog());
+
+    CommandScheduler.getInstance().
+      onCommandInitialize(command -> DataLog.init(command));
+    CommandScheduler.getInstance().
+      onCommandInterrupt(command -> DataLog.end(command, true));
+    CommandScheduler.getInstance().
+      onCommandFinish(command -> DataLog.end(command, false));
+  }
 
   /**
    * Formats a message and writes it to the RioLog.
@@ -28,8 +39,7 @@ public final class Log {
    * @param message contains the text of the message to be logged.
    */
   public static void log(String message) {
-    long time = System.currentTimeMillis() - startTime;
-    DataLogManager.log(String.format("[%6.2f] %s\n", time / 1000.0, message));
+    DataLogManager.log(String.format("[%6.2f] %s\n", Timer.getFPGATimestamp() , message));
   }
 
   /**
@@ -37,7 +47,7 @@ public final class Log {
    */
   public static void start() {
     log("*".repeat(20) + " Robot Start, version " +
-        Log.class.getPackage().getImplementationVersion() + " " +
+        DataLog.class.getPackage().getImplementationVersion() + " " +
         "*".repeat(20));
   }
 

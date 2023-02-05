@@ -18,6 +18,7 @@ import frc.robot.commands.drive.DriveWithJoysticks;
 import frc.robot.commands.drive.ZeroHeading;
 import frc.robot.commands.suction.DisableSuction;
 import frc.robot.commands.suction.EnableSuction;
+import frc.robot.lib.Utils;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Suction;
@@ -41,9 +42,9 @@ public class RobotContainer {
     m_drive.setDefaultCommand(
       new DriveWithJoysticks(
         m_drive,
-        () -> applyDeadband(-m_driverController.getLeftY(), Constants.Controllers.kDeadband),
-        () -> applyDeadband(-m_driverController.getLeftX(), Constants.Controllers.kDeadband),
-        () -> applyDeadband(-m_driverController.getRightX(), Constants.Controllers.kDeadband)
+        () -> Utils.applyDeadband(-m_driverController.getLeftY(), Constants.Controllers.kDeadband),
+        () -> Utils.applyDeadband(-m_driverController.getLeftX(), Constants.Controllers.kDeadband),
+        () -> Utils.applyDeadband(-m_driverController.getRightX(), Constants.Controllers.kDeadband)
       )
     );
   }
@@ -61,9 +62,5 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
     return new FollowTrajectory(simplePath, true, m_drive);
-  }
-
-  public double applyDeadband(double input, double deadband) {
-    return (Math.abs(input) < deadband) ? 0.0 : Math.copySign((Math.abs(input) - deadband) / 0.9, input);
   }
 }
