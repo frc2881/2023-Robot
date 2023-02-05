@@ -38,18 +38,34 @@ public class Intake extends SubsystemBase {
     m_colorMatcher.setConfidenceThreshold(0.95);
   }
 
+  /**
+   * Runs the rollers
+   * 
+   * @param speed positive value runs the rollers forward
+   */
   public void runRollers(double speed){
     m_rollers.set(speed);
   }
 
+  /**
+   * Moves the arm in or out
+   * 
+   * @param speed positive value extends
+   */
   public void moveArm(double speed){
-    m_arm.set(speed); // Presets: All the way out, all the way in and somewhere in the middle to let the arm out
+    m_arm.set(speed);
   }
 
+  /**
+   * @return is the game piece a cube
+   */
   public boolean isCube() {
     return m_pieceIsCube;
   }
 
+  /**
+   * @return is the game piece a cone
+   */
   public boolean isCone() {
     return m_pieceIsCone;
   }
@@ -87,13 +103,9 @@ public class Intake extends SubsystemBase {
       m_colorSensor = new ColorSensorV3(Port.kMXP);
     }
 
-    // Use for finding the Color values for cone/cube
+    // Use for finding the Color values for cone/cube.
     Color color = m_colorSensor.getColor();
 
-    /**
-     * Open Smart Dashboard or Shuffleboard to see the color detected by the 
-     * sensor.
-     */
     SmartDashboard.putNumber("Red", color.red);
     SmartDashboard.putNumber("Green", color.green);
     SmartDashboard.putNumber("Blue", color.blue);
