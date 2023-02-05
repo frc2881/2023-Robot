@@ -5,10 +5,14 @@
 
 package frc.robot.subsystems;
 
+import java.io.IOException;
 import java.util.Optional;
 
 import org.photonvision.EstimatedRobotPose;
+import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -55,8 +59,8 @@ public class Drive extends SubsystemBase {
   // The gyro sensor
   private final NavX m_gyro = new NavX();
 
-  public PhotonCameraWrapper m_leftPhotonCamera = new PhotonCameraWrapper(Constants.Vision.kLeftCameraName);
-  public PhotonCameraWrapper m_rightPhotonCamera = new PhotonCameraWrapper(Constants.Vision.kRightCameraName);
+  public PhotonCameraWrapper m_leftPhotonCamera;
+  public PhotonCameraWrapper m_rightPhotonCamera;
 
   private final SwerveDrivePoseEstimator m_poseEstimator = 
     new SwerveDrivePoseEstimator(
@@ -72,6 +76,25 @@ public class Drive extends SubsystemBase {
   private final Field2d m_fieldSim = new Field2d();
 
   public Drive() {
+    AprilTagFieldLayout atfl = null;
+    try {
+        atfl = AprilTagFieldLayout.loadFromResource(Constants.Vision.kAprilTagFieldLayout);
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+    m_leftPhotonCamera = new PhotonCameraWrapper(
+      Constants.Vision.kLeftCameraName,
+      Constants.Vision.kLeftRobotToCamera,
+      PoseStrategy.CLOSEST_TO_REFERENCE_POSE,
+      atfl
+    );
+    m_rightPhotonCamera = new PhotonCameraWrapper(
+      Constants.Vision.kRightCameraName,
+      Constants.Vision.kRightRobotToCamera,
+      PoseStrategy.CLOSEST_TO_REFERENCE_POSE,
+      atfl
+    );
+
     SmartDashboard.putData("Field", m_fieldSim);
     SmartDashboard.setDefaultNumber("P", Constants.SwerveModule.kDrivingP);
     SmartDashboard.setDefaultNumber("D", Constants.SwerveModule.kDrivingD);
