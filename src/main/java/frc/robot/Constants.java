@@ -5,8 +5,11 @@
 
 package frc.robot;
 
+import java.io.IOException;
+
 import com.revrobotics.CANSparkMax.IdleMode;
 
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
@@ -195,7 +198,14 @@ public class Constants {
       }
 
       public static final class Vision {
-        public static final String kAprilTagFieldLayout = AprilTagFields.k2023ChargedUp.m_resourceFile;
+        public static AprilTagFieldLayout kAprilTagFieldLayout = null;
+        static {
+            try {
+                kAprilTagFieldLayout = AprilTagFieldLayout.loadFromResource(AprilTagFields.k2023ChargedUp.m_resourceFile);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
 
         public static final String kLeftCameraName = "LEFT";
         public static final Transform3d kLeftRobotToCamera =

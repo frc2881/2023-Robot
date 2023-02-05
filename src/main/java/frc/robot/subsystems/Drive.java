@@ -76,23 +76,17 @@ public class Drive extends SubsystemBase {
   private final Field2d m_fieldSim = new Field2d();
 
   public Drive() {
-    AprilTagFieldLayout atfl = null;
-    try {
-        atfl = AprilTagFieldLayout.loadFromResource(Constants.Vision.kAprilTagFieldLayout);
-    } catch (IOException e) {
-        e.printStackTrace();
-    }
     m_leftPhotonCamera = new PhotonCameraWrapper(
       Constants.Vision.kLeftCameraName,
       Constants.Vision.kLeftRobotToCamera,
       PoseStrategy.CLOSEST_TO_REFERENCE_POSE,
-      atfl
+      Constants.Vision.kAprilTagFieldLayout
     );
     m_rightPhotonCamera = new PhotonCameraWrapper(
       Constants.Vision.kRightCameraName,
       Constants.Vision.kRightRobotToCamera,
       PoseStrategy.CLOSEST_TO_REFERENCE_POSE,
-      atfl
+      Constants.Vision.kAprilTagFieldLayout
     );
 
     SmartDashboard.putData("Field", m_fieldSim);
