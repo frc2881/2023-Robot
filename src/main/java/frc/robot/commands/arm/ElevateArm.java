@@ -8,12 +8,12 @@ package frc.robot.commands.arm;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Arm;
 
+/** Elevates the scoring arm. */
 public class ElevateArm extends CommandBase {
   private Arm m_arm;
   private double m_speed;
   
   public ElevateArm(Arm arm, double speed) {
-    // Use addRequirements() here to declare subsystem dependencies.
     m_arm = arm;
     m_speed = speed;
   }

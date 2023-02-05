@@ -32,7 +32,7 @@ public class Arm extends SubsystemBase {
                        (float)Constants.Arm.kExtendReverseLimit);
 
     m_elevationMotor = new CANSparkMax(Constants.Arm.kElevationMotorId, MotorType.kBrushless);
-    // m_extensionMotor.setInverted(false); (Might need; test and see)
+    // m_elevationMotor.setInverted(false); (Might need; test and see)
     m_extensionMotor.setIdleMode(IdleMode.kBrake);
     m_extensionMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
     m_extensionMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward,
@@ -62,6 +62,11 @@ public class Arm extends SubsystemBase {
     m_extensionMotor.set(speed);
   }
 
+  /**
+   * Elevates or lowers the arm.
+   * 
+   * @param speed positive value elevates.
+   */
   public void elevate(double speed) { // TODO: Find better name?
     m_elevationMotor.set(speed);
   }

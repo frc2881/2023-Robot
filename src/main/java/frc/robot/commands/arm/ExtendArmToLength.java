@@ -8,8 +8,7 @@ package frc.robot.commands.arm;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Arm;
 
-
-/** Add your docs here. */
+/** Extends the scoring arm to a specified length. */
 public class ExtendArmToLength extends CommandBase {
   private Arm m_arm;
   private Double m_speed;
