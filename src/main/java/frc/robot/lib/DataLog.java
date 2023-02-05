@@ -26,11 +26,11 @@ public final class DataLog {
     DriverStation.startDataLog(DataLogManager.getLog());
 
     CommandScheduler.getInstance().
-      onCommandInitialize(command -> DataLog.init(command));
+      onCommandInitialize(command -> init(command));
     CommandScheduler.getInstance().
-      onCommandInterrupt(command -> DataLog.end(command, true));
+      onCommandInterrupt(command -> end(command, true));
     CommandScheduler.getInstance().
-      onCommandFinish(command -> DataLog.end(command, false));
+      onCommandFinish(command -> end(command, false));
   }
 
   /**
@@ -87,14 +87,10 @@ public final class DataLog {
    *
    * @param command is the command class that is ending.
    *
-   * @param interrupted is <b>true</b> if the command was interrupted.
+   * @param isInterrupted is <b>true</b> if the command was interrupted.
    */
-  public static void end(Command command, boolean interrupted) {
+  public static void end(Command command, boolean isInterrupted) {
     String name = command.getClass().getSimpleName();
-    if(interrupted) {
-      log("--> Interrupted command: " + name);
-    } else {
-      log("--> End command: " + name);
-    }
+    log("--> " + (isInterrupted ? "Interrupted": "End") + "command: " + name);
   }
 }
