@@ -14,33 +14,24 @@ import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
-import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
-
-import frc.robot.Constants;
+import edu.wpi.first.math.geometry.Transform3d;
 
  public class PhotonCameraWrapper {
      public PhotonCamera photonCamera;
      public PhotonPoseEstimator photonPoseEstimator;
  
-     public PhotonCameraWrapper(String cameraName) {
- 
-        AprilTagFieldLayout atfl = null;
-        try {
-            atfl = AprilTagFieldLayout.loadFromResource(AprilTagFields.k2023ChargedUp.m_resourceFile);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
- 
-        photonCamera = new PhotonCamera(cameraName);
-         
+     public PhotonCameraWrapper(
+        String cameraName, 
+        Transform3d robotToCamera,
+        PoseStrategy poseStrategy,
+        AprilTagFieldLayout aprilTagFieldLayout
+    ) {  
         photonPoseEstimator = new PhotonPoseEstimator(
-            atfl,
-            PoseStrategy.CLOSEST_TO_REFERENCE_POSE, 
-            photonCamera, 
-            (cameraName == Constants.Vision.kLeftCameraName) 
-                ? Constants.Vision.kLeftRobotToCam 
-                : Constants.Vision.kRightRobotToCam
+            aprilTagFieldLayout,
+            poseStrategy, 
+            new PhotonCamera(cameraName), 
+            robotToCamera
         );
      }
  

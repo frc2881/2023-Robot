@@ -28,8 +28,8 @@ public class RobotContainer {
   private Suction m_suction = new Suction();
   private Arm m_arm = new Arm();
 
-  private final XboxController m_driverController = new XboxController(0);
-  private final XboxController m_manipulatorController = new XboxController(1);
+  private final XboxController m_driverController = new XboxController(Constants.Controllers.kDriverControllerPort);
+  private final XboxController m_manipulatorController = new XboxController(Constants.Controllers.kManipulatorControllerPort);
 
   private final PathPlannerTrajectory simplePath = PathPlanner.loadPath("SimplePath", 1, 1);
   
