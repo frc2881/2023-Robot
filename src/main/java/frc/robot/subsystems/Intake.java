@@ -25,7 +25,7 @@ public class Intake extends SubsystemBase {
   private final ColorMatch m_colorMatcher;
   private boolean m_pieceIsCube;
   private boolean m_pieceIsCone;
-  /** Creates a new Intake. */
+  
   public Intake() {
     m_rollers = new CANSparkMax(Constants.Intake.kIntakeRollersCANId, MotorType.kBrushless);
     m_arm = new CANSparkMax(Constants.Intake.kIntakeArmCANId, MotorType.kBrushless);

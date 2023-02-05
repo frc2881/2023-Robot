@@ -8,12 +8,13 @@ package frc.robot.commands.intake;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Intake;
 
+/** Retracts the intake in. */
 public class RetractIntakeArm extends CommandBase {
   private Intake m_intake;
-  /** Creates a new RetractIntakeArm. */
+  
   public RetractIntakeArm(Intake intake) {
     m_intake = intake;
-    // Use addRequirements() here to declare subsystem dependencies.
+  
   }
 
   // Called when the command is initially scheduled.

@@ -8,12 +8,13 @@ package frc.robot.commands.intake;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Intake;
 
+/** Runs the rollers forward.*/
 public class RunRollersForward extends CommandBase {
   private Intake m_intake;
   
   public RunRollersForward(Intake intake) {
     m_intake = intake;
-    // Use addRequirements() here to declare subsystem dependencies.
+    
   }
 
   // Called when the command is initially scheduled.
