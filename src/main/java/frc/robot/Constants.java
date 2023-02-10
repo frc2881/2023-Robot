@@ -57,20 +57,20 @@ public class Constants {
             new Translation2d(-kWheelBase / 2, -kTrackWidth / 2));
     
         // Angular offsets of the modules relative to the chassis in radians
-        public static final double kFrontLeftChassisAngularOffset = -Math.toRadians(72.7);
-        public static final double kFrontRightChassisAngularOffset = -Math.toRadians(210.4);
-        public static final double kBackLeftChassisAngularOffset = -Math.toRadians(281.2);
-        public static final double kBackRightChassisAngularOffset = -Math.toRadians(160.0);
+        public static final double kFrontLeftChassisAngularOffset = 5.92;
+        public static final double kFrontRightChassisAngularOffset = Math.toRadians(210.4);
+        public static final double kBackLeftChassisAngularOffset = 1.58;
+        public static final double kBackRightChassisAngularOffset = 4.38;
     
         // SPARK MAX CAN IDs
-        public static final int kFrontLeftDrivingCanId = 1;
-        public static final int kRearLeftDrivingCanId = 3;
-        public static final int kFrontRightDrivingCanId = 5;
-        public static final int kRearRightDrivingCanId = 7;
+        public static final int kFrontLeftDrivingCanId = 15;
+        public static final int kRearLeftDrivingCanId = 7;
+        public static final int kFrontRightDrivingCanId = 26;
+        public static final int kRearRightDrivingCanId = 9;
     
-        public static final int kFrontLeftTurningCanId = 2;
-        public static final int kRearLeftTurningCanId = 4;
-        public static final int kFrontRightTurningCanId = 6;
+        public static final int kFrontLeftTurningCanId = 14;
+        public static final int kRearLeftTurningCanId = 6;
+        public static final int kFrontRightTurningCanId = 17;
         public static final int kRearRightTurningCanId = 8;
 
         public static final int kFrontLeftCanCoderId = 2;
@@ -111,6 +111,9 @@ public class Constants {
     
         public static final double kTurningEncoderPositionFactor = (2 * Math.PI) / kSteeringMotorReduction; // radians
         public static final double kTurningEncoderVelocityFactor = ((2 * Math.PI) / kSteeringMotorReduction) / 60.0; // radians per second
+
+        public static final double kTurningAnalogPositionFactor = (Math.PI * 2 / 3.3);
+        public static final double kTurningAnalogVelocityFactor = (kTurningAnalogPositionFactor/60);
     
         public static final double kTurningEncoderPositionPIDMinInput = -Math.PI; // radians
         public static final double kTurningEncoderPositionPIDMaxInput = Math.PI; // radians

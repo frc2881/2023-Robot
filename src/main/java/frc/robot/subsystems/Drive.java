@@ -121,7 +121,7 @@ public class Drive extends SubsystemBase {
         m_rearLeft.getPosition(),
         m_rearRight.getPosition()
     });
-
+/*
     Optional<EstimatedRobotPose> leftCameraResult = m_leftPhotonCamera.getEstimatedGlobalPose(m_poseEstimator.getEstimatedPosition());
     if (leftCameraResult.isPresent()) {
       EstimatedRobotPose camPose = leftCameraResult.get();
@@ -133,7 +133,7 @@ public class Drive extends SubsystemBase {
       EstimatedRobotPose camPose = rightCameraResult.get();
       m_poseEstimator.addVisionMeasurement(camPose.estimatedPose.toPose2d(), camPose.timestampSeconds);
     }
-
+*/
     m_fieldSim.setRobotPose(m_poseEstimator.getEstimatedPosition());
   }
 

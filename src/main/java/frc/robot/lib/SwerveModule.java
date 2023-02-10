@@ -5,10 +5,11 @@
 
 package frc.robot.lib;
 
-import com.ctre.phoenix.sensors.CANCoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxAnalogSensor;
+import com.revrobotics.SparkMaxAnalogSensor.Mode;
 import com.revrobotics.SparkMaxPIDController;
 
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -17,6 +18,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import frc.robot.Constants;
 
 public class SwerveModule {
@@ -25,7 +27,7 @@ public class SwerveModule {
 
   private final RelativeEncoder m_drivingEncoder;
   private final RelativeEncoder m_turningEncoder;
-  private final CANCoder m_canCoder;
+  private final SparkMaxAnalogSensor m_turningAnalogSensor;
 
   private final SparkMaxPIDController m_drivingPIDController;
   private final SparkMaxPIDController m_turningPIDController;
@@ -58,7 +60,7 @@ public class SwerveModule {
     // Setup encoders and PID controllers for the driving and turning SPARKS MAX.
     m_drivingEncoder = m_drivingSparkMax.getEncoder();
     m_turningEncoder = m_turningSparkMax.getEncoder();
-    m_canCoder = new CANCoder(canCoderCANId);
+    m_turningAnalogSensor = m_turningSparkMax.getAnalog(Mode.kAbsolute);
     m_drivingPIDController = m_drivingSparkMax.getPIDController();
     m_turningPIDController = m_turningSparkMax.getPIDController();
     m_drivingPIDController.setFeedbackDevice(m_drivingEncoder);
@@ -75,6 +77,8 @@ public class SwerveModule {
     // APIs.
     m_turningEncoder.setPositionConversionFactor(Constants.SwerveModule.kTurningEncoderPositionFactor);
     m_turningEncoder.setVelocityConversionFactor(Constants.SwerveModule.kTurningEncoderVelocityFactor);
+    m_turningAnalogSensor.setPositionConversionFactor(Constants.SwerveModule.kTurningAnalogPositionFactor);
+    m_turningAnalogSensor.setVelocityConversionFactor(Constants.SwerveModule.kTurningAnalogVelocityFactor);
 
     // Enable PID wrap around for the turning motor. This will allow the PID
     // controller to go through 0 to get to the setpoint i.e. going from 350 degrees
@@ -117,9 +121,9 @@ public class SwerveModule {
 
     // This is commented out because it is already being calculated by the CANcoder
     // m_chassisAngularOffset = chassisAngularOffset; 
-    m_desiredState.angle = new Rotation2d(Math.toRadians(m_canCoder.getAbsolutePosition()));
+    m_desiredState.angle = new Rotation2d(m_turningAnalogSensor.getPosition() - chassisAngularOffset);
     m_drivingEncoder.setPosition(0);
-    m_turningEncoder.setPosition(Math.toRadians(m_canCoder.getAbsolutePosition()));
+    m_turningEncoder.setPosition(m_turningAnalogSensor.getPosition() - chassisAngularOffset );
     
   }
 
@@ -187,7 +191,7 @@ public class SwerveModule {
   }
 
   public double getSteeringAbsolutePosition(){
-    return m_canCoder.getAbsolutePosition();
+    return m_turningAnalogSensor.getPosition();
   }
 
   public double getDrivingRelativePosition(){
