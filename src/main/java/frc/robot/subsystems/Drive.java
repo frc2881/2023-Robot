@@ -27,7 +27,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.robot.Constants;
 import frc.robot.lib.NavX;
-import frc.robot.lib.PhotonCameraWrapper;
+// import frc.robot.lib.PhotonCameraWrapper;
 import frc.robot.lib.SwerveModule;
 
 public class Drive extends SubsystemBase {
@@ -45,22 +45,22 @@ public class Drive extends SubsystemBase {
       Constants.Drive.kFrontRightChassisAngularOffset);
 
   private final SwerveModule m_rearLeft = new  SwerveModule(
-      Constants.Drive.kRearLeftDrivingCanId,
-      Constants.Drive.kRearLeftTurningCanId,
-      Constants.Drive.kRearLeftCanCoderId,
+      Constants.Drive.kBackLeftDrivingCanId,
+      Constants.Drive.kBackLeftTurningCanId,
+      Constants.Drive.kBackLeftCanCoderId,
       Constants.Drive.kBackLeftChassisAngularOffset);
 
   private final SwerveModule m_rearRight = new  SwerveModule(
-      Constants.Drive.kRearRightDrivingCanId,
-      Constants.Drive.kRearRightTurningCanId,
-      Constants.Drive.kRearRightCanCoderId, 
+      Constants.Drive.kBackRightDrivingCanId,
+      Constants.Drive.kBackRightTurningCanId,
+      Constants.Drive.kBackRightCanCoderId, 
       Constants.Drive.kBackRightChassisAngularOffset);
 
   // The gyro sensor
   private final NavX m_gyro = new NavX();
 
-  public PhotonCameraWrapper m_leftPhotonCamera;
-  public PhotonCameraWrapper m_rightPhotonCamera;
+  // public PhotonCameraWrapper m_leftPhotonCamera;
+  // public PhotonCameraWrapper m_rightPhotonCamera;
 
   private final SwerveDrivePoseEstimator m_poseEstimator = 
     new SwerveDrivePoseEstimator(
@@ -76,18 +76,18 @@ public class Drive extends SubsystemBase {
   private final Field2d m_fieldSim = new Field2d();
 
   public Drive() {
-    m_leftPhotonCamera = new PhotonCameraWrapper(
-      Constants.Vision.kLeftCameraName,
-      Constants.Vision.kLeftRobotToCamera,
-      PoseStrategy.CLOSEST_TO_REFERENCE_POSE,
-      Constants.Vision.kAprilTagFieldLayout
-    );
-    m_rightPhotonCamera = new PhotonCameraWrapper(
-      Constants.Vision.kRightCameraName,
-      Constants.Vision.kRightRobotToCamera,
-      PoseStrategy.CLOSEST_TO_REFERENCE_POSE,
-      Constants.Vision.kAprilTagFieldLayout
-    );
+    // m_leftPhotonCamera = new PhotonCameraWrapper(
+    //   Constants.Vision.kLeftCameraName,
+    //   Constants.Vision.kLeftRobotToCamera,
+    //   PoseStrategy.CLOSEST_TO_REFERENCE_POSE,
+    //   Constants.Vision.kAprilTagFieldLayout
+    // );
+    // m_rightPhotonCamera = new PhotonCameraWrapper(
+    //   Constants.Vision.kRightCameraName,
+    //   Constants.Vision.kRightRobotToCamera,
+    //   PoseStrategy.CLOSEST_TO_REFERENCE_POSE,
+    //   Constants.Vision.kAprilTagFieldLayout
+    // );
 
     SmartDashboard.putData("Field", m_fieldSim);
     SmartDashboard.setDefaultNumber("P", Constants.SwerveModule.kDrivingP);
@@ -122,29 +122,29 @@ public class Drive extends SubsystemBase {
         m_rearRight.getPosition()
     });
 
-    Optional<EstimatedRobotPose> leftCameraResult = m_leftPhotonCamera.getEstimatedGlobalPose(m_poseEstimator.getEstimatedPosition());
-    if (leftCameraResult.isPresent()) {
-      EstimatedRobotPose camPose = leftCameraResult.get();
-      m_poseEstimator.addVisionMeasurement(camPose.estimatedPose.toPose2d(), camPose.timestampSeconds);
+    // Optional<EstimatedRobotPose> leftCameraResult = m_leftPhotonCamera.getEstimatedGlobalPose(m_poseEstimator.getEstimatedPosition());
+    // if (leftCameraResult.isPresent()) {
+    //   EstimatedRobotPose camPose = leftCameraResult.get();
+    //   m_poseEstimator.addVisionMeasurement(camPose.estimatedPose.toPose2d(), camPose.timestampSeconds);
     }
 
-    Optional<EstimatedRobotPose> rightCameraResult = m_rightPhotonCamera.getEstimatedGlobalPose(m_poseEstimator.getEstimatedPosition());
-    if (rightCameraResult.isPresent()) {
-      EstimatedRobotPose camPose = rightCameraResult.get();
-      m_poseEstimator.addVisionMeasurement(camPose.estimatedPose.toPose2d(), camPose.timestampSeconds);
-    }
+  //   Optional<EstimatedRobotPose> rightCameraResult = m_rightPhotonCamera.getEstimatedGlobalPose(m_poseEstimator.getEstimatedPosition());
+  //   if (rightCameraResult.isPresent()) {
+  //     EstimatedRobotPose camPose = rightCameraResult.get();
+  //     m_poseEstimator.addVisionMeasurement(camPose.estimatedPose.toPose2d(), camPose.timestampSeconds);
+  //   }
 
-    m_fieldSim.setRobotPose(m_poseEstimator.getEstimatedPosition());
-  }
+  //   m_fieldSim.setRobotPose(m_poseEstimator.getEstimatedPosition());
+  // }
 
-  /**
-   * Returns the currently-estimated pose of the robot.
-   *
-   * @return The pose.
-   */
-  public Pose2d getPose() {
-    return m_poseEstimator.getEstimatedPosition();
-  }
+  // /**
+  //  * Returns the currently-estimated pose of the robot.
+  //  *
+  //  * @return The pose.
+  //  */
+  // public Pose2d getPose() {
+  //   return m_poseEstimator.getEstimatedPosition();
+  //}
 
   /**
    * Resets the odometry to the specified pose.

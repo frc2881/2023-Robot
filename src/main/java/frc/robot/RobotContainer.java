@@ -10,27 +10,28 @@ import com.pathplanner.lib.PathPlannerTrajectory;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
-import frc.robot.commands.arm.ExtendArm;
-import frc.robot.commands.arm.RetractArm;
-import frc.robot.commands.auto.FollowTrajectory;
+// import frc.robot.commands.arm.ExtendArm;
+// import frc.robot.commands.arm.RetractArm;
+// import frc.robot.commands.auto.FollowTrajectory;
 import frc.robot.commands.drive.DriveWithJoysticks;
 import frc.robot.commands.drive.ZeroHeading;
-import frc.robot.commands.suction.DisableSuction;
-import frc.robot.commands.suction.EnableSuction;
+// import frc.robot.commands.suction.DisableSuction;
+// import frc.robot.commands.suction.EnableSuction;
 import frc.robot.lib.Utils;
-import frc.robot.subsystems.Arm;
+// import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Drive;
-import frc.robot.subsystems.Suction;
+// import frc.robot.subsystems.Suction;
 
 public class RobotContainer {
   private Drive m_drive = new Drive();
-  private Suction m_suction = new Suction();
-  private Arm m_arm = new Arm();
+  // private Suction m_suction = new Suction();
+  // private Arm m_arm = new Arm();
 
-  private final XboxController m_driverController = new XboxController(Constants.Controllers.kDriverControllerPort);
-  private final XboxController m_manipulatorController = new XboxController(Constants.Controllers.kManipulatorControllerPort);
+  private final CommandXboxController m_driverController = new CommandXboxController(Constants.Controllers.kDriverControllerPort);
+  private final CommandXboxController m_manipulatorController = new CommandXboxController(Constants.Controllers.kManipulatorControllerPort);
 
   private final PathPlannerTrajectory simplePath = PathPlanner.loadPath("SimplePath", 1, 1);
   
@@ -52,16 +53,16 @@ public class RobotContainer {
 
   private void setupTriggers() {
     //DRIVER
-    new Trigger(m_driverController::getBackButton).onTrue(new ZeroHeading(m_drive));
+    m_driverController.back().onTrue(new ZeroHeading(m_drive));
 
     //MANIPULATOR
-    new Trigger(m_manipulatorController::getAButton).onTrue(new EnableSuction(m_suction));
-    new Trigger(m_manipulatorController::getBButton).onTrue(new DisableSuction(m_suction));
-    new Trigger(m_manipulatorController::getYButton).whileTrue(new ExtendArm(m_arm, 0));
-    new Trigger(m_manipulatorController::getXButton).whileTrue(new RetractArm(m_arm, 0));
+    // new Trigger(m_manipulatorController::getAButton).onTrue(new EnableSuction(m_suction));
+    // new Trigger(m_manipulatorController::getBButton).onTrue(new DisableSuction(m_suction));
+    // new Trigger(m_manipulatorController::getYButton).whileTrue(new ExtendArm(m_arm, 0));
+    // new Trigger(m_manipulatorController::getXButton).whileTrue(new RetractArm(m_arm, 0));
   }
 
-  public Command getAutonomousCommand() {
-    return new FollowTrajectory(simplePath, true, m_drive);
-  }
+  // public Command getAutonomousCommand() {
+  //    return new FollowTrajectory(simplePath, true, m_drive);
+  // }
 }
