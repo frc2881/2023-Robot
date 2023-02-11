@@ -11,7 +11,7 @@ import com.pathplanner.lib.PathPlannerTrajectory;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-
+import frc.robot.commands.arm.ElevateArm;
 import frc.robot.commands.arm.ExtendArm;
 import frc.robot.commands.auto.FollowTrajectory;
 import frc.robot.commands.drive.DriveWithJoysticks;
@@ -52,6 +52,8 @@ public class RobotContainer {
   private void setupTriggers() {
     //DRIVER
     new Trigger(m_driverController::getBackButton).onTrue(new ZeroHeading(m_drive));
+    new Trigger(m_driverController::getYButton).whileTrue(new ElevateArm(m_arm, 0.5));
+    new Trigger(m_driverController::getXButton).whileTrue(new ElevateArm(m_arm, -0.5));
 
     //MANIPULATOR
     new Trigger(m_manipulatorController::getAButton).onTrue(new EnableSuction(m_suction));
