@@ -32,12 +32,12 @@ public class Constants {
         /**
          * The CAN ID of the extension motor.
          */
-        public static final int kExtensionMotorId = 41; // TODO: Fix
+        public static final int kExtensionMotorId = 21; // TODO: Fix
 
         /*
          * The CAN ID of the elevation motor.
          */
-        public static final int kElevationMotorId = 41; // TODO: Fix
+        public static final int kElevationMotorId = 20; // TODO: Fix
 
         /*
          * The gear ratio for the arm that converts motor rotations into inches
