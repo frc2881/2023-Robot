@@ -121,9 +121,10 @@ public class SwerveModule {
 
     // This is commented out because it is already being calculated by the CANcoder
     // m_chassisAngularOffset = chassisAngularOffset; 
-    m_desiredState.angle = new Rotation2d(m_turningAnalogSensor.getPosition() - chassisAngularOffset);
+    double initialAngle = m_turningAnalogSensor.getPosition() - chassisAngularOffset;
+    m_desiredState.angle = new Rotation2d(initialAngle);
     m_drivingEncoder.setPosition(0);
-    m_turningEncoder.setPosition(m_turningAnalogSensor.getPosition() - chassisAngularOffset );
+    m_turningEncoder.setPosition(initialAngle);
     
   }
 
