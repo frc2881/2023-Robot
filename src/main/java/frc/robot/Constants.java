@@ -143,6 +143,9 @@ public class Constants {
 
         public static final int kIntakeArmCANId = 18;
 
+        public static final double kExtendSpeed = 0.3; 
+        public static final double kRetractSpeed = -0.3; 
+
         /**
          * The color of the cube, as detected by the REV Color Sensor V3.
          */
@@ -158,12 +161,6 @@ public class Constants {
          * as detected by the REV Color Sensor V3.
          */
         public static final int kDistance = 200; // TODO: Update 
-
-
-        public static final double kIntakeArmRotationsToDegrees = 1.0 / 12.0; // Don't know if this works
-
-        public static final float kSoftLimitForward = 90;
-        public static final float kSoftLimitBackward = 0;
       }
 
       public static final class PrettyLights {

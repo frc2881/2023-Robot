@@ -22,7 +22,7 @@ import frc.robot.Constants;
 
 public class Intake extends SubsystemBase {
   private final CANSparkMax m_rollers;
-  private final CANSparkMax m_intakeArm;
+  private final CANSparkMax m_intakeArmMotor;
   private ColorSensorV3 m_colorSensor;
   private final ColorMatch m_colorMatcher;
   private boolean m_pieceIsCube;
@@ -31,9 +31,9 @@ public class Intake extends SubsystemBase {
   
   public Intake() {
     m_rollers = new CANSparkMax(Constants.Intake.kIntakeRollersCANId, MotorType.kBrushless);
-    m_intakeArm = new CANSparkMax(Constants.Intake.kIntakeArmCANId, MotorType.kBrushless);
+    m_intakeArmMotor = new CANSparkMax(Constants.Intake.kIntakeArmCANId, MotorType.kBrushless);
 
-    m_intakeArm.setInverted(true);
+    m_intakeArmMotor.setInverted(true);
 
     m_colorSensor = new ColorSensorV3(Port.kMXP);
 
@@ -42,11 +42,7 @@ public class Intake extends SubsystemBase {
     m_colorMatcher.addColorMatch(Constants.Intake.kCubeColor);
     m_colorMatcher.setConfidenceThreshold(0.95);
 
-    /*m_intakeArm.enableSoftLimit(SoftLimitDirection.kForward, true);
-    m_intakeArm.enableSoftLimit(SoftLimitDirection.kReverse, true);
-    m_intakeArm.setSoftLimit(SoftLimitDirection.kForward, Constants.Intake.kSoftLimitForward);
-    m_intakeArm.setSoftLimit(SoftLimitDirection.kReverse, Constants.Intake.kSoftLimitBackward);*/
-    m_intakeArmMotorEncoder = m_intakeArm.getEncoder();
+    m_intakeArmMotorEncoder = m_intakeArmMotor.getEncoder();
   }
 
   /**
@@ -58,13 +54,12 @@ public class Intake extends SubsystemBase {
     m_rollers.set(speed);
   }
 
-  /**
-   * Moves the arm in or out
-   * 
-   * @param speed positive value extends
-   */
-  public void moveArm(double speed){
-    m_intakeArm.set(speed);
+  public void extend() {
+    m_intakeArmMotor.set(Constants.Intake.kExtendSpeed); 
+  }
+
+  public void retract() {
+    m_intakeArmMotor.set(Constants.Intake.kRetractSpeed); 
   }
 
   /**
@@ -114,12 +109,21 @@ public class Intake extends SubsystemBase {
       m_colorSensor = new ColorSensorV3(Port.kMXP);
     }
 
+    if (Math.abs(m_intakeArmMotorEncoder.getVelocity()) < 0.1) {
+      m_intakeArmMotor.set(0.0); 
+    }
+
     // Use for finding the Color values for cone/cube.
     Color color = m_colorSensor.getColor();
 
     SmartDashboard.putNumber("Red", color.red);
     SmartDashboard.putNumber("Green", color.green);
     SmartDashboard.putNumber("Blue", color.blue);
+
+    SmartDashboard.putNumber("Intake/EncoderVelocity", m_intakeArmMotorEncoder.getVelocity());
+    SmartDashboard.putNumber("Intake/MotorSpeed", m_intakeArmMotor.get()); 
+
+
   }
 
   @Override
@@ -130,9 +134,5 @@ public class Intake extends SubsystemBase {
     }
     builder.addBooleanProperty("Cone", () -> isCube(), null);
     builder.addBooleanProperty("Cube", () -> isCone(), null);
-  }
-  
-  public Double getIntakeArmEncoderPosition(){
-    return m_intakeArmMotorEncoder.getPosition();
   }
 }

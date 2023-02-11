@@ -61,8 +61,8 @@ public class RobotContainer {
     new Trigger(m_driverController::getBackButton).onTrue(new ZeroHeading(m_drive));
     //new Trigger(m_driverController::getAButton).whileTrue(new RunRollersForward(m_intake));
     //new Trigger(m_driverController::getBButton).whileTrue(new RunRollersBackward(m_intake));
-    new Trigger(m_driverController::getXButton).whileTrue(new ExtendIntakeArm(m_intake)); 
-    new Trigger(m_driverController::getYButton).whileTrue(new RetractIntakeArm(m_intake)); 
+    new Trigger(m_driverController::getXButton).onTrue(new ExtendIntakeArm(m_intake)); 
+    new Trigger(m_driverController::getYButton).onTrue(new RetractIntakeArm(m_intake)); 
 
     //MANIPULATOR
     new Trigger(m_manipulatorController::getAButton).onTrue(new EnableSuction(m_suction));
