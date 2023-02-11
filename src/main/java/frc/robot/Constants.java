@@ -139,8 +139,9 @@ public class Constants {
 
       public static final class Intake {
 
-        public static final int kIntakeRollersCANId = 0;
-        public static final int kIntakeArmCANId = 0;
+        public static final int kIntakeRollersCANId = 19;
+
+        public static final int kIntakeArmCANId = 18;
 
         /**
          * The color of the cube, as detected by the REV Color Sensor V3.
