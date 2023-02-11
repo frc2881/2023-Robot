@@ -148,12 +148,12 @@ public class Constants {
         /**
          * The CAN ID of the first suction motor.
          */
-        public static final int kMotor1Id = 40;
+        public static final int kMotor1Id = 10;
 
         /**
          * The CAN ID of the second suction motor.
          */
-        public static final int kMotor2Id = 41; //TODO check the actual ID number
+        public static final int kMotor2Id = 11;
 
         /**
          * The pneumatic hub channel ID of the first suction solenoid.
@@ -188,12 +188,12 @@ public class Constants {
         /*
          * The target pressure for vacuum state
          */
-        public static final double kTargetPressure = 17;
+        public static final double kTargetPressure = 1400; //total of both sensors
 
         /*
          * The minimum pressure for vacuum state
          */
-        public static final double kMinimumPressure = 20;
+        public static final double kMinimumPressure = 2000;
 
       }
 
