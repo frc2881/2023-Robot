@@ -9,11 +9,11 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Arm;
 
 /** Elevates the scoring arm. */
-public class ElevateArm extends CommandBase {
+public class TiltArm extends CommandBase {
   private Arm m_arm;
   private double m_speed;
   
-  public ElevateArm(Arm arm, double speed) {
+  public TiltArm(Arm arm, double speed) {
     m_arm = arm;
     m_speed = speed;
   }
@@ -25,13 +25,13 @@ public class ElevateArm extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_arm.elevate(m_speed);
+    m_arm.tilt(m_speed);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_arm.elevate(0.0);
+    m_arm.tilt(0.0);
   }
 
   // Returns true when the command should end.

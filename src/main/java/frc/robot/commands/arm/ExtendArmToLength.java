@@ -16,8 +16,18 @@ public class ExtendArmToLength extends CommandBase {
 
   public ExtendArmToLength(Arm arm, Double speed, Double position) {
     m_arm = arm;
-    m_speed = speed;
     m_position = position;
+
+    // Set speed depending on whether we are above or below the position wanted
+      if(m_arm.getTiltEncoderPosition() < m_position){
+        m_speed = speed;
+
+      } else if(m_arm.getTiltEncoderPosition() > m_position){
+        m_speed = -speed;
+      }
+      else{
+        m_speed = 0.0;
+      }
 
   }
 
@@ -27,6 +37,7 @@ public class ExtendArmToLength extends CommandBase {
 
   @Override
   public void execute() {
+    // TODO: Add isSafe based on tilt position
     m_arm.runArm(m_speed);
   }
 

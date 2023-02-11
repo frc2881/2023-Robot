@@ -8,11 +8,18 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Intake extends SubsystemBase {
+  public boolean isOut = true;
   /** Creates a new Intake. */
-  public Intake() {}
+  public Intake() {
+
+  }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+  }
+
+  public boolean isOut(){
+    return isOut;
   }
 }
