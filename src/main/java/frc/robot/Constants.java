@@ -17,6 +17,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.util.Color;
 
 
 /** Add your docs here. */
@@ -176,6 +177,28 @@ public class Constants {
 
       public static final class Intake {
 
+        public static final int kIntakeRollersCANId = 19;
+
+        public static final int kIntakeArmCANId = 18;
+
+        public static final double kExtendSpeed = 0.3; 
+        public static final double kRetractSpeed = -0.3; 
+
+        /**
+         * The color of the cube, as detected by the REV Color Sensor V3.
+         */
+        public static final Color kCubeColor = new Color(0, 0, 0); // TODO: Update Color values
+
+        /**
+         * The color of the cone, as detected by the REV Color Sensor V3.
+         */
+        public static final Color kConeColor = new Color(0, 0, 0); // TODO: Update Color values
+
+        /**
+         * The minimum distance to the cargo in order to consider it to be present,
+         * as detected by the REV Color Sensor V3.
+         */
+        public static final int kDistance = 200; // TODO: Update 
       }
 
       public static final class PrettyLights {
