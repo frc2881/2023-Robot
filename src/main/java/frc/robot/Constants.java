@@ -160,6 +160,10 @@ public class Constants {
         public static final int kDistance = 200; // TODO: Update 
 
 
+        public static final double kIntakeArmRotationsToDegrees = 1.0 / 12.0; // Don't know if this works
+
+        public static final float kSoftLimitForward = 90;
+        public static final float kSoftLimitBackward = 0;
       }
 
       public static final class PrettyLights {

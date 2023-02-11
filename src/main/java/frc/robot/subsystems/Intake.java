@@ -10,6 +10,8 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.ColorMatch;
 import com.revrobotics.ColorMatchResult;
 import com.revrobotics.ColorSensorV3;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.CANSparkMax.SoftLimitDirection;
 
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.I2C.Port;
@@ -20,15 +22,18 @@ import frc.robot.Constants;
 
 public class Intake extends SubsystemBase {
   private final CANSparkMax m_rollers;
-  private final CANSparkMax m_arm;
+  private final CANSparkMax m_intakeArm;
   private ColorSensorV3 m_colorSensor;
   private final ColorMatch m_colorMatcher;
   private boolean m_pieceIsCube;
   private boolean m_pieceIsCone;
+  private final RelativeEncoder m_intakeArmMotorEncoder;
   
   public Intake() {
     m_rollers = new CANSparkMax(Constants.Intake.kIntakeRollersCANId, MotorType.kBrushless);
-    m_arm = new CANSparkMax(Constants.Intake.kIntakeArmCANId, MotorType.kBrushless);
+    m_intakeArm = new CANSparkMax(Constants.Intake.kIntakeArmCANId, MotorType.kBrushless);
+
+    m_intakeArm.setInverted(true);
 
     m_colorSensor = new ColorSensorV3(Port.kMXP);
 
@@ -36,6 +41,12 @@ public class Intake extends SubsystemBase {
     m_colorMatcher.addColorMatch(Constants.Intake.kConeColor);
     m_colorMatcher.addColorMatch(Constants.Intake.kCubeColor);
     m_colorMatcher.setConfidenceThreshold(0.95);
+
+    /*m_intakeArm.enableSoftLimit(SoftLimitDirection.kForward, true);
+    m_intakeArm.enableSoftLimit(SoftLimitDirection.kReverse, true);
+    m_intakeArm.setSoftLimit(SoftLimitDirection.kForward, Constants.Intake.kSoftLimitForward);
+    m_intakeArm.setSoftLimit(SoftLimitDirection.kReverse, Constants.Intake.kSoftLimitBackward);*/
+    m_intakeArmMotorEncoder = m_intakeArm.getEncoder();
   }
 
   /**
@@ -53,7 +64,7 @@ public class Intake extends SubsystemBase {
    * @param speed positive value extends
    */
   public void moveArm(double speed){
-    m_arm.set(speed);
+    m_intakeArm.set(speed);
   }
 
   /**
@@ -119,6 +130,9 @@ public class Intake extends SubsystemBase {
     }
     builder.addBooleanProperty("Cone", () -> isCube(), null);
     builder.addBooleanProperty("Cube", () -> isCone(), null);
-
+  }
+  
+  public Double getIntakeArmEncoderPosition(){
+    return m_intakeArmMotorEncoder.getPosition();
   }
 }
