@@ -176,12 +176,12 @@ public class Constants {
         public static final double kMaxSpeed = 0.33;
 
         /**
-         * The pneumatic hub channel ID of the first pressure sensor.
+         * The pneumatic hub channel ID of the bottom pressure sensor.
          */
         public static final int kPressureSensorBottomId = 0;
 
         /**
-         * The pneumatic hub channel ID of the first pressure sensor.
+         * The pneumatic hub channel ID of the top pressure sensor.
          */
         public static final int kPressureSensorTopId = 1;
 
