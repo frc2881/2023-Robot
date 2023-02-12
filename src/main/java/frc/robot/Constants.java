@@ -284,14 +284,14 @@ public class Constants {
         public static final String kLeftCameraName = "LEFT";
         public static final Transform3d kLeftRobotToCamera =
             new Transform3d(
-                new Translation3d(0.5, 0.0, 0.5),
-                new Rotation3d(0, 0,0)); 
+                new Translation3d(-0.16390, 0.18440, 0.59055),
+                new Rotation3d(0, 0, Math.toRadians(10))); 
 
         public static final String kRightCameraName = "RIGHT";
         public static final Transform3d kRightRobotToCamera =
             new Transform3d(
-                new Translation3d(0.5, 0.0, 0.5),
-                new Rotation3d(0, 0,0)); 
+                new Translation3d(-0.16390, -0.18298, 0.59055),
+                new Rotation3d(0, 0, Math.toRadians(10))); 
 
       }
 
