@@ -5,9 +5,6 @@
 
 package frc.robot.subsystems;
 
-
-
-
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -17,13 +14,14 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj.RobotController;
+
 import frc.robot.Constants;
+import frc.robot.lib.Utils;
 
 public class Suction extends SubsystemBase {
-  
-
-  private final AnalogInput m_AnalogPressureBottom;
-  private final AnalogInput m_AnalogPressureTop;
+  private final AnalogInput m_AnalogInputPressureBottom;
+  private final AnalogInput m_AnalogInputPressureTop;
   private final CANSparkMax m_motorBottom;
   private final CANSparkMax m_motorTop;
   private final Solenoid m_solenoidBottom;
@@ -34,8 +32,8 @@ public class Suction extends SubsystemBase {
   
 
   public Suction() {
-    m_AnalogPressureBottom = new AnalogInput(Constants.Suction.kPressureSensorBottomId);
-    m_AnalogPressureTop = new AnalogInput(Constants.Suction.kPressureSensorTopId);
+    m_AnalogInputPressureBottom = new AnalogInput(Constants.Suction.kPressureSensorBottomId);
+    m_AnalogInputPressureTop = new AnalogInput(Constants.Suction.kPressureSensorTopId);
 
     m_motorBottom = new CANSparkMax(Constants.Suction.kMotorBottomId, MotorType.kBrushless);
     m_motorBottom.restoreFactoryDefaults();
@@ -56,8 +54,9 @@ public class Suction extends SubsystemBase {
 
   @Override
   public void periodic() {
-    double pressureBottom = m_AnalogPressureBottom.getAverageVoltage();
-    double pressureTop = m_AnalogPressureTop.getAverageVoltage();
+    double supplyVoltage = RobotController.getVoltage5V();
+    double pressureBottom = Utils.voltsToPsi(m_AnalogInputPressureBottom.getAverageVoltage(), supplyVoltage);
+    double pressureTop = Utils.voltsToPsi(m_AnalogInputPressureTop.getAverageVoltage(), supplyVoltage);
 
     //Automated reenabling of the suction system
     if (m_isEnabled) {
@@ -99,7 +98,6 @@ public class Suction extends SubsystemBase {
       m_isTargetPressureBottomReached = false;
       m_isTargetPressureTopReached = false;
     }
-
 
     SmartDashboard.putNumber("Suction/PressureBottom", pressureBottom);
     SmartDashboard.putNumber("Suction/PressureTop", pressureTop);
