@@ -49,10 +49,10 @@ public class Elevator extends SubsystemBase{
 
     @Override
     public void periodic() {
-        elevatorTab.getLayout("Lift Motors", BuiltInLayouts.kList)
-        .addDouble("Right Lift Motor Ticks", () -> rightLiftMotor.getEncoder().getPosition());
-        elevatorTab.getLayout("Lift Motors", BuiltInLayouts.kList)
-        .addDouble("Left Lift Motor Ticks", () -> leftLiftMotor.getEncoder().getPosition());
+        // elevatorTab.getLayout("Lift Motors", BuiltInLayouts.kList)
+        // .addDouble("Right Lift Motor Ticks", () -> rightLiftMotor.getEncoder().getPosition());
+        // elevatorTab.getLayout("Lift Motors", BuiltInLayouts.kList)
+        // .addDouble("Left Lift Motor Ticks", () -> leftLiftMotor.getEncoder().getPosition());
 
         SmartDashboard.putNumber("right liftTicks", rightLiftMotor.getEncoder().getPosition());
         SmartDashboard.putNumber("left liftTicks", leftLiftMotor.getEncoder().getPosition());
