@@ -176,9 +176,9 @@ public class Drive extends SubsystemBase {
    */
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
     // Adjust input based on   speed
-    xSpeed *= Constants.Drive.kMaxSpeedMetersPerSecond;
-    ySpeed *= Constants.Drive.kMaxSpeedMetersPerSecond;
-    rot *= Constants.Drive.kMaxAngularSpeed;
+    // xSpeed *= Constants.Drive.kMaxSpeedMetersPerSecond;
+    // ySpeed *= Constants.Drive.kMaxSpeedMetersPerSecond;
+    // rot *= Constants.Drive.kMaxAngularSpeed;
 
     var swerveModuleStates = Constants.Drive.kDriveKinematics.toSwerveModuleStates(
         fieldRelative

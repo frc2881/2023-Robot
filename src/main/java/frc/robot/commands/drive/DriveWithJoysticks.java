@@ -8,6 +8,7 @@ package frc.robot.commands.drive;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.subsystems.Drive;
 
 public class DriveWithJoysticks extends CommandBase {
@@ -24,14 +25,16 @@ public class DriveWithJoysticks extends CommandBase {
     m_translationXSupplier = translationXSupplier;
     m_translationYSupplier = translationYSupplier;
     m_rotationSupplier = rotationSupplier;
-
     
     addRequirements(m_drive);
   }
 
   @Override
   public void execute() {
-   m_drive.drive(m_translationXSupplier.getAsDouble(), m_translationYSupplier.getAsDouble(), m_rotationSupplier.getAsDouble(), true);
+   m_drive.drive(m_translationXSupplier.getAsDouble() * Constants.Drive.kMaxSpeedMetersPerSecond,
+               m_translationYSupplier.getAsDouble() * Constants.Drive.kMaxSpeedMetersPerSecond, 
+               m_rotationSupplier.getAsDouble() * Constants.Drive.kMaxAngularSpeed, 
+               true);
   }
 
   @Override

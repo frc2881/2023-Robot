@@ -5,15 +5,17 @@
 
 package frc.robot.commands.arm;
 
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Arm;
 
 /** Extends the scoring arm. */
 public class ExtendArm extends CommandBase {
   private Arm m_arm;
-  private double m_speed;
+  private DoubleSupplier m_speed;
 
-  public ExtendArm(Arm arm, double speed) {
+  public ExtendArm(Arm arm, DoubleSupplier speed) {
     m_arm = arm;
     m_speed = speed;
   }
@@ -21,7 +23,7 @@ public class ExtendArm extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_arm.runArm(m_speed);
+    m_arm.runArm(m_speed.getAsDouble());
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -31,7 +33,7 @@ public class ExtendArm extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_arm.runArm(m_speed);
+    m_arm.runArm(0.0);
   }
 
   // Returns true when the command should end.

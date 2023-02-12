@@ -44,7 +44,7 @@ public class Constants {
          * The gear ratio for the arm that converts motor rotations into inches
          * of extension of the arm.
          */
-        public static final double kExtendRotationsToInches = (1.0 / 2.0) / 3.0;
+        public static final double kExtendRotationsToInches = (1.0 / 2.0) / 4.0;
 
         /*
          * The gear ratio for the arm that converts motor rotations into inches
@@ -62,16 +62,16 @@ public class Constants {
         public static final double kExtendReverseLimit = 0.0; 
 
          /*
-         * The maximum distance (in rotations) that the arm can elevate.
+         * The maximum distance (in inches) that the arm can elevate.
          */
-        public static final double kTiltForwardLimit = 14.5;
+        public static final double kTiltForwardLimit = 20; // TODO: Fix
 
          /*
          * The maximum distance (in rotations) that the arm can go down.
          */
         public static final double kTiltReverseLimit = 0.0;
 
-        public static final double kMinSafeTilt = 0.0;
+        public static final double kMinSafeTilt = 2.6;
     }
 
     public static final class Clamps {
@@ -96,7 +96,7 @@ public class Constants {
             new Translation2d(-kWheelBase / 2, -kTrackWidth / 2));
     
         // Angular offsets of the modules relative to the chassis in radians
-        public static final double kFrontLeftChassisAngularOffset = 5.91;
+        public static final double kFrontLeftChassisAngularOffset = 5.9215;
         public static final double kFrontRightChassisAngularOffset = 2.86;
         public static final double kRearLeftChassisAngularOffset = 1.59;
         public static final double kRearRightChassisAngularOffset = 4.40;

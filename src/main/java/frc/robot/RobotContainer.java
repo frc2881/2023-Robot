@@ -10,9 +10,13 @@ import com.pathplanner.lib.PathPlannerTrajectory;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RepeatCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.arm.ArmExtendOverride;
 import frc.robot.commands.arm.ArmTiltOverride;
+import frc.robot.commands.arm.ExtendAndTiltArm;
 import frc.robot.commands.arm.ExtendArm;
 import frc.robot.commands.arm.ExtendArmToLength;
 import frc.robot.commands.arm.TiltArm;
@@ -70,14 +74,15 @@ public class RobotContainer {
     //MANIPULATOR
     new Trigger(m_manipulatorController::getAButton).onTrue(new EnableSuction(m_suction));
     new Trigger(m_manipulatorController::getBButton).onTrue(new DisableSuction(m_suction));
-    new Trigger(m_manipulatorController::getYButton).whileTrue(new TiltArm(m_arm, 0.15)); //new TiltArmToHeight(m_arm, m_intake, 0.25, 10.0));
-    new Trigger(m_manipulatorController::getXButton).whileTrue(new ExtendArm(m_arm, -0.15)); //ExtendArmToLength(m_arm, 0.25, 10.0));
+    new Trigger(() -> Math.abs(m_manipulatorController.getLeftY()) > 0.1).whileTrue(new TiltArm(m_arm, m_manipulatorController::getLeftY)); //new TiltArmToHeight(m_arm, m_intake, 0.25, 10.0));
+    new Trigger(() -> Math.abs(m_manipulatorController.getRightY()) > 0.1).whileTrue(new ExtendArm(m_arm, m_manipulatorController::getRightY));
+    new Trigger(m_manipulatorController::getXButton).whileTrue(new ExtendAndTiltArm(0.2, 8.0, 8.0, m_arm, m_intake));
     new Trigger(m_manipulatorController::getBackButton).whileTrue(new ArmTiltOverride(m_arm));
     new Trigger(m_manipulatorController::getStartButton).whileTrue(new ArmExtendOverride(m_arm));
 
   }
 
   public Command getAutonomousCommand() {
-    return new FollowTrajectory(simplePath, true, m_drive);
+    return new RunCommand(() -> m_drive.drive(1.0, 0.0, 0.0, true), m_drive); // DriveWithJoysticks(m_drive, () -> 1.0, () -> 0.0, () -> 0.0); // FollowTrajectory(simplePath, true, m_drive);
   }
 }

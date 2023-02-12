@@ -15,11 +15,13 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Arm extends SubsystemBase {
+  private Intake m_intake;
   private final CANSparkMax m_extensionMotor;
   private final RelativeEncoder m_extensionMotorEncoder;
   private final CANSparkMax m_tiltMotor;
   private final RelativeEncoder m_tiltMotorEncoder;
   private boolean extendIsSafe;
+  private boolean tiltIsSafe;
 
   /** Creates a new Arm. */
   public Arm() {
@@ -42,7 +44,7 @@ public class Arm extends SubsystemBase {
                        (float)Constants.Arm.kTiltReverseLimit);
 
     m_tiltMotorEncoder = m_tiltMotor.getEncoder();
-    //m_tiltMotorEncoder.setPositionConversionFactor(Constants.Arm.kTiltRotationsToInches);
+    m_tiltMotorEncoder.setPositionConversionFactor(Constants.Arm.kTiltRotationsToInches);
 
     m_extensionMotorEncoder = m_extensionMotor.getEncoder();
     m_extensionMotorEncoder.setPositionConversionFactor(Constants.Arm.kExtendRotationsToInches);
@@ -120,6 +122,18 @@ public class Arm extends SubsystemBase {
     }
 
     return extendIsSafe;
+  }
+
+  public boolean isSafeToTilt(){
+    double extend = m_tiltMotorEncoder.getPosition();
+
+    if(extend > 0){
+      tiltIsSafe = false;
+    } else{
+      tiltIsSafe = true;
+    }
+
+    return tiltIsSafe;
   }
 
 }
