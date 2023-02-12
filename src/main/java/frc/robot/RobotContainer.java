@@ -11,23 +11,32 @@ import com.pathplanner.lib.PathPlannerTrajectory;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-
+import frc.robot.commands.arm.ArmExtendOverride;
+import frc.robot.commands.arm.ArmTiltOverride;
 import frc.robot.commands.arm.ExtendArm;
-import frc.robot.commands.arm.RetractArm;
+import frc.robot.commands.arm.ExtendArmToLength;
+import frc.robot.commands.arm.TiltArm;
+import frc.robot.commands.arm.TiltArmToHeight;
 import frc.robot.commands.auto.FollowTrajectory;
 import frc.robot.commands.drive.DriveWithJoysticks;
 import frc.robot.commands.drive.ZeroHeading;
+import frc.robot.commands.intake.ExtendIntakeArm;
+import frc.robot.commands.intake.RetractIntakeArm;
+import frc.robot.commands.intake.RunRollersBackward;
+import frc.robot.commands.intake.RunRollersForward;
 import frc.robot.commands.suction.DisableSuction;
 import frc.robot.commands.suction.EnableSuction;
 import frc.robot.lib.Utils;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Drive;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Suction;
 
 public class RobotContainer {
   private Drive m_drive = new Drive();
   private Suction m_suction = new Suction();
   private Arm m_arm = new Arm();
+  private Intake m_intake = new Intake();
 
   private final XboxController m_driverController = new XboxController(Constants.Controllers.kDriverControllerPort);
   private final XboxController m_manipulatorController = new XboxController(Constants.Controllers.kManipulatorControllerPort);
@@ -53,12 +62,19 @@ public class RobotContainer {
   private void setupTriggers() {
     //DRIVER
     new Trigger(m_driverController::getBackButton).onTrue(new ZeroHeading(m_drive));
+    //new Trigger(m_driverController::getAButton).whileTrue(new RunRollersForward(m_intake));
+    //new Trigger(m_driverController::getBButton).whileTrue(new RunRollersBackward(m_intake));
+    new Trigger(m_driverController::getXButton).onTrue(new ExtendIntakeArm(m_intake)); 
+    new Trigger(m_driverController::getYButton).onTrue(new RetractIntakeArm(m_intake)); 
 
     //MANIPULATOR
     new Trigger(m_manipulatorController::getAButton).onTrue(new EnableSuction(m_suction));
     new Trigger(m_manipulatorController::getBButton).onTrue(new DisableSuction(m_suction));
-    new Trigger(m_manipulatorController::getYButton).whileTrue(new ExtendArm(m_arm, 0));
-    new Trigger(m_manipulatorController::getXButton).whileTrue(new RetractArm(m_arm, 0));
+    new Trigger(m_manipulatorController::getYButton).whileTrue(new TiltArm(m_arm, 0.15)); //new TiltArmToHeight(m_arm, m_intake, 0.25, 10.0));
+    new Trigger(m_manipulatorController::getXButton).whileTrue(new ExtendArm(m_arm, -0.15)); //ExtendArmToLength(m_arm, 0.25, 10.0));
+    new Trigger(m_manipulatorController::getBackButton).whileTrue(new ArmTiltOverride(m_arm));
+    new Trigger(m_manipulatorController::getStartButton).whileTrue(new ArmExtendOverride(m_arm));
+
   }
 
   public Command getAutonomousCommand() {

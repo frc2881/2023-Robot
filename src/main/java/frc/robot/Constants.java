@@ -17,6 +17,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.util.Color;
 
 
 /** Add your docs here. */
@@ -32,7 +33,45 @@ public class Constants {
         /**
          * The CAN ID of the extension motor.
          */
-        public static final int kExtensionMotorId = 41;
+        public static final int kExtensionMotorId = 21; // TODO: Fix
+
+        /*
+         * The CAN ID of the elevation motor.
+         */
+        public static final int kTiltMotorId = 20; // TODO: Fix
+
+        /*
+         * The gear ratio for the arm that converts motor rotations into inches
+         * of extension of the arm.
+         */
+        public static final double kExtendRotationsToInches = (1.0 / 2.0) / 3.0;
+
+        /*
+         * The gear ratio for the arm that converts motor rotations into inches
+         * of elevation of the arm.
+         */
+        public static final double kTiltRotationsToInches = (1.0 / 2.0) / 3.0; // This is not completely accurate so it's been changed to rotations
+        /*
+         * The maximum distance (in inches) that the arm can extend.
+         */
+        public static final double kExtendForwardLimit = 44.5; 
+
+         /*
+         * The maximum distance (in inches) that the arm can retract.
+         */
+        public static final double kExtendReverseLimit = 0.0; 
+
+         /*
+         * The maximum distance (in rotations) that the arm can elevate.
+         */
+        public static final double kTiltForwardLimit = 14.5;
+
+         /*
+         * The maximum distance (in rotations) that the arm can go down.
+         */
+        public static final double kTiltReverseLimit = 0.0;
+
+        public static final double kMinSafeTilt = 0.0;
     }
 
     public static final class Clamps {
@@ -141,6 +180,28 @@ public class Constants {
 
       public static final class Intake {
 
+        public static final int kIntakeRollersCANId = 19;
+
+        public static final int kIntakeArmCANId = 18;
+
+        public static final double kExtendSpeed = 0.3; 
+        public static final double kRetractSpeed = -0.3; 
+
+        /**
+         * The color of the cube, as detected by the REV Color Sensor V3.
+         */
+        public static final Color kCubeColor = new Color(0, 0, 0); // TODO: Update Color values
+
+        /**
+         * The color of the cone, as detected by the REV Color Sensor V3.
+         */
+        public static final Color kConeColor = new Color(0, 0, 0); // TODO: Update Color values
+
+        /**
+         * The minimum distance to the cargo in order to consider it to be present,
+         * as detected by the REV Color Sensor V3.
+         */
+        public static final int kDistance = 200; // TODO: Update 
       }
 
       public static final class PrettyLights {
@@ -151,22 +212,22 @@ public class Constants {
         /**
          * The CAN ID of the first suction motor.
          */
-        public static final int kMotor1Id = 40;
+        public static final int kMotorBottomId = 10;
 
         /**
          * The CAN ID of the second suction motor.
          */
-        public static final int kMotor2Id = 41; //TODO check the actual ID number
+        public static final int kMotorTopId = 11;
 
         /**
          * The pneumatic hub channel ID of the first suction solenoid.
          */
-        public static final int kSolenoid1Id = 0;
+        public static final int kSolenoidBottomId = 0;
 
         /**
          * The pneumatic hub channel ID of the second suction solenoid.
          */
-        public static final int kSolenoid2Id = 1;
+        public static final int kSolenoidTopId = 1;
 
         /**
          * The maximum current to send to the suction motor.
@@ -179,24 +240,34 @@ public class Constants {
         public static final double kMaxSpeed = 0.33;
 
         /**
-         * The pneumatic hub channel ID of the first pressure sensor.
+         * The pneumatic hub channel ID of the bottom pressure sensor.
          */
-        public static final int kPressureSensor1Id = 0;
+        public static final int kPressureSensorBottomId = 0;
 
         /**
-         * The pneumatic hub channel ID of the first pressure sensor.
+         * The pneumatic hub channel ID of the top pressure sensor.
          */
-        public static final int kPressureSensor2Id = 1;
+        public static final int kPressureSensorTopId = 1;
 
         /*
-         * The target pressure for vacuum state
+         * The target pressure for bottom vacuum state
          */
-        public static final double kTargetPressure = 17;
+        public static final double kTargetPressureBottom = 0.82;
 
         /*
-         * The minimum pressure for vacuum state
+         * The minimum pressure for bottom vacuum state
          */
-        public static final double kMinimumPressure = 20;
+        public static final double kMinimumPressureBottom = 0.85;
+
+        /*
+         * The target pressure for top vacuum state
+         */
+        public static final double kTargetPressureTop = 0.82;
+
+        /*
+         * The minimum pressure for top vacuum state
+         */
+        public static final double kMinimumPressureTop = 0.85;
 
       }
 
