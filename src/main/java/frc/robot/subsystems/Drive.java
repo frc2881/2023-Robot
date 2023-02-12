@@ -48,13 +48,13 @@ public class Drive extends SubsystemBase {
       Constants.Drive.kRearLeftDrivingCanId,
       Constants.Drive.kRearLeftTurningCanId,
       Constants.Drive.kRearLeftCanCoderId,
-      Constants.Drive.kBackLeftChassisAngularOffset);
+      Constants.Drive.kRearLeftChassisAngularOffset);
 
   private final SwerveModule m_rearRight = new  SwerveModule(
       Constants.Drive.kRearRightDrivingCanId,
       Constants.Drive.kRearRightTurningCanId,
       Constants.Drive.kRearRightCanCoderId, 
-      Constants.Drive.kBackRightChassisAngularOffset);
+      Constants.Drive.kRearRightChassisAngularOffset);
 
   // The gyro sensor
   private final NavX m_gyro = new NavX();

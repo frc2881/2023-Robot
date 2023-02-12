@@ -46,10 +46,10 @@ public class Constants {
         public static final double kMaxAngularSpeed = 2 * Math.PI; // radians per second
     
         // Chassis configuration
-        public static final double kTrackWidth = Units.inchesToMeters(26.5);
+        public static final double kTrackWidth = Units.inchesToMeters(24.5);
         // Distance between centers of right and left wheels on robot
         public static final double kWheelBase = Units.inchesToMeters(26.5);
-        // Distance between front and back wheels on robot
+        // Distance between front and rear wheels on robot
         public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
             new Translation2d(kWheelBase / 2, kTrackWidth / 2),
             new Translation2d(kWheelBase / 2, -kTrackWidth / 2),
@@ -57,10 +57,10 @@ public class Constants {
             new Translation2d(-kWheelBase / 2, -kTrackWidth / 2));
     
         // Angular offsets of the modules relative to the chassis in radians
-        public static final double kFrontLeftChassisAngularOffset = 5.92;
+        public static final double kFrontLeftChassisAngularOffset = 5.91;
         public static final double kFrontRightChassisAngularOffset = 2.86;
-        public static final double kBackLeftChassisAngularOffset = 1.58;
-        public static final double kBackRightChassisAngularOffset = 4.38;
+        public static final double kRearLeftChassisAngularOffset = 1.59;
+        public static final double kRearRightChassisAngularOffset = 4.40;
     
         // SPARK MAX CAN IDs
         public static final int kFrontLeftDrivingCanId = 15;
