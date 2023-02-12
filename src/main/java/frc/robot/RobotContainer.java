@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.arm.ArmExtendOverride;
 import frc.robot.commands.arm.ArmTiltOverride;
+import frc.robot.commands.arm.ExtendArm;
 import frc.robot.commands.arm.ExtendArmToLength;
 import frc.robot.commands.arm.TiltArm;
 import frc.robot.commands.arm.TiltArmToHeight;
@@ -69,8 +70,8 @@ public class RobotContainer {
     //MANIPULATOR
     new Trigger(m_manipulatorController::getAButton).onTrue(new EnableSuction(m_suction));
     new Trigger(m_manipulatorController::getBButton).onTrue(new DisableSuction(m_suction));
-    new Trigger(m_manipulatorController::getYButton).whileTrue(new TiltArmToHeight(m_arm, m_intake, 0.25, 10.0));
-    new Trigger(m_manipulatorController::getXButton).whileTrue(new ExtendArmToLength(m_arm, 0.25, 10.0));
+    new Trigger(m_manipulatorController::getYButton).whileTrue(new TiltArm(m_arm, 0.15)); //new TiltArmToHeight(m_arm, m_intake, 0.25, 10.0));
+    new Trigger(m_manipulatorController::getXButton).whileTrue(new ExtendArm(m_arm, -0.15)); //ExtendArmToLength(m_arm, 0.25, 10.0));
     new Trigger(m_manipulatorController::getBackButton).whileTrue(new ArmTiltOverride(m_arm));
     new Trigger(m_manipulatorController::getStartButton).whileTrue(new ArmExtendOverride(m_arm));
 

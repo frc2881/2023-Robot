@@ -31,7 +31,7 @@ public class ArmExtendOverride extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     // m_arm.enableExtendSoftLimits(true);
-    m_arm.resetExtendEncoder();
+    m_arm.resetExtensionEncoder();
 
     m_arm.runArm(0.0);
   }

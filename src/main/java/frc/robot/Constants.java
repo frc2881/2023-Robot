@@ -44,27 +44,27 @@ public class Constants {
          * The gear ratio for the arm that converts motor rotations into inches
          * of extension of the arm.
          */
-        public static final double kExtendRotationsToInches = (1.0 / 2.0) / 3.0; // TODO: Make sure conversion factor is correct
+        public static final double kExtendRotationsToInches = (1.0 / 2.0) / 3.0;
 
         /*
          * The gear ratio for the arm that converts motor rotations into inches
          * of elevation of the arm.
          */
-        public static final double kTiltRotationsToInches = (1.0 / 2.0) / 3.0; 
+        public static final double kTiltRotationsToInches = (1.0 / 2.0) / 3.0; // This is not completely accurate so it's been changed to rotations
         /*
-         * The maximum distance (in rotations) that the arm can extend.
+         * The maximum distance (in inches) that the arm can extend.
          */
-        public static final double kExtendForwardLimit = 0; // TODO: UPDATE
+        public static final double kExtendForwardLimit = 44.5; 
 
          /*
-         * The maximum distance (in rotations) that the arm can retract.
+         * The maximum distance (in inches) that the arm can retract.
          */
         public static final double kExtendReverseLimit = 0.0; 
 
          /*
          * The maximum distance (in rotations) that the arm can elevate.
          */
-        public static final double kTiltForwardLimit = 0.0; // TODO: UPDATE
+        public static final double kTiltForwardLimit = 14.5;
 
          /*
          * The maximum distance (in rotations) that the arm can go down.

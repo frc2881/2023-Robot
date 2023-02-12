@@ -25,45 +25,34 @@ public class Arm extends SubsystemBase {
   public Arm() {
     m_extensionMotor = new CANSparkMax(Constants.Arm.kExtensionMotorId, MotorType.kBrushless);
     m_extensionMotor.setIdleMode(IdleMode.kBrake); 
-
-    m_extensionMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, false);
-    m_extensionMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, false);
-    
-    /* 
     m_extensionMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
     m_extensionMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward,
                        (float)Constants.Arm.kExtendForwardLimit); 
-
     m_extensionMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
     m_extensionMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse,
-                       (float)Constants.Arm.kExtendReverseLimit);*/
+                       (float)Constants.Arm.kExtendReverseLimit);
 
     m_tiltMotor = new CANSparkMax(Constants.Arm.kTiltMotorId, MotorType.kBrushless);
     m_tiltMotor.setIdleMode(IdleMode.kBrake);
-    
-    m_tiltMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, false);
-    m_tiltMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, false);
-
-    /*
     m_tiltMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
     m_tiltMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward,
                        (float)Constants.Arm.kTiltForwardLimit);
-
     m_tiltMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
     m_tiltMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse,
-                       (float)Constants.Arm.kTiltReverseLimit); */
+                       (float)Constants.Arm.kTiltReverseLimit);
 
     m_tiltMotorEncoder = m_tiltMotor.getEncoder();
     //m_tiltMotorEncoder.setPositionConversionFactor(Constants.Arm.kTiltRotationsToInches);
 
     m_extensionMotorEncoder = m_extensionMotor.getEncoder();
-    //m_extensionMotorEncoder.setPositionConversionFactor(Constants.Arm.kExtendRotationsToInches);
+    m_extensionMotorEncoder.setPositionConversionFactor(Constants.Arm.kExtendRotationsToInches);
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Arm/Tilt/Encoder Position", m_tiltMotorEncoder.getPosition());
+    SmartDashboard.putNumber("Arm/Extend/Encoder Position", m_extensionMotorEncoder.getPosition());
   }
 
   /**
@@ -97,7 +86,7 @@ public class Arm extends SubsystemBase {
     m_tiltMotorEncoder.setPosition(0.0);
   }
 
-  public void resetExtendEncoder() {
+  public void resetExtensionEncoder() {
     m_extensionMotorEncoder.setPosition(0.0);
   }
 
