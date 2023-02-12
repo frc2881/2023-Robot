@@ -48,13 +48,13 @@ public class Drive extends SubsystemBase {
       Constants.Drive.kRearLeftDrivingCanId,
       Constants.Drive.kRearLeftTurningCanId,
       Constants.Drive.kRearLeftCanCoderId,
-      Constants.Drive.kBackLeftChassisAngularOffset);
+      Constants.Drive.kRearLeftChassisAngularOffset);
 
   private final SwerveModule m_rearRight = new  SwerveModule(
       Constants.Drive.kRearRightDrivingCanId,
       Constants.Drive.kRearRightTurningCanId,
       Constants.Drive.kRearRightCanCoderId, 
-      Constants.Drive.kBackRightChassisAngularOffset);
+      Constants.Drive.kRearRightChassisAngularOffset);
 
   // The gyro sensor
   private final NavX m_gyro = new NavX();
@@ -121,7 +121,7 @@ public class Drive extends SubsystemBase {
         m_rearLeft.getPosition(),
         m_rearRight.getPosition()
     });
-
+/*
     Optional<EstimatedRobotPose> leftCameraResult = m_leftPhotonCamera.getEstimatedGlobalPose(m_poseEstimator.getEstimatedPosition());
     if (leftCameraResult.isPresent()) {
       EstimatedRobotPose camPose = leftCameraResult.get();
@@ -133,7 +133,7 @@ public class Drive extends SubsystemBase {
       EstimatedRobotPose camPose = rightCameraResult.get();
       m_poseEstimator.addVisionMeasurement(camPose.estimatedPose.toPose2d(), camPose.timestampSeconds);
     }
-
+*/
     m_fieldSim.setRobotPose(m_poseEstimator.getEstimatedPosition());
   }
 
