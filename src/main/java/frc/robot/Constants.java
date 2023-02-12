@@ -250,24 +250,24 @@ public class Constants {
         public static final int kPressureSensorTopId = 1;
 
         /*
-         * The target pressure for bottom vacuum state
+         * The target pressure for bottom vacuum state in PSI
          */
-        public static final double kTargetPressureBottom = 0.82;
+        public static final double kTargetPressureBottom = 17.5;
 
         /*
-         * The minimum pressure for bottom vacuum state
+         * The minimum pressure for bottom vacuum state in PSI
          */
-        public static final double kMinimumPressureBottom = 0.85;
+        public static final double kMinimumPressureBottom = 19.5;
 
         /*
-         * The target pressure for top vacuum state
+         * The target pressure for top vacuum state in PSI
          */
-        public static final double kTargetPressureTop = 0.82;
+        public static final double kTargetPressureTop = 17.5;
 
         /*
-         * The minimum pressure for top vacuum state
+         * The minimum pressure for top vacuum state in PSI
          */
-        public static final double kMinimumPressureTop = 0.85;
+        public static final double kMinimumPressureTop = 19.5;
 
       }
 

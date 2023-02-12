@@ -6,4 +6,9 @@ public final class Utils {
         return (Math.abs(input) < deadband) ? 0.0 : Math.copySign((Math.abs(input) - deadband) / 0.9, input);
     }
 
+     /** Converts volts to PSI per the REV Analog Pressure Sensor datasheet. */
+    public static double voltsToPsi(double sensorVoltage, double supplyVoltage) {
+        return 250 * (sensorVoltage / supplyVoltage) - 25;
+    }
+
 }
