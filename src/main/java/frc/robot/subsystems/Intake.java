@@ -28,6 +28,7 @@ public class Intake extends SubsystemBase {
   private boolean m_pieceIsCube;
   private boolean m_pieceIsCone;
   private final RelativeEncoder m_intakeArmMotorEncoder;
+  public boolean isOut = true;
   
   public Intake() {
     m_rollers = new CANSparkMax(Constants.Intake.kIntakeRollersCANId, MotorType.kBrushless);
@@ -134,5 +135,9 @@ public class Intake extends SubsystemBase {
     }
     builder.addBooleanProperty("Cone", () -> isCube(), null);
     builder.addBooleanProperty("Cube", () -> isCone(), null);
+  }
+
+  public boolean isOut(){
+    return isOut;
   }
 }

@@ -8,14 +8,14 @@ package frc.robot.commands.arm;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Arm;
 
-public class ElevateArm extends CommandBase {
+/** Elevates the scoring arm. */
+public class TiltArm extends CommandBase {
   private Arm m_arm;
-  private double m_position;
+  private double m_speed;
   
-  public ElevateArm(Arm arm, double position) {
-    // Use addRequirements() here to declare subsystem dependencies.
+  public TiltArm(Arm arm, double speed) {
     m_arm = arm;
-    m_position = position;
+    m_speed = speed;
   }
 
   // Called when the command is initially scheduled.
@@ -24,11 +24,15 @@ public class ElevateArm extends CommandBase {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    m_arm.tilt(m_speed);
+  }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    m_arm.tilt(0.0);
+  }
 
   // Returns true when the command should end.
   @Override

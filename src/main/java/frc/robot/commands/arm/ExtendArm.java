@@ -8,20 +8,20 @@ package frc.robot.commands.arm;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Arm;
 
+/** Extends the scoring arm. */
 public class ExtendArm extends CommandBase {
   private Arm m_arm;
-  private double m_position;
-  /** Creates a new Lower. */
-  public ExtendArm(Arm arm, double position) {
-    // Use addRequirements() here to declare subsystem dependencies.
+  private double m_speed;
+
+  public ExtendArm(Arm arm, double speed) {
     m_arm = arm;
-    m_position = position;
+    m_speed = speed;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_arm.extend(0.5);
+    m_arm.runArm(m_speed);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -31,7 +31,7 @@ public class ExtendArm extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_arm.extend(0);
+    m_arm.runArm(m_speed);
   }
 
   // Returns true when the command should end.
