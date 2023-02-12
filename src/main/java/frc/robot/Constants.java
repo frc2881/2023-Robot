@@ -250,24 +250,24 @@ public class Constants {
         public static final int kPressureSensorTopId = 1;
 
         /*
-         * The target pressure for bottom vacuum state
+         * The target pressure for bottom vacuum state in PSI
          */
-        public static final double kTargetPressureBottom = 0.82;
+        public static final double kTargetPressureBottom = 17.5;
 
         /*
-         * The minimum pressure for bottom vacuum state
+         * The minimum pressure for bottom vacuum state in PSI
          */
-        public static final double kMinimumPressureBottom = 0.85;
+        public static final double kMinimumPressureBottom = 19.5;
 
         /*
-         * The target pressure for top vacuum state
+         * The target pressure for top vacuum state in PSI
          */
-        public static final double kTargetPressureTop = 0.82;
+        public static final double kTargetPressureTop = 17.5;
 
         /*
-         * The minimum pressure for top vacuum state
+         * The minimum pressure for top vacuum state in PSI
          */
-        public static final double kMinimumPressureTop = 0.85;
+        public static final double kMinimumPressureTop = 19.5;
 
       }
 
@@ -284,14 +284,14 @@ public class Constants {
         public static final String kLeftCameraName = "LEFT";
         public static final Transform3d kLeftRobotToCamera =
             new Transform3d(
-                new Translation3d(0.5, 0.0, 0.5),
-                new Rotation3d(0, 0,0)); 
+                new Translation3d(-0.16390, 0.18440, 0.59055),
+                new Rotation3d(0, 0, Math.toRadians(10))); 
 
         public static final String kRightCameraName = "RIGHT";
         public static final Transform3d kRightRobotToCamera =
             new Transform3d(
-                new Translation3d(0.5, 0.0, 0.5),
-                new Rotation3d(0, 0,0)); 
+                new Translation3d(-0.16390, -0.18298, 0.59055),
+                new Rotation3d(0, 0, Math.toRadians(10))); 
 
       }
 

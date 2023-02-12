@@ -5,7 +5,6 @@
 
 package frc.robot.lib;
 
-import java.io.IOException;
 import java.util.Optional;
 
 import org.photonvision.EstimatedRobotPose;
