@@ -30,41 +30,40 @@ import frc.robot.lib.NavX;
 // import frc.robot.lib.PhotonCameraWrapper;
 import frc.robot.lib.SwerveModule;
 
-public class Drive extends SubsystemBase {
+public class Swerve extends SubsystemBase {
   // Create SwerveModules
   private final SwerveModule m_frontLeft = new SwerveModule(
-      Constants.Drive.kFrontLeftDrivingCanId,
-      Constants.Drive.kFrontLeftTurningCanId,
-      Constants.Drive.kFrontLeftCanCoderId,
-      Constants.Drive.kFrontLeftChassisAngularOffset);
+      Constants.Swerve.kFrontLeftDrivingCanId,
+      Constants.Swerve.kFrontLeftTurningCanId,
+      Constants.Swerve.kFrontLeftCanCoderId,
+      Constants.Swerve.kFrontLeftChassisAngularOffset);
 
   private final SwerveModule m_frontRight = new  SwerveModule(
-      Constants.Drive.kFrontRightDrivingCanId,
-      Constants.Drive.kFrontRightTurningCanId,
-      Constants.Drive.kFrontRightCanCoderId, 
-      Constants.Drive.kFrontRightChassisAngularOffset);
+      Constants.Swerve.kFrontRightDrivingCanId,
+      Constants.Swerve.kFrontRightTurningCanId,
+      Constants.Swerve.kFrontRightCanCoderId, 
+      Constants.Swerve.kFrontRightChassisAngularOffset);
 
   private final SwerveModule m_rearLeft = new  SwerveModule(
-      Constants.Drive.kBackLeftDrivingCanId,
-      Constants.Drive.kBackLeftTurningCanId,
-      Constants.Drive.kBackLeftCanCoderId,
-      Constants.Drive.kBackLeftChassisAngularOffset);
+      Constants.Swerve.kBackLeftDrivingCanId,
+      Constants.Swerve.kBackLeftTurningCanId,
+      Constants.Swerve.kBackLeftCanCoderId,
+      Constants.Swerve.kBackLeftChassisAngularOffset);
 
   private final SwerveModule m_rearRight = new  SwerveModule(
-      Constants.Drive.kBackRightDrivingCanId,
-      Constants.Drive.kBackRightTurningCanId,
-      Constants.Drive.kBackRightCanCoderId, 
-      Constants.Drive.kBackRightChassisAngularOffset);
+      Constants.Swerve.kBackRightDrivingCanId,
+      Constants.Swerve.kBackRightTurningCanId,
+      Constants.Swerve.kBackRightCanCoderId, 
+      Constants.Swerve.kBackRightChassisAngularOffset);
 
   // The gyro sensor
   private final NavX m_gyro = new NavX();
 
-  // public PhotonCameraWrapper m_leftPhotonCamera;
-  // public PhotonCameraWrapper m_rightPhotonCamera;
+  // public PhotonCameraWrapper m_photonCamera;
 
   private final SwerveDrivePoseEstimator m_poseEstimator = 
     new SwerveDrivePoseEstimator(
-      Constants.Drive.kDriveKinematics, 
+      Constants.Swerve.kDriveKinematics, 
       Rotation2d.fromDegrees(m_gyro.getAngle()), 
       new SwerveModulePosition[] {
         m_frontLeft.getPosition(),
@@ -75,20 +74,14 @@ public class Drive extends SubsystemBase {
 
   private final Field2d m_fieldSim = new Field2d();
 
-  public Drive() {
-    // m_leftPhotonCamera = new PhotonCameraWrapper(
-    //   Constants.Vision.kLeftCameraName,
-    //   Constants.Vision.kLeftRobotToCamera,
+  public Swerve() {
+    // m_photonCamera = new PhotonCameraWrapper(
+    //   Constants.Vision.kCameraName,
+    //   Constants.Vision.kRobotToCamera,
     //   PoseStrategy.CLOSEST_TO_REFERENCE_POSE,
     //   Constants.Vision.kAprilTagFieldLayout
     // );
-    // m_rightPhotonCamera = new PhotonCameraWrapper(
-    //   Constants.Vision.kRightCameraName,
-    //   Constants.Vision.kRightRobotToCamera,
-    //   PoseStrategy.CLOSEST_TO_REFERENCE_POSE,
-    //   Constants.Vision.kAprilTagFieldLayout
-    // );
-
+    
     SmartDashboard.putData("Field", m_fieldSim);
     SmartDashboard.setDefaultNumber("P", Constants.SwerveModule.kDrivingP);
     SmartDashboard.setDefaultNumber("D", Constants.SwerveModule.kDrivingD);
@@ -122,20 +115,14 @@ public class Drive extends SubsystemBase {
         m_rearRight.getPosition()
     });
 
-    // Optional<EstimatedRobotPose> leftCameraResult = m_leftPhotonCamera.getEstimatedGlobalPose(m_poseEstimator.getEstimatedPosition());
+    // Optional<EstimatedRobotPose> cameraResult = m_photonCamera.getEstimatedGlobalPose(m_poseEstimator.getEstimatedPosition());
     // if (leftCameraResult.isPresent()) {
     //   EstimatedRobotPose camPose = leftCameraResult.get();
     //   m_poseEstimator.addVisionMeasurement(camPose.estimatedPose.toPose2d(), camPose.timestampSeconds);
-    }
-
-  //   Optional<EstimatedRobotPose> rightCameraResult = m_rightPhotonCamera.getEstimatedGlobalPose(m_poseEstimator.getEstimatedPosition());
-  //   if (rightCameraResult.isPresent()) {
-  //     EstimatedRobotPose camPose = rightCameraResult.get();
-  //     m_poseEstimator.addVisionMeasurement(camPose.estimatedPose.toPose2d(), camPose.timestampSeconds);
-  //   }
+    //}
 
   //   m_fieldSim.setRobotPose(m_poseEstimator.getEstimatedPosition());
-  // }
+    }
 
   // /**
   //  * Returns the currently-estimated pose of the robot.
@@ -176,16 +163,16 @@ public class Drive extends SubsystemBase {
    */
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
     // Adjust input based on   speed
-    xSpeed *= Constants.Drive.kMaxSpeedMetersPerSecond;
-    ySpeed *= Constants.Drive.kMaxSpeedMetersPerSecond;
-    rot *= Constants.Drive.kMaxAngularSpeed;
+    xSpeed *= Constants.Swerve.kMaxSpeedMetersPerSecond;
+    ySpeed *= Constants.Swerve.kMaxSpeedMetersPerSecond;
+    rot *= Constants.Swerve.kMaxAngularSpeed;
 
-    var swerveModuleStates = Constants.Drive.kDriveKinematics.toSwerveModuleStates(
+    var swerveModuleStates = Constants.Swerve.kDriveKinematics.toSwerveModuleStates(
         fieldRelative
             ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, Rotation2d.fromDegrees(m_gyro.getAngle()))
             : new ChassisSpeeds(xSpeed, ySpeed, rot));
     SwerveDriveKinematics.desaturateWheelSpeeds(
-        swerveModuleStates, Constants.Drive.kMaxSpeedMetersPerSecond);
+        swerveModuleStates, Constants.Swerve.kMaxSpeedMetersPerSecond);
     m_frontLeft.setDesiredState(swerveModuleStates[0]);
     m_frontRight.setDesiredState(swerveModuleStates[1]);
     m_rearLeft.setDesiredState(swerveModuleStates[2]);
@@ -209,7 +196,7 @@ public class Drive extends SubsystemBase {
    */
   public void setModuleStates(SwerveModuleState[] desiredStates) {
     SwerveDriveKinematics.desaturateWheelSpeeds(
-        desiredStates, Constants.Drive.kMaxSpeedMetersPerSecond);
+        desiredStates, Constants.Swerve.kMaxSpeedMetersPerSecond);
     m_frontLeft.setDesiredState(desiredStates[0]);
     m_frontRight.setDesiredState(desiredStates[1]);
     m_rearLeft.setDesiredState(desiredStates[2]);
@@ -244,7 +231,7 @@ public class Drive extends SubsystemBase {
    * @return The turn rate of the robot, in degrees per second
    */
   public double getTurnRate() {
-    return m_gyro.getRate() * (Constants.Drive.kGyroReversed ? -1.0 : 1.0);
+    return m_gyro.getRate() * (Constants.Swerve.kGyroReversed ? -1.0 : 1.0);
   }
 
   @Override
