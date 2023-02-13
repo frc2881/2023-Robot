@@ -26,7 +26,7 @@ import frc.robot.subsystems.Swerve;
 // import frc.robot.subsystems.Suction;
 
 public class RobotContainer {
-  private final Swerve m_swerve = new Swerve();
+  private Swerve m_swerve = new Swerve();
   // private Suction m_suction = new Suction();
   // private Arm m_arm = new Arm();
 
