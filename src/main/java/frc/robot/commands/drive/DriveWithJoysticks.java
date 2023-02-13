@@ -8,35 +8,35 @@ package frc.robot.commands.drive;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Drive;
+import frc.robot.subsystems.Swerve;
 
 public class DriveWithJoysticks extends CommandBase {
-  private final Drive m_drive;
+  private final Swerve m_swerve;
   private final DoubleSupplier m_translationXSupplier;
   private final DoubleSupplier m_translationYSupplier;
   private final DoubleSupplier m_rotationSupplier;
 
-  public DriveWithJoysticks(Drive drive,
+  public DriveWithJoysticks(Swerve swerve,
   DoubleSupplier translationXSupplier,
   DoubleSupplier translationYSupplier,
   DoubleSupplier rotationSupplier) {
-    m_drive = drive;
+    m_swerve = swerve;
     m_translationXSupplier = translationXSupplier;
     m_translationYSupplier = translationYSupplier;
     m_rotationSupplier = rotationSupplier;
 
     
-    addRequirements(m_drive);
+    addRequirements(m_swerve);
   }
 
   @Override
   public void execute() {
-   m_drive.drive(m_translationXSupplier.getAsDouble(), m_translationYSupplier.getAsDouble(), m_rotationSupplier.getAsDouble(), true);
+   m_swerve.drive(m_translationXSupplier.getAsDouble(), m_translationYSupplier.getAsDouble(), m_rotationSupplier.getAsDouble(), true);
   }
 
   @Override
   public void end(boolean interrupted) {
-   m_drive.drive(0, 0, 0, true);
+   m_swerve.drive(0, 0, 0, true);
   }
 
   @Override

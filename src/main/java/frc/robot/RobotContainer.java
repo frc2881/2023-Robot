@@ -22,11 +22,11 @@ import frc.robot.commands.drive.ZeroHeading;
 // import frc.robot.commands.suction.EnableSuction;
 import frc.robot.lib.Utils;
 // import frc.robot.subsystems.Arm;
-import frc.robot.subsystems.Drive;
+import frc.robot.subsystems.Swerve;
 // import frc.robot.subsystems.Suction;
 
 public class RobotContainer {
-  private Drive m_drive = new Drive();
+  private Swerve m_swerve = new Swerve();
   // private Suction m_suction = new Suction();
   // private Arm m_arm = new Arm();
 
@@ -41,9 +41,9 @@ public class RobotContainer {
   }
 
   private void setupDrive() {
-    m_drive.setDefaultCommand(
+    m_swerve.setDefaultCommand(
       new DriveWithJoysticks(
-        m_drive,
+        m_swerve,
         () -> Utils.applyDeadband(-m_driverController.getLeftY(), Constants.Controllers.kDeadband),
         () -> Utils.applyDeadband(-m_driverController.getLeftX(), Constants.Controllers.kDeadband),
         () -> Utils.applyDeadband(-m_driverController.getRightX(), Constants.Controllers.kDeadband)
@@ -53,7 +53,7 @@ public class RobotContainer {
 
   private void setupTriggers() {
     //DRIVER
-    m_driverController.back().onTrue(new ZeroHeading(m_drive));
+    m_driverController.back().onTrue(new ZeroHeading(m_swerve));
 
     //MANIPULATOR
     // new Trigger(m_manipulatorController::getAButton).onTrue(new EnableSuction(m_suction));

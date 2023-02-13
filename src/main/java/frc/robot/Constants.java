@@ -41,12 +41,12 @@ public class Constants {
 
     public static final class Elevator{
 
-        public static final int LEFT_ELEVATOR_MOTOR = 9;
-        public static final int RIGHT_ELEVATOR_MOTOR = 6;
+        public static final int kLeftElevatorMotor = 9;
+        public static final int kRightElevatorMotor = 6;
     
     }
 
-    public static final class Drive {
+    public static final class Swerve {
         // Driving Parameters - Note that these are not the maximum capable speeds of
         // the robot, rather the allowed maximum speeds
         public static final double kTrackWidth = Units.inchesToMeters(11);
@@ -228,17 +228,17 @@ public class Constants {
             }
         }
 
-        public static final String kLeftCameraName = "LEFT";
-        public static final Transform3d kLeftRobotToCamera =
+        public static final String kCameraName = "gloworm";
+        public static final Transform3d kRobotToCamera =
             new Transform3d(
                 new Translation3d(0.5, 0.0, 0.5),
                 new Rotation3d(0, 0,0)); 
 
-        public static final String kRightCameraName = "RIGHT";
-        public static final Transform3d kRightRobotToCamera =
-            new Transform3d(
-                new Translation3d(0.5, 0.0, 0.5),
-                new Rotation3d(0, 0,0)); 
+        // public static final String kRightCameraName = "RIGHT";
+        // public static final Transform3d kRightRobotToCamera =
+        //     new Transform3d(
+        //         new Translation3d(0.5, 0.0, 0.5),
+        //         new Rotation3d(0, 0,0)); 
 
       }
 

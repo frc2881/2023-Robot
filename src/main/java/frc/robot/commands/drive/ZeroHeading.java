@@ -6,13 +6,13 @@ package frc.robot.commands.drive;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-import frc.robot.subsystems.Drive;
+import frc.robot.subsystems.Swerve;
 
 public class ZeroHeading extends CommandBase {
-  private final Drive m_drive;
+  private final Swerve m_drive;
 
   /** Creates a new ZeroHeading. */
-  public ZeroHeading(Drive drive) {
+  public ZeroHeading(Swerve drive) {
     m_drive = drive;
     addRequirements(drive);
   }
