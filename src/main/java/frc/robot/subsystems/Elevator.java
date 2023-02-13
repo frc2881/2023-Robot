@@ -12,8 +12,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Elevator extends SubsystemBase{
-    private CANSparkMax leftLiftMotor = new CANSparkMax(Constants.Elevator.LEFT_ELEVATOR_MOTOR, MotorType.kBrushless);
-    private CANSparkMax rightLiftMotor =  new CANSparkMax(Constants.Elevator.RIGHT_ELEVATOR_MOTOR, MotorType.kBrushless);
+    private CANSparkMax leftLiftMotor = new CANSparkMax(Constants.Elevator.kLeftElevatorMotor, MotorType.kBrushless);
+    private CANSparkMax rightLiftMotor =  new CANSparkMax(Constants.Elevator.kRightElevatorMotor, MotorType.kBrushless);
 
     ShuffleboardTab elevatorTab;
     public Elevator() {

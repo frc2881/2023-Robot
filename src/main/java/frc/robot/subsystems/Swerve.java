@@ -163,9 +163,9 @@ public class Swerve extends SubsystemBase {
    */
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
     // Adjust input based on   speed
-    xSpeed *= Constants.Swerve.kMaxSpeedMetersPerSecond;
-    ySpeed *= Constants.Swerve.kMaxSpeedMetersPerSecond;
-    rot *= Constants.Swerve.kMaxAngularSpeed;
+    // xSpeed *= Constants.Swerve.kMaxSpeedMetersPerSecond;
+    // ySpeed *= Constants.Swerve.kMaxSpeedMetersPerSecond;
+    // rot *= Constants.Swerve.kMaxAngularSpeed;
 
     var swerveModuleStates = Constants.Swerve.kDriveKinematics.toSwerveModuleStates(
         fieldRelative

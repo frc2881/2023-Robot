@@ -26,7 +26,7 @@ import frc.robot.subsystems.Swerve;
 // import frc.robot.subsystems.Suction;
 
 public class RobotContainer {
-  private Swerve m_swerve = new Swerve();
+  private final Swerve m_swerve = new Swerve();
   // private Suction m_suction = new Suction();
   // private Arm m_arm = new Arm();
 
@@ -37,7 +37,7 @@ public class RobotContainer {
   
   public RobotContainer() {
     setupDrive(); 
-    setupTriggers();
+    configureButtonBindings();
   }
 
   private void setupDrive() {
@@ -51,7 +51,7 @@ public class RobotContainer {
     );
   }
 
-  private void setupTriggers() {
+  private void configureButtonBindings() {
     //DRIVER
     m_driverController.back().onTrue(new ZeroHeading(m_swerve));
 
