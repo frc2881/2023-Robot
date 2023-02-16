@@ -12,6 +12,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.RobotController;
@@ -27,6 +28,7 @@ public class Suction extends SubsystemBase {
   private final Solenoid m_solenoidBottom;
   private final Solenoid m_solenoidTop;
   private boolean m_isEnabled = false;
+  private boolean m_isDisabling = false;
   private boolean m_isTargetPressureBottomReached = false;
   private boolean m_isTargetPressureTopReached = false;
   
@@ -91,12 +93,17 @@ public class Suction extends SubsystemBase {
       } 
       
     } else {
-      m_motorBottom.set(0);
-      m_motorTop.set(0);
-      m_solenoidBottom.set(true);
-      m_solenoidTop.set(true);
-      m_isTargetPressureBottomReached = false;
-      m_isTargetPressureTopReached = false;
+      if (m_isDisabling){
+        m_motorTop.set(Constants.Suction.kMaxSpeed);
+        m_motorBottom.set(0);
+        m_solenoidBottom.set(true);
+        Timer.delay(Constants.Suction.kDelay);
+        m_motorTop.set(0);
+        m_solenoidTop.set(true);
+        m_isTargetPressureBottomReached = false;
+        m_isTargetPressureTopReached = false;
+        m_isDisabling = false;
+      }
     }
 
     SmartDashboard.putNumber("Suction/PressureBottom", pressureBottom);
@@ -109,5 +116,6 @@ public class Suction extends SubsystemBase {
 
   public void disable() {
     m_isEnabled = false;
+    m_isDisabling = true;
   }
 }

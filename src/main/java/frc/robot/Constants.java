@@ -235,9 +235,14 @@ public class Constants {
         public static final int kCurrentLimit = 30;
 
         /**
-         * The maximum speed that the suction motor runs.
+         * The maximum speed that the suction motor runs during regular hold of the game piece.
          */
         public static final double kMaxSpeed = 0.33;
+
+        /*
+         * Delay for Disabling sequence
+         */
+        public static final double kDelay = 0.5;
 
         /**
          * The pneumatic hub channel ID of the bottom pressure sensor.
