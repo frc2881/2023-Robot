@@ -9,6 +9,7 @@ import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.revrobotics.CANSparkMax.IdleMode;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -45,9 +46,9 @@ public class RobotContainer {
     m_swerve.setDefaultCommand(
       new DriveWithJoysticks(
         m_swerve,
-        () -> Utils.applyDeadband(-m_driverController.getLeftY(), Constants.Controllers.kDeadband),
-        () -> Utils.applyDeadband(-m_driverController.getLeftX(), Constants.Controllers.kDeadband),
-        () -> Utils.applyDeadband(-m_driverController.getRightX(), Constants.Controllers.kDeadband)
+        () -> MathUtil.applyDeadband(-m_driverController.getLeftY(), Constants.Controllers.kDeadband),
+        () -> MathUtil.applyDeadband(-m_driverController.getLeftX(), Constants.Controllers.kDeadband),
+        () -> MathUtil.applyDeadband(-m_driverController.getRightX(), Constants.Controllers.kDeadband)
       )
     );
   }
