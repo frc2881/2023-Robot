@@ -32,6 +32,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledInit() {
+    //m_robotContainer.disabledInit();
     DataLog.mode("DISABLED");
   }
 
@@ -86,5 +87,6 @@ public class Robot extends TimedRobot {
    public static void addCustomPeriodic(Runnable callback, double periodSeconds) {
     m_robotInstance.addPeriodic(callback, periodSeconds, 0.333);
   }
+  
   
 }

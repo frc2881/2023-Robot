@@ -197,4 +197,14 @@ public class SwerveModule {
   public double getDrivingVelocity(){
     return m_drivingEncoder.getVelocity();
   }
+
+  public CANSparkMax getDriveMotor()
+  {
+    return m_drivingSparkMax;
+  }
+
+  public CANSparkMax getTurnMotor()
+  {
+    return m_turningSparkMax;
+  }
 }

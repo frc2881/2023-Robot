@@ -7,6 +7,7 @@ package frc.robot;
 
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
+import com.revrobotics.CANSparkMax.IdleMode;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -65,4 +66,16 @@ public class RobotContainer {
   // public Command getAutonomousCommand() {
   //    return new FollowTrajectory(simplePath, true, m_drive);
   // }
+
+  public void disabledInit()
+  {
+    m_swerve.setDriveMotorIdleMode(IdleMode.kCoast);
+    m_swerve.setTurnMotorIdleMode(IdleMode.kCoast);
+  }
+
+  public void enabledInit()
+  {
+    m_swerve.setDriveMotorIdleMode(IdleMode.kBrake);
+    m_swerve.setTurnMotorIdleMode(IdleMode.kBrake);
+  }
 }
