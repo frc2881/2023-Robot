@@ -24,7 +24,7 @@ public class ArmTiltOverride extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_arm.tilt(-0.15);
+    m_arm.runTilt(-0.15);
   }
 
   // Called once the command ends or is interrupted.
@@ -33,7 +33,7 @@ public class ArmTiltOverride extends CommandBase {
     m_arm.enableTiltSoftLimits(true);
     m_arm.resetTiltEncoder();
 
-    m_arm.tilt(0.0);
+    m_arm.runTilt(0.0);
   }
 
   // Returns true when the command should end.

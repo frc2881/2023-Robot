@@ -55,13 +55,13 @@ public class TiltArmToHeight extends CommandBase {
       }
     }*/
 
-     m_arm.tilt(m_speed);
+     m_arm.runTilt(m_speed);
   }
     
 
   @Override
   public void end(boolean interrupted) {
-    m_arm.tilt(0.0);
+    m_arm.runTilt(0.0);
   }
 
   // Returns true when the command should end.

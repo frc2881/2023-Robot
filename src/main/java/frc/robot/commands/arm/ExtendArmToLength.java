@@ -41,15 +41,15 @@ public class ExtendArmToLength extends CommandBase {
     boolean isSafe = m_arm.isSafeToExtend();
 
     if(isSafe == false){
-      m_arm.runArm(0.0);
+      m_arm.runExtension(0.0);
     } else {
-      m_arm.runArm(m_speed);
+      m_arm.runExtension(m_speed);
     }
   }
 
   @Override
   public void end(boolean interrupted) {
-    m_arm.runArm(0.0);
+    m_arm.runExtension(0.0);
   }
 
   // Returns true when the command should end.

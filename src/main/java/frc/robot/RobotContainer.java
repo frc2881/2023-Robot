@@ -10,24 +10,17 @@ import com.pathplanner.lib.PathPlannerTrajectory;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.arm.ArmExtendOverride;
 import frc.robot.commands.arm.ArmTiltOverride;
 import frc.robot.commands.arm.ExtendAndTiltArm;
 import frc.robot.commands.arm.ExtendArm;
-import frc.robot.commands.arm.ExtendArmToLength;
 import frc.robot.commands.arm.TiltArm;
-import frc.robot.commands.arm.TiltArmToHeight;
-import frc.robot.commands.auto.FollowTrajectory;
 import frc.robot.commands.drive.DriveWithJoysticks;
 import frc.robot.commands.drive.ZeroHeading;
 import frc.robot.commands.intake.ExtendIntakeArm;
 import frc.robot.commands.intake.RetractIntakeArm;
-import frc.robot.commands.intake.RunRollersBackward;
-import frc.robot.commands.intake.RunRollersForward;
 import frc.robot.commands.suction.DisableSuction;
 import frc.robot.commands.suction.EnableSuction;
 import frc.robot.lib.Utils;
@@ -79,7 +72,11 @@ public class RobotContainer {
     new Trigger(m_manipulatorController::getXButton).whileTrue(new ExtendAndTiltArm(0.2, 8.0, 8.0, m_arm, m_intake));
     new Trigger(m_manipulatorController::getBackButton).whileTrue(new ArmTiltOverride(m_arm));
     new Trigger(m_manipulatorController::getStartButton).whileTrue(new ArmExtendOverride(m_arm));
-
+    //new Trigger(() -> m_manipulatorController.getPOV() == 0).whileTrue(new RunCommand(() -> m_arm.setDesiredExtensionPosition(10), m_arm));
+    //new Trigger(() -> m_manipulatorController.getPOV() == 180).whileTrue(new RunCommand(() -> m_arm.setDesiredExtensionPosition(2), m_arm));
+    //new Trigger(() -> m_manipulatorController.getPOV() == 90).whileTrue(new RunCommand(() -> m_arm.setDesiredTiltPosition(10), m_arm));
+    //new Trigger(() -> m_manipulatorController.getPOV() == 270).whileTrue(new RunCommand(() -> m_arm.setDesiredTiltPosition(2), m_arm));
+    
   }
 
   public Command getAutonomousCommand() {

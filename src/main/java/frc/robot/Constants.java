@@ -64,7 +64,7 @@ public class Constants {
          /*
          * The maximum distance (in inches) that the arm can elevate.
          */
-        public static final double kTiltForwardLimit = 20; // TODO: Fix
+        public static final double kTiltForwardLimit = 15; 
 
          /*
          * The maximum distance (in rotations) that the arm can go down.
@@ -72,6 +72,98 @@ public class Constants {
         public static final double kTiltReverseLimit = 0.0;
 
         public static final double kMinSafeTilt = 2.6;
+
+        
+        /*
+         * Tilt PID Controller
+         */
+        public static final double kTiltP = 3;
+        /*
+         * Tilt Min Speed
+         */
+        public static final double kTiltMinOutput = -1;
+        /*
+         * Tilit Max Speed
+         */
+        public static final double kTiltMaxOutput = 1;
+
+        /*
+         * Extension PID Controller
+         */
+        public static final double kExtensionP = 3;
+        /*
+         * Extension Min Speed
+         */
+        public static final double kExtensionMinOutput = -1;
+        /*
+         * Extension Max Speed
+         */
+        public static final double kExtensionMaxOutput = 1;
+
+
+        /*
+         * High Cone Tilt Height
+         */
+        public static final double kHighConeTilt = 1;
+
+        /*
+         * Middle Cone Tilt Height
+         */
+        public static final double kMiddleConeTilt = 1;
+
+        /*
+         * Low Cone Tilt Height
+         */
+        public static final double kLowConeTilt = 1;
+
+        /*
+         * High Cone Extension
+         */
+        public static final double kHighConeExtend = 1;
+
+        /*
+         * Middle Cone Extension
+         */
+        public static final double kMiddleConeExtend = 1;
+
+        /*
+         * Low Cone Extension
+         */
+        public static final double kLowConeExtend = 1;
+
+        
+
+        /*
+         * High Cube Tilt Height
+         */
+        public static final double kHighCubeTilt = 1;
+
+        /*
+         * Middle Cube Tilt Height
+         */
+        public static final double kMiddleCubeTilt = 1;
+
+        /*
+         * Low Cube Tilt Height
+         */
+        public static final double kLowCubeTilt = 1;
+
+        /*
+         * High Cube Extension
+         */
+        public static final double kHighCubeExtend = 1;
+
+        /*
+         * Middle Cube Extension
+         */
+        public static final double kMiddleCubeExtend = 1;
+
+        /*
+         * Low Cube Extension
+         */
+        public static final double kLowCubeExtend = 1;
+
+
     }
 
     public static final class Clamps {

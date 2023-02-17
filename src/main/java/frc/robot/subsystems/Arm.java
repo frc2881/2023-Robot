@@ -9,6 +9,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxPIDController;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -17,9 +18,11 @@ import frc.robot.Constants;
 public class Arm extends SubsystemBase {
   private Intake m_intake;
   private final CANSparkMax m_extensionMotor;
+  private final SparkMaxPIDController m_extensionPID;
   private final RelativeEncoder m_extensionMotorEncoder;
   private final CANSparkMax m_tiltMotor;
   private final RelativeEncoder m_tiltMotorEncoder;
+  private final SparkMaxPIDController m_tiltPID;
   private boolean extendIsSafe;
   private boolean tiltIsSafe;
 
@@ -34,6 +37,17 @@ public class Arm extends SubsystemBase {
     m_extensionMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse,
                        (float)Constants.Arm.kExtendReverseLimit);
 
+    m_extensionMotorEncoder = m_extensionMotor.getEncoder();
+    m_extensionMotorEncoder.setPositionConversionFactor(Constants.Arm.kExtendRotationsToInches);
+    
+    m_extensionPID = m_extensionMotor.getPIDController();
+    m_extensionPID.setFeedbackDevice(m_extensionMotorEncoder);
+    m_extensionPID.setP(Constants.Arm.kExtensionP);
+    m_extensionPID.setOutputRange(Constants.Arm.kExtensionMinOutput,
+                                  Constants.Arm.kExtensionMaxOutput);
+
+
+
     m_tiltMotor = new CANSparkMax(Constants.Arm.kTiltMotorId, MotorType.kBrushless);
     m_tiltMotor.setIdleMode(IdleMode.kBrake);
     m_tiltMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
@@ -46,8 +60,11 @@ public class Arm extends SubsystemBase {
     m_tiltMotorEncoder = m_tiltMotor.getEncoder();
     m_tiltMotorEncoder.setPositionConversionFactor(Constants.Arm.kTiltRotationsToInches);
 
-    m_extensionMotorEncoder = m_extensionMotor.getEncoder();
-    m_extensionMotorEncoder.setPositionConversionFactor(Constants.Arm.kExtendRotationsToInches);
+    m_tiltPID = m_tiltMotor.getPIDController();
+    m_tiltPID.setP(Constants.Arm.kTiltP);
+    m_tiltPID.setOutputRange(Constants.Arm.kTiltMinOutput,
+                             Constants.Arm.kTiltMaxOutput);
+
   }
 
   @Override
@@ -61,7 +78,7 @@ public class Arm extends SubsystemBase {
    * Extends or retracts the arm
    * @param speed positive value extends
    */
-  public void runArm(double speed) { 
+  public void runExtension(double speed) { 
     m_extensionMotor.set(speed);
   }
 
@@ -69,10 +86,24 @@ public class Arm extends SubsystemBase {
    * Tilts the arm.
    * @param speed positive value goes up.
    */
-  public void tilt(double speed) {
+  public void runTilt(double speed) {
     m_tiltMotor.set(speed);
   }
+
   
+  /*
+   * Sets the Extension position to given value. 15 inches of movement.
+   */
+  public void setDesiredExtensionPosition(double position) {
+    m_extensionPID.setReference(position, CANSparkMax.ControlType.kPosition);
+  }
+  
+  /*
+   * Sets the Tilt position to given value
+   */
+  public void setDesiredTiltPosition(double position) {
+    m_tiltPID.setReference(position, CANSparkMax.ControlType.kPosition);
+  }
 
   // In inches
   public Double getExtensionEncoderPosition(){

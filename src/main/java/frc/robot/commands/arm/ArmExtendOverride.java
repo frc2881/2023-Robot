@@ -24,7 +24,7 @@ public class ArmExtendOverride extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_arm.runArm(-0.10);
+    m_arm.runExtension(-0.10);
   }
 
   // Called once the command ends or is interrupted.
@@ -33,7 +33,7 @@ public class ArmExtendOverride extends CommandBase {
     m_arm.enableExtendSoftLimits(true);
     m_arm.resetExtensionEncoder();
 
-    m_arm.runArm(0.0);
+    m_arm.runExtension(0.0);
   }
 
   // Returns true when the command should end.
