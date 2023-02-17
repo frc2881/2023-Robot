@@ -27,13 +27,13 @@ public class TiltArm extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_arm.tilt(-m_speed.getAsDouble());
+    m_arm.runTilt(-m_speed.getAsDouble());
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_arm.tilt(0.0);
+    m_arm.runTilt(0.0);
   }
 
   // Returns true when the command should end.
