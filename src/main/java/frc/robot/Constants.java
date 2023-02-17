@@ -64,7 +64,7 @@ public class Constants {
          /*
          * The maximum distance (in inches) that the arm can elevate.
          */
-        public static final double kTiltForwardLimit = 15; // TODO: Fix
+        public static final double kTiltForwardLimit = 15; 
 
          /*
          * The maximum distance (in rotations) that the arm can go down.
