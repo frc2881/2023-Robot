@@ -33,6 +33,11 @@ public class Intake extends SubsystemBase {
   
   public Intake() {
     m_rollers = new CANSparkMax(Constants.Intake.kIntakeRollersCANId, MotorType.kBrushless);
+    m_rollers.restoreFactoryDefaults();
+    m_rollers.setInverted(false);
+    m_rollers.setIdleMode(IdleMode.kBrake);
+    m_rollers.setSmartCurrentLimit(Constants.Intake.kCurrentLimit);
+
 
     m_intakeArmMotor = new CANSparkMax(Constants.Intake.kIntakeArmCANId, MotorType.kBrushless);
     m_intakeArmMotor.restoreFactoryDefaults();
@@ -55,8 +60,16 @@ public class Intake extends SubsystemBase {
    * 
    * @param speed positive value runs the rollers forward
    */
-  public void runRollers(double speed){
-    m_rollers.set(speed);
+  public void runRollersInward() {
+    m_rollers.set(Constants.Intake.kRollersInward);
+  }
+
+  public void runRollersOutward() {
+    m_rollers.set(Constants.Intake.kRollersOutward);
+  }
+
+  public void stopRollers() {
+    m_rollers.set(0);
   }
 
   public void extend() {
