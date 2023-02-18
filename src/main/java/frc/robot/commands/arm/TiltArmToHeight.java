@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Intake;
 
-/** Elevates the scoring arm to a specified height. */
 public class TiltArmToHeight extends CommandBase {
   private Arm m_arm;
   private Intake m_intake;
@@ -21,24 +20,12 @@ public class TiltArmToHeight extends CommandBase {
     m_intake = intake;
     m_position = position;
 
-    // Set speed depending on whether we are above or below the position wanted
-    if(m_arm.getTiltEncoderPosition() < m_position){
-      m_speed = speed;
-
-    } else if(m_arm.getTiltEncoderPosition() > m_position){
-      m_speed = -speed;
-    }
-    else{
-      m_speed = 0.0;
-    }
-
-    // addRequirements(m_arm);
-
   }
 
   @Override
   public void initialize() {
     System.out.println("Tilt Arm to height");
+    m_arm.setDesiredTiltPosition(m_position);
   }
 
   @Override
@@ -54,22 +41,16 @@ public class TiltArmToHeight extends CommandBase {
         m_arm.tilt(m_speed);
       }
     }*/
-
-     m_arm.runTilt(m_speed);
   }
     
 
   @Override
-  public void end(boolean interrupted) {
-    m_arm.runTilt(0.0);
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-      if((m_speed < 0) && (m_arm.getTiltEncoderPosition() <= m_position)){
-        return true;
-      } else if((m_speed > 0) && (m_arm.getTiltEncoderPosition() >= m_position)) {
+      if(Math.abs(m_arm.getTiltEncoderPosition() - m_position) < 0.1){
         return true;
       } else {
         return false;

@@ -16,6 +16,7 @@ import frc.robot.commands.arm.ArmExtendOverride;
 import frc.robot.commands.arm.ArmTiltOverride;
 import frc.robot.commands.arm.ExtendAndTiltArm;
 import frc.robot.commands.arm.ExtendArm;
+import frc.robot.commands.arm.ScoreMedium;
 import frc.robot.commands.arm.TiltArm;
 import frc.robot.commands.drive.DriveWithJoysticks;
 import frc.robot.commands.drive.ZeroHeading;
@@ -67,15 +68,17 @@ public class RobotContainer {
     //MANIPULATOR
     new Trigger(m_manipulatorController::getAButton).onTrue(new EnableSuction(m_suction));
     new Trigger(m_manipulatorController::getBButton).onTrue(new DisableSuction(m_suction));
-    new Trigger(() -> Math.abs(m_manipulatorController.getLeftY()) > 0.1).whileTrue(new TiltArm(m_arm, m_manipulatorController::getLeftY)); //new TiltArmToHeight(m_arm, m_intake, 0.25, 10.0));
-    new Trigger(() -> Math.abs(m_manipulatorController.getRightY()) > 0.1).whileTrue(new ExtendArm(m_arm, m_manipulatorController::getRightY));
+    new Trigger(() -> Math.abs(m_manipulatorController.getLeftY()) > 0.1).whileTrue(new ExtendArm(m_arm, m_manipulatorController::getLeftY));
+    new Trigger(() -> Math.abs(m_manipulatorController.getRightY()) > 0.1).whileTrue(new TiltArm(m_arm, m_manipulatorController::getRightY)); 
     new Trigger(m_manipulatorController::getXButton).whileTrue(new ExtendAndTiltArm(0.2, 8.0, 8.0, m_arm, m_intake));
-    new Trigger(m_manipulatorController::getBackButton).whileTrue(new ArmTiltOverride(m_arm));
-    new Trigger(m_manipulatorController::getStartButton).whileTrue(new ArmExtendOverride(m_arm));
-    //new Trigger(() -> m_manipulatorController.getPOV() == 0).whileTrue(new RunCommand(() -> m_arm.setDesiredExtensionPosition(10), m_arm));
-    //new Trigger(() -> m_manipulatorController.getPOV() == 180).whileTrue(new RunCommand(() -> m_arm.setDesiredExtensionPosition(2), m_arm));
-    //new Trigger(() -> m_manipulatorController.getPOV() == 90).whileTrue(new RunCommand(() -> m_arm.setDesiredTiltPosition(10), m_arm));
-    //new Trigger(() -> m_manipulatorController.getPOV() == 270).whileTrue(new RunCommand(() -> m_arm.setDesiredTiltPosition(2), m_arm));
+    new Trigger(m_manipulatorController::getBackButton).whileTrue(new ArmExtendOverride(m_arm));
+    new Trigger(m_manipulatorController::getStartButton).whileTrue(new ArmTiltOverride(m_arm));
+    new Trigger(m_manipulatorController::getYButton).whileTrue(new ScoreMedium(m_arm, m_intake, 0.15, m_suction));
+
+    new Trigger(() -> m_manipulatorController.getPOV() == 0).whileTrue(new RunCommand(() -> m_arm.setDesiredExtensionPosition(10), m_arm));
+    new Trigger(() -> m_manipulatorController.getPOV() == 180).whileTrue(new RunCommand(() -> m_arm.setDesiredExtensionPosition(2), m_arm));
+    new Trigger(() -> m_manipulatorController.getPOV() == 90).whileTrue(new RunCommand(() -> m_arm.setDesiredTiltPosition(10), m_arm));
+    new Trigger(() -> m_manipulatorController.getPOV() == 270).whileTrue(new RunCommand(() -> m_arm.setDesiredTiltPosition(2), m_arm));
     
   }
 

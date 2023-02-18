@@ -116,11 +116,11 @@ public class Arm extends SubsystemBase {
   }
 
   public void resetTiltEncoder() {
-    m_tiltMotorEncoder.setPosition(0.0);
+    m_tiltMotorEncoder.setPosition(-0.1);
   }
 
   public void resetExtensionEncoder() {
-    m_extensionMotorEncoder.setPosition(0.0);
+    m_extensionMotorEncoder.setPosition(-0.1);
   }
 
   public void enableTiltSoftLimits(boolean enable){
@@ -156,14 +156,18 @@ public class Arm extends SubsystemBase {
   }
 
   public boolean isSafeToTilt(){
-    double extend = m_tiltMotorEncoder.getPosition();
+    double extensionPosition = m_extensionMotorEncoder.getPosition();
+    double tiltPosition = m_tiltMotorEncoder.getPosition();
 
-    if(extend > 0){
-      tiltIsSafe = false;
-    } else{
+    if(tiltPosition > Constants.Arm.kMinSafeTilt){
       tiltIsSafe = true;
+    } else{
+      if(extensionPosition > 0){
+        tiltIsSafe = false;
+      } else{
+        tiltIsSafe = true;
+      }
     }
-
     return tiltIsSafe;
   }
 

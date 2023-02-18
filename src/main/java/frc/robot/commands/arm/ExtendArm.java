@@ -23,7 +23,11 @@ public class ExtendArm extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_arm.runExtension(m_speed.getAsDouble());
+    boolean isSafe = m_arm.isSafeToExtend();
+    if(isSafe == true){
+      m_arm.runExtension(m_speed.getAsDouble());
+    }
+    
   }
 
   // Called every time the scheduler runs while the command is scheduled.
