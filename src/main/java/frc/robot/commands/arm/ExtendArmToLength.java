@@ -18,46 +18,29 @@ public class ExtendArmToLength extends CommandBase {
     m_arm = arm;
     m_position = position;
 
-    // Set speed depending on whether we are above or below the position wanted
-      if(m_arm.getExtensionEncoderPosition() < m_position){
-        m_speed = speed;
-
-      } else if(m_arm.getExtensionEncoderPosition() > m_position){
-        m_speed = -speed;
-      }
-      else{
-        m_speed = 0.0;
-      }
-
+    
   }
 
   @Override
   public void initialize() {
     System.out.println("Extend Arm to Length");
-  }
-
-  @Override
-  public void execute() {
-    boolean isSafe = m_arm.isSafeToExtend();
-
-    if(isSafe == false){
-      m_arm.runExtension(0.0);
-    } else {
-      m_arm.runExtension(m_speed);
+    boolean isSafe = true; //m_arm.isSafeToExtend();
+    if(isSafe == true){
+      m_arm.setDesiredExtensionPosition(m_position);
     }
+    
   }
 
   @Override
-  public void end(boolean interrupted) {
-    m_arm.runExtension(0.0);
-  }
+  public void execute() {}
+
+  @Override
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if((m_speed < 0) && (m_arm.getExtensionEncoderPosition() <= m_position)) {
-      return true;
-    } else if((m_speed > 0) && (m_arm.getExtensionEncoderPosition() >= m_position)) {
+    if(Math.abs(m_arm.getExtensionEncoderPosition() - m_position) < 0.1) {
       return true;
     } else {
       return false;

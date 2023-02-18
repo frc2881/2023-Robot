@@ -54,7 +54,7 @@ public class Constants {
         /*
          * The maximum distance (in inches) that the arm can extend.
          */
-        public static final double kExtendForwardLimit = 44.5; 
+        public static final double kExtendForwardLimit = 30; 
 
          /*
          * The maximum distance (in inches) that the arm can retract.
@@ -64,7 +64,7 @@ public class Constants {
          /*
          * The maximum distance (in inches) that the arm can elevate.
          */
-        public static final double kTiltForwardLimit = 15; 
+        public static final double kTiltForwardLimit = 18; 
 
          /*
          * The maximum distance (in rotations) that the arm can go down.
@@ -189,9 +189,14 @@ public class Constants {
     
         // Angular offsets of the modules relative to the chassis in radians
         public static final double kFrontLeftChassisAngularOffset = 5.9215;
-        public static final double kFrontRightChassisAngularOffset = 2.86;
-        public static final double kRearLeftChassisAngularOffset = 1.59;
-        public static final double kRearRightChassisAngularOffset = 4.40;
+        public static final double kFrontRightChassisAngularOffset = 2.85;
+        public static final double kRearLeftChassisAngularOffset = 1.60;
+        public static final double kRearRightChassisAngularOffset = 4.45;
+
+        /*   public static final double kFrontLeftChassisAngularOffset = 5.9175;
+        public static final double kFrontRightChassisAngularOffset = 2.8580;
+        public static final double kRearLeftChassisAngularOffset = 1.5195;
+        public static final double kRearRightChassisAngularOffset = 4.4545; */
     
         // SPARK MAX CAN IDs
         public static final int kFrontLeftDrivingCanId = 15;
@@ -203,11 +208,6 @@ public class Constants {
         public static final int kRearLeftTurningCanId = 6;
         public static final int kFrontRightTurningCanId = 17;
         public static final int kRearRightTurningCanId = 8;
-
-        public static final int kFrontLeftCanCoderId = 2;
-        public static final int kRearLeftCanCoderId = 4;
-        public static final int kFrontRightCanCoderId = 6;
-        public static final int kRearRightCanCoderId = 8;
     
         public static final boolean kGyroReversed = false;
       }
