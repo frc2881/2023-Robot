@@ -10,8 +10,6 @@ import java.util.Optional;
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 
-import edu.wpi.first.apriltag.AprilTagFieldLayout;
-import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -23,7 +21,6 @@ import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
 import frc.robot.Constants;
 import frc.robot.lib.NavX;
 import frc.robot.lib.PhotonCameraWrapper;
@@ -74,13 +71,13 @@ public class Drive extends SubsystemBase {
     m_leftPhotonCamera = new PhotonCameraWrapper(
       Constants.Vision.kLeftCameraName,
       Constants.Vision.kLeftRobotToCamera,
-      PoseStrategy.CLOSEST_TO_REFERENCE_POSE,
+      PoseStrategy.LOWEST_AMBIGUITY,
       Constants.Vision.kAprilTagFieldLayout
     );
     m_rightPhotonCamera = new PhotonCameraWrapper(
       Constants.Vision.kRightCameraName,
       Constants.Vision.kRightRobotToCamera,
-      PoseStrategy.CLOSEST_TO_REFERENCE_POSE,
+      PoseStrategy.LOWEST_AMBIGUITY,
       Constants.Vision.kAprilTagFieldLayout
     );
 
