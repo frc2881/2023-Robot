@@ -91,7 +91,7 @@ public class Constants {
         public static final int kBackLeftDrivingCanId = 10;
         public static final int kBackLeftTurningCanId = 1;
         public static final int kBackLeftCanCoderId = 62;
-        public static final double kBackLeftChassisAngularOffset = -Math.toRadians(0);
+        public static final double kBackLeftChassisAngularOffset = -Math.toRadians(100);
         
         //Back Right Module
         public static final int kBackRightDrivingCanId = 7;
@@ -121,7 +121,7 @@ public class Constants {
         // 45 teeth on the wheel's bevel gear, 22 teeth on the first-stage spur gear, 15 teeth on the bevel pinion
         public static final double kDrivingMotorReduction = (50.0 * 17.0 * 45.0) / (kDrivingMotorPinionTeeth * 27.0 * 15.0);//
         public static final double kDriveWheelFreeSpeedRps = (kDrivingMotorFreeSpeedRps * kWheelCircumferenceMeters)
-            / kDrivingMotorReduction;
+            /kDrivingMotorReduction;
     
         public static final double kSteeringMotorReduction = 150.0 / 7.0;
     
