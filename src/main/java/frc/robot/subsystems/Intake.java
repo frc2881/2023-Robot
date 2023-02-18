@@ -11,6 +11,7 @@ import com.revrobotics.ColorMatch;
 import com.revrobotics.ColorMatchResult;
 import com.revrobotics.ColorSensorV3;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMax.SoftLimitDirection;
 
 import edu.wpi.first.util.sendable.SendableBuilder;
@@ -32,9 +33,12 @@ public class Intake extends SubsystemBase {
   
   public Intake() {
     m_rollers = new CANSparkMax(Constants.Intake.kIntakeRollersCANId, MotorType.kBrushless);
-    m_intakeArmMotor = new CANSparkMax(Constants.Intake.kIntakeArmCANId, MotorType.kBrushless);
 
-    m_intakeArmMotor.setInverted(true);
+    m_intakeArmMotor = new CANSparkMax(Constants.Intake.kIntakeArmCANId, MotorType.kBrushless);
+    m_intakeArmMotor.restoreFactoryDefaults();
+    m_intakeArmMotor.setInverted(false);
+    m_intakeArmMotor.setIdleMode(IdleMode.kBrake);
+    m_intakeArmMotor.setSmartCurrentLimit(Constants.Intake.kCurrentLimit);
 
     m_colorSensor = new ColorSensorV3(Port.kMXP);
 

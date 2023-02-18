@@ -279,6 +279,8 @@ public class Constants {
         public static final double kExtendSpeed = 0.3; 
         public static final double kRetractSpeed = -0.3; 
 
+        public static final int kCurrentLimit = 30;
+
         /**
          * The color of the cube, as detected by the REV Color Sensor V3.
          */
