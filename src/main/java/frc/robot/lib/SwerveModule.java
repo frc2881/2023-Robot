@@ -124,7 +124,7 @@ public class SwerveModule {
     
     double initialAngle = m_turningAnalogSensor.getPosition() - chassisAngularOffset;
     if(initialAngle > 0.1 || initialAngle < 0.0){
-      DataLog.log("ERROR - Initial Angle Bad: " + initialAngle + " CANId: " + turningCANId);
+      DataLog.log("ERROR - Initial Angle Bad: " + initialAngle + " Position from Analog: " + m_turningAnalogSensor.getPosition() + " CANId: " + turningCANId);
       initialAngle = 0.0;
     }
     m_desiredState.angle = new Rotation2d(initialAngle);
