@@ -2,9 +2,12 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.arm;
+package frc.robot.commands.arm.Score;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.commands.arm.ExtendArmToLength;
+import frc.robot.commands.arm.TiltArmToHeight;
+import frc.robot.commands.arm.MoveTo.MoveToMedium;
 import frc.robot.commands.intake.ExtendIntakeArm;
 import frc.robot.commands.suction.DisableSuction;
 import frc.robot.commands.suction.EnableSuction;
@@ -23,11 +26,14 @@ public class ScoreMedium extends SequentialCommandGroup {
       addCommands(new ExtendIntakeArm(intake));
     } */
     //13.5, 13, 11.8
-    addCommands(
+    addCommands(new MoveToMedium(arm, intake, speed),
+    new TiltArmToHeight(arm, intake, speed, 13.0));
+
+    
+      /* 
       new TiltArmToHeight(arm, intake, speed, 1.0),
       new ExtendArmToLength(arm, speed, 4.5),
       new EnableSuction(suction));
-      /*
       new ExtendArmToLength(arm, speed, 0.1),
       new TiltArmToHeight(arm, intake, speed, 13.5),
       new ExtendArmToLength(arm, speed, 13.0),

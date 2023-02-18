@@ -117,7 +117,7 @@ public class SwerveModule {
     m_turningSparkMax.burnFlash();
 
     // This allows time for the absolute position to be sent by the CANcoder (we know this isn't the best solution, we'll fix it later)
-    Timer.delay(5);
+    //Timer.delay(1);
 
     // This is commented out because it is already being calculated by the CANcoder
     // m_chassisAngularOffset = chassisAngularOffset; 

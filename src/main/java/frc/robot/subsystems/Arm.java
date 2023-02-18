@@ -95,6 +95,7 @@ public class Arm extends SubsystemBase {
    * Sets the Extension position to given value. 15 inches of movement.
    */
   public void setDesiredExtensionPosition(double position) {
+    // TODO: Add ability to set the speed
     m_extensionPID.setReference(position, CANSparkMax.ControlType.kPosition);
   }
   

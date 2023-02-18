@@ -18,12 +18,13 @@ public class ExtendArmToLength extends CommandBase {
     m_arm = arm;
     m_position = position;
 
+    
   }
 
   @Override
   public void initialize() {
     System.out.println("Extend Arm to Length");
-    boolean isSafe = m_arm.isSafeToExtend();
+    boolean isSafe = true; //m_arm.isSafeToExtend();
     if(isSafe == true){
       m_arm.setDesiredExtensionPosition(m_position);
     }
