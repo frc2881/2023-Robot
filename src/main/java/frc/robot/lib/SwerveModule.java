@@ -42,7 +42,7 @@ public class SwerveModule {
    * MAXSwerve Module built with NEOs, SPARKS MAX, and a Through Bore
    * Encoder.
    */
-  public SwerveModule(int drivingCANId, int turningCANId, int canCoderCANId, double chassisAngularOffset) {
+  public SwerveModule(int drivingCANId, int turningCANId, double chassisAngularOffset) {
     m_drivingSparkMax = new CANSparkMax(drivingCANId, MotorType.kBrushless);
     m_turningSparkMax = new CANSparkMax(turningCANId, MotorType.kBrushless);
 
@@ -117,16 +117,22 @@ public class SwerveModule {
     m_turningSparkMax.burnFlash();
 
     // This allows time for the absolute position to be sent by the CANcoder (we know this isn't the best solution, we'll fix it later)
-    Timer.delay(1);
+    Timer.delay(5);
 
     // This is commented out because it is already being calculated by the CANcoder
     // m_chassisAngularOffset = chassisAngularOffset; 
+    
     double initialAngle = m_turningAnalogSensor.getPosition() - chassisAngularOffset;
+    if(initialAngle > 0.1 || initialAngle < 0.0){
+      DataLog.log("ERROR - Initial Angle Bad: " + initialAngle + " CANId: " + turningCANId);
+      initialAngle = 0.0;
+    }
     m_desiredState.angle = new Rotation2d(initialAngle);
-    m_drivingEncoder.setPosition(0);
+    m_drivingEncoder.setPosition(0.0);
     m_turningEncoder.setPosition(initialAngle);
     
   }
+
 
   /**
    * Returns the current state of the module.
@@ -184,7 +190,7 @@ public class SwerveModule {
 
   /** Zeroes all the SwerveModule encoders. */
   public void resetEncoders() {
-    m_drivingEncoder.setPosition(0);
+    m_drivingEncoder.setPosition(0.0);
   }
 
   public double getSteeringRelativePosition(){
