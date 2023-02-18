@@ -21,6 +21,8 @@ import frc.robot.commands.drive.DriveWithJoysticks;
 import frc.robot.commands.drive.ZeroHeading;
 import frc.robot.commands.intake.ExtendIntakeArm;
 import frc.robot.commands.intake.RetractIntakeArm;
+import frc.robot.commands.intake.RunRollersInward;
+import frc.robot.commands.intake.RunRollersOutward;
 import frc.robot.commands.suction.DisableSuction;
 import frc.robot.commands.suction.EnableSuction;
 import frc.robot.lib.Utils;
@@ -59,10 +61,10 @@ public class RobotContainer {
   private void setupTriggers() {
     //DRIVER
     new Trigger(m_driverController::getBackButton).onTrue(new ZeroHeading(m_drive));
-    //new Trigger(m_driverController::getAButton).whileTrue(new RunRollersForward(m_intake));
-    //new Trigger(m_driverController::getBButton).whileTrue(new RunRollersBackward(m_intake));
-    new Trigger(m_driverController::getXButton).onTrue(new ExtendIntakeArm(m_intake)); 
-    new Trigger(m_driverController::getYButton).onTrue(new RetractIntakeArm(m_intake)); 
+    new Trigger(m_driverController::getAButton).whileTrue(new RunRollersInward(m_intake));
+    new Trigger(m_driverController::getBButton).whileTrue(new RunRollersOutward(m_intake));
+    //new Trigger(m_driverController::getXButton).onTrue(new ExtendIntakeArm(m_intake)); 
+    //new Trigger(m_driverController::getYButton).onTrue(new RetractIntakeArm(m_intake)); 
 
     //MANIPULATOR
     new Trigger(m_manipulatorController::getAButton).onTrue(new EnableSuction(m_suction));

@@ -279,6 +279,9 @@ public class Constants {
         public static final double kExtendSpeed = 0.3; 
         public static final double kRetractSpeed = -0.3; 
 
+        public static final double kRollersInward = 0.5;
+        public static final double kRollersOutward = -0.5;
+
         public static final int kCurrentLimit = 30;
 
         /**
