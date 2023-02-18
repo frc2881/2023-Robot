@@ -34,25 +34,21 @@ public class Drive extends SubsystemBase {
   private final SwerveModule m_frontLeft = new SwerveModule(
       Constants.Drive.kFrontLeftDrivingCanId,
       Constants.Drive.kFrontLeftTurningCanId,
-      Constants.Drive.kFrontLeftCanCoderId,
       Constants.Drive.kFrontLeftChassisAngularOffset);
 
   private final SwerveModule m_frontRight = new  SwerveModule(
       Constants.Drive.kFrontRightDrivingCanId,
       Constants.Drive.kFrontRightTurningCanId,
-      Constants.Drive.kFrontRightCanCoderId, 
       Constants.Drive.kFrontRightChassisAngularOffset);
 
   private final SwerveModule m_rearLeft = new  SwerveModule(
       Constants.Drive.kRearLeftDrivingCanId,
       Constants.Drive.kRearLeftTurningCanId,
-      Constants.Drive.kRearLeftCanCoderId,
       Constants.Drive.kRearLeftChassisAngularOffset);
 
   private final SwerveModule m_rearRight = new  SwerveModule(
       Constants.Drive.kRearRightDrivingCanId,
-      Constants.Drive.kRearRightTurningCanId,
-      Constants.Drive.kRearRightCanCoderId, 
+      Constants.Drive.kRearRightTurningCanId, 
       Constants.Drive.kRearRightChassisAngularOffset);
 
   // The gyro sensor
