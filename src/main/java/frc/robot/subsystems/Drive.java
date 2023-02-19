@@ -65,7 +65,7 @@ public class Drive extends SubsystemBase {
         m_rearRight.getPosition()}, 
       new Pose2d());
 
-  private final Field2d m_fieldSim = new Field2d();
+  private final Field2d m_field = new Field2d();
 
   public Drive() {
     m_leftPhotonCamera = new PhotonCameraWrapper(
@@ -81,27 +81,13 @@ public class Drive extends SubsystemBase {
       Constants.Vision.kAprilTagFieldLayout
     );
 
-    SmartDashboard.putData("Field", m_fieldSim);
-    SmartDashboard.setDefaultNumber("P", Constants.SwerveModule.kDrivingP);
-    SmartDashboard.setDefaultNumber("D", Constants.SwerveModule.kDrivingD);
+    SmartDashboard.putData("Field", m_field);
   }
 
   @Override
   public void periodic() {
     updatePose();
-
-    SmartDashboard.putNumber("Drive/Swerve/FrontLeft/SteeringRelativePosition", m_frontLeft.getSteeringRelativePosition());
-    SmartDashboard.putNumber("Drive/Swerve/FrontLeft/SteeringAbsolutePosition", m_frontLeft.getSteeringAbsolutePosition());
-    SmartDashboard.putNumber("Drive/Swerve/FrontRight/SteeringRelativePosition", m_frontRight.getSteeringRelativePosition());
-    SmartDashboard.putNumber("Drive/Swerve/FrontRight/SteeringAbsolutePosition", m_frontRight.getSteeringAbsolutePosition());
-    SmartDashboard.putNumber("Drive/Swerve/RearLeft/SteeringRelativePosition", m_rearLeft.getSteeringRelativePosition());
-    SmartDashboard.putNumber("Drive/Swerve/RearLeft/SteeringAbsolutePosition", m_rearLeft.getSteeringAbsolutePosition());
-    SmartDashboard.putNumber("Drive/Swerve/RearRight/SteeringRelativePosition", m_rearRight.getSteeringRelativePosition());
-    SmartDashboard.putNumber("Drive/Swerve/RearRight/SteeringAbsolutePosition", m_rearRight.getSteeringAbsolutePosition());
-    SmartDashboard.putNumber("Drive/NavX/Angle", m_gyro.getAngle());
-    SmartDashboard.putNumber("Drive/NavX/Yaw", m_gyro.getYaw());
-    SmartDashboard.putNumber("Front Left Relative Position", m_frontLeft.getDrivingRelativePosition());
-    SmartDashboard.putNumber("Front Left Velocity", m_frontLeft.getDrivingVelocity());
+    updateTelemetry();
   }
    
   public void updatePose() {
@@ -125,8 +111,6 @@ public class Drive extends SubsystemBase {
         m_poseEstimator.addVisionMeasurement(camPose.estimatedPose.toPose2d(), camPose.timestampSeconds);
       }
     }
-    
-    m_fieldSim.setRobotPose(m_poseEstimator.getEstimatedPosition());
   }
 
   /**
@@ -153,8 +137,6 @@ public class Drive extends SubsystemBase {
             m_rearRight.getPosition()
         },
         pose);
-
-      m_fieldSim.setRobotPose(m_poseEstimator.getEstimatedPosition());
   }
 
   /**
@@ -243,5 +225,36 @@ public class Drive extends SubsystemBase {
   public void initSendable(SendableBuilder builder) {
     super.initSendable(builder);
     m_gyro.initSendable(builder);
+  }
+
+  private void updateTelemetry() {
+    m_field.setRobotPose(m_poseEstimator.getEstimatedPosition());
+
+    SmartDashboard.putNumber("Drive/Heading", getHeading());
+    SmartDashboard.putNumber("Drive/TurnRate", getTurnRate());
+
+    SmartDashboard.putNumber("Drive/Swerve/FrontLeft/Steering/RelativePosition", m_frontLeft.getSteeringRelativePosition());
+    SmartDashboard.putNumber("Drive/Swerve/FrontLeft/Steering/AbsolutePosition", m_frontLeft.getSteeringAbsolutePosition());
+    SmartDashboard.putNumber("Drive/Swerve/FrontLeft/Driving/RelativePosition", m_frontLeft.getDrivingRelativePosition());
+    SmartDashboard.putNumber("Drive/Swerve/FrontLeft/Driving/Velocity", m_frontLeft.getDrivingVelocity());
+
+    SmartDashboard.putNumber("Drive/Swerve/FrontRight/Steering/RelativePosition", m_frontRight.getSteeringRelativePosition());
+    SmartDashboard.putNumber("Drive/Swerve/FrontRight/Steering/AbsolutePosition", m_frontRight.getSteeringAbsolutePosition());
+    SmartDashboard.putNumber("Drive/Swerve/FrontRight/Driving/RelativePosition", m_frontRight.getDrivingRelativePosition());
+    SmartDashboard.putNumber("Drive/Swerve/FrontRight/Driving/Velocity", m_frontRight.getDrivingVelocity());
+
+    SmartDashboard.putNumber("Drive/Swerve/RearLeft/Steering/RelativePosition", m_rearLeft.getSteeringRelativePosition());
+    SmartDashboard.putNumber("Drive/Swerve/RearLeft/Steering/AbsolutePosition", m_rearLeft.getSteeringAbsolutePosition());
+    SmartDashboard.putNumber("Drive/Swerve/RearLeft/Driving/RelativePosition", m_rearLeft.getDrivingRelativePosition());
+    SmartDashboard.putNumber("Drive/Swerve/RearLeft/Driving/Velocity", m_rearLeft.getDrivingVelocity());
+
+    SmartDashboard.putNumber("Drive/Swerve/RearRight/Steering/RelativePosition", m_rearRight.getSteeringRelativePosition());
+    SmartDashboard.putNumber("Drive/Swerve/RearRight/Steering/AbsolutePosition", m_rearRight.getSteeringAbsolutePosition());
+    SmartDashboard.putNumber("Drive/Swerve/RearRight/Driving/RelativePosition", m_rearRight.getDrivingRelativePosition());
+    SmartDashboard.putNumber("Drive/Swerve/RearRight/Driving/Velocity", m_rearRight.getDrivingVelocity());
+
+    SmartDashboard.putNumber("Drive/Gyro/Angle", m_gyro.getAngle());
+    SmartDashboard.putNumber("Drive/Gyro/Yaw", m_gyro.getYaw());
+    SmartDashboard.putNumber("Drive/Gyro/Pitch", m_gyro.getPitch());
   }
 }

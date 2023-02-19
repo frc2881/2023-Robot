@@ -31,7 +31,8 @@ public class Suction extends SubsystemBase {
   private boolean m_isDisabling = false;
   private boolean m_isTargetPressureBottomReached = false;
   private boolean m_isTargetPressureTopReached = false;
-  
+  private double m_currentPressureBottom = 0;
+  private double m_currentPressureTop = 0;
 
   public Suction() {
     m_AnalogInputPressureBottom = new AnalogInput(Constants.Suction.kPressureSensorBottomId);
@@ -56,8 +57,8 @@ public class Suction extends SubsystemBase {
   @Override
   public void periodic() {
     double supplyVoltage = RobotController.getVoltage5V();
-    double pressureBottom = Utils.voltsToPsi(m_AnalogInputPressureBottom.getAverageVoltage(), supplyVoltage);
-    double pressureTop = Utils.voltsToPsi(m_AnalogInputPressureTop.getAverageVoltage(), supplyVoltage);
+    m_currentPressureBottom = Utils.voltsToPsi(m_AnalogInputPressureBottom.getAverageVoltage(), supplyVoltage);
+    m_currentPressureTop = Utils.voltsToPsi(m_AnalogInputPressureTop.getAverageVoltage(), supplyVoltage);
 
     //Automated reenabling of the suction system
     if (m_isEnabled) {
@@ -66,27 +67,27 @@ public class Suction extends SubsystemBase {
       
       //We seperated the sensor statements so the motors only run when necessary and not when the individual one has enough pressure
       if (!m_isTargetPressureBottomReached) {
-        if (pressureBottom > Constants.Suction.kTargetPressureBottom) {
+        if (m_currentPressureBottom > Constants.Suction.kTargetPressureBottom) {
           m_motorBottom.set(Constants.Suction.kMaxSpeed);
         } else {
           m_motorBottom.set(0);
           m_isTargetPressureBottomReached = true;
         }
       } else {
-        if (pressureBottom > Constants.Suction.kMinimumPressureBottom) {
+        if (m_currentPressureBottom > Constants.Suction.kMinimumPressureBottom) {
           m_isTargetPressureBottomReached = false;
         }
       } 
 
       if (!m_isTargetPressureTopReached) {
-        if (pressureTop > Constants.Suction.kTargetPressureTop) {
+        if (m_currentPressureTop > Constants.Suction.kTargetPressureTop) {
           m_motorTop.set(Constants.Suction.kMaxSpeed);
         } else {
           m_motorTop.set(0);
           m_isTargetPressureTopReached = true;
         }
       } else {
-        if (pressureTop > Constants.Suction.kMinimumPressureTop) {
+        if (m_currentPressureTop > Constants.Suction.kMinimumPressureTop) {
           m_isTargetPressureTopReached = false;
         }
       } 
@@ -106,17 +107,9 @@ public class Suction extends SubsystemBase {
         m_motorBottom.set(0);
         m_motorTop.set(0);
       }
-    }
+    } 
 
-    SmartDashboard.putBoolean("Suction/IsEnabled", m_isEnabled);
-    SmartDashboard.putNumber("Suction/Bottom/Pressure/Current", pressureBottom);
-    SmartDashboard.putNumber("Suction/Top/Pressure/Current", pressureTop);
-    SmartDashboard.putNumber("Suction/Bottom/Pressure/Minimum", Constants.Suction.kMinimumPressureBottom);
-    SmartDashboard.putNumber("Suction/Top/Pressure/Minimum", Constants.Suction.kMinimumPressureTop);
-    SmartDashboard.putNumber("Suction/Bottom/Pressure/Target", Constants.Suction.kTargetPressureBottom);
-    SmartDashboard.putNumber("Suction/Top/Pressure/Target", Constants.Suction.kTargetPressureTop);
-    SmartDashboard.putNumber("Suction/Bottom/Motor/Speed", m_motorBottom.get());
-    SmartDashboard.putNumber("Suction/Top/Motor/Speed", m_motorTop.get());
+    updateTelemetry();
   }
   
   public void enable() {  
@@ -126,5 +119,17 @@ public class Suction extends SubsystemBase {
   public void disable() {
     m_isEnabled = false;
     m_isDisabling = true;
+  }
+
+  private void updateTelemetry() {
+    SmartDashboard.putBoolean("Suction/IsEnabled", m_isEnabled);
+    SmartDashboard.putNumber("Suction/Bottom/Pressure/Current", m_currentPressureBottom);
+    SmartDashboard.putNumber("Suction/Top/Pressure/Current", m_currentPressureTop);
+    SmartDashboard.putNumber("Suction/Bottom/Pressure/Minimum", Constants.Suction.kMinimumPressureBottom);
+    SmartDashboard.putNumber("Suction/Top/Pressure/Minimum", Constants.Suction.kMinimumPressureTop);
+    SmartDashboard.putNumber("Suction/Bottom/Pressure/Target", Constants.Suction.kTargetPressureBottom);
+    SmartDashboard.putNumber("Suction/Top/Pressure/Target", Constants.Suction.kTargetPressureTop);
+    SmartDashboard.putNumber("Suction/Bottom/Motor/Speed", m_motorBottom.get());
+    SmartDashboard.putNumber("Suction/Top/Motor/Speed", m_motorTop.get());
   }
 }
