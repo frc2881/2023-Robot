@@ -51,7 +51,6 @@ public class Suction extends SubsystemBase {
 
     m_solenoidBottom = new Solenoid(PneumaticsModuleType.REVPH, Constants.Suction.kSolenoidBottomId);
     m_solenoidTop = new Solenoid(PneumaticsModuleType.REVPH, Constants.Suction.kSolenoidTopId);
-
   }
 
   @Override
@@ -103,13 +102,23 @@ public class Suction extends SubsystemBase {
         m_isTargetPressureBottomReached = false;
         m_isTargetPressureTopReached = false;
         m_isDisabling = false;
+      } else {
+        m_motorBottom.set(0);
+        m_motorTop.set(0);
       }
     }
 
-    SmartDashboard.putNumber("Suction/PressureBottom", pressureBottom);
-    SmartDashboard.putNumber("Suction/PressureTop", pressureTop);
+    SmartDashboard.putBoolean("Suction/IsEnabled", m_isEnabled);
+    SmartDashboard.putNumber("Suction/Bottom/Pressure/Current", pressureBottom);
+    SmartDashboard.putNumber("Suction/Top/Pressure/Current", pressureTop);
+    SmartDashboard.putNumber("Suction/Bottom/Pressure/Minimum", Constants.Suction.kMinimumPressureBottom);
+    SmartDashboard.putNumber("Suction/Top/Pressure/Minimum", Constants.Suction.kMinimumPressureTop);
+    SmartDashboard.putNumber("Suction/Bottom/Pressure/Target", Constants.Suction.kTargetPressureBottom);
+    SmartDashboard.putNumber("Suction/Top/Pressure/Target", Constants.Suction.kTargetPressureTop);
+    SmartDashboard.putNumber("Suction/Bottom/Motor/Speed", m_motorBottom.get());
+    SmartDashboard.putNumber("Suction/Top/Motor/Speed", m_motorTop.get());
   }
-
+  
   public void enable() {  
     m_isEnabled = true;
   }
