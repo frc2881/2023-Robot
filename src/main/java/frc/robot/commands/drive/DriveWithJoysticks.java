@@ -9,6 +9,7 @@ import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
+import frc.robot.lib.Enums.DriveMode;
 import frc.robot.subsystems.Drive;
 
 public class DriveWithJoysticks extends CommandBase {
@@ -33,13 +34,12 @@ public class DriveWithJoysticks extends CommandBase {
   public void execute() {
    m_drive.drive(m_translationXSupplier.getAsDouble() * Constants.Drive.kMaxSpeedMetersPerSecond,
                m_translationYSupplier.getAsDouble() * Constants.Drive.kMaxSpeedMetersPerSecond, 
-               m_rotationSupplier.getAsDouble() * Constants.Drive.kMaxAngularSpeed, 
-               true);
+               m_rotationSupplier.getAsDouble() * Constants.Drive.kMaxAngularSpeed);
   }
 
   @Override
   public void end(boolean interrupted) {
-   m_drive.drive(0, 0, 0, true);
+   m_drive.drive(0, 0, 0);
   }
 
   @Override

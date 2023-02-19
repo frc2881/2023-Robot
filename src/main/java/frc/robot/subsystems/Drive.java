@@ -25,6 +25,7 @@ import frc.robot.Constants;
 import frc.robot.lib.NavX;
 import frc.robot.lib.PhotonCameraWrapper;
 import frc.robot.lib.SwerveModule;
+import frc.robot.lib.Enums.DriveMode;
 
 public class Drive extends SubsystemBase {
   // Create SwerveModules
@@ -50,6 +51,8 @@ public class Drive extends SubsystemBase {
 
   // The gyro sensor
   private final NavX m_gyro = new NavX();
+  
+  private DriveMode m_driveMode = DriveMode.FIELD_CENTRIC;
 
   public PhotonCameraWrapper m_leftPhotonCamera;
   public PhotonCameraWrapper m_rightPhotonCamera;
@@ -148,14 +151,14 @@ public class Drive extends SubsystemBase {
    * @param fieldRelative Whether the provided x and y speeds are relative to the
    *                      field.
    */
-  public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
+  public void drive(double xSpeed, double ySpeed, double rot) {
     // Adjust input based on   speed
     // xSpeed *= Constants.Drive.kMaxSpeedMetersPerSecond;
     // ySpeed *= Constants.Drive.kMaxSpeedMetersPerSecond;
     // rot *= Constants.Drive.kMaxAngularSpeed;
 
     var swerveModuleStates = Constants.Drive.kDriveKinematics.toSwerveModuleStates(
-        fieldRelative
+        (m_driveMode == DriveMode.FIELD_CENTRIC)
             ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, Rotation2d.fromDegrees(m_gyro.getAngle()))
             : new ChassisSpeeds(xSpeed, ySpeed, rot));
     SwerveDriveKinematics.desaturateWheelSpeeds(
@@ -164,6 +167,10 @@ public class Drive extends SubsystemBase {
     m_frontRight.setDesiredState(swerveModuleStates[1]);
     m_rearLeft.setDesiredState(swerveModuleStates[2]);
     m_rearRight.setDesiredState(swerveModuleStates[3]);
+  }
+
+  public void setDriveMode(DriveMode driveMode) {
+    m_driveMode = driveMode;
   }
 
   /**
@@ -230,6 +237,7 @@ public class Drive extends SubsystemBase {
   private void updateTelemetry() {
     m_field.setRobotPose(m_poseEstimator.getEstimatedPosition());
 
+    SmartDashboard.putString("Drive/Mode", m_driveMode.toString());
     SmartDashboard.putNumber("Drive/Heading", getHeading());
     SmartDashboard.putNumber("Drive/TurnRate", getTurnRate());
 
