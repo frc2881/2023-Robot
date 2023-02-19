@@ -334,7 +334,7 @@ public class Constants {
         /**
          * The maximum speed that the suction motor runs during regular hold of the game piece.
          */
-        public static final double kMaxSpeed = 0.33;
+        public static final double kMaxSpeed = 0.5;
 
         /*
          * Delay for Disabling sequence
@@ -354,22 +354,22 @@ public class Constants {
         /*
          * The target pressure for bottom vacuum state in PSI
          */
-        public static final double kTargetPressureBottom = 17.5;
+        public static final double kTargetPressureBottom = 17.25;
 
         /*
          * The minimum pressure for bottom vacuum state in PSI
          */
-        public static final double kMinimumPressureBottom = 19.5;
+        public static final double kMinimumPressureBottom = 19;
 
         /*
          * The target pressure for top vacuum state in PSI
          */
-        public static final double kTargetPressureTop = 17.5;
+        public static final double kTargetPressureTop = 17.25;
 
         /*
          * The minimum pressure for top vacuum state in PSI
          */
-        public static final double kMinimumPressureTop = 19.5;
+        public static final double kMinimumPressureTop = 19;
 
       }
 
