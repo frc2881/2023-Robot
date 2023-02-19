@@ -10,6 +10,7 @@ import com.pathplanner.lib.PathPlannerTrajectory;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.arm.ArmExtendOverride;
@@ -29,6 +30,7 @@ import frc.robot.commands.intake.RunRollersOutward;
 import frc.robot.commands.suction.DisableSuction;
 import frc.robot.commands.suction.EnableSuction;
 import frc.robot.lib.Utils;
+import frc.robot.lib.Enums.DriveMode;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Intake;
@@ -63,6 +65,10 @@ public class RobotContainer {
 
   private void setupTriggers() {
     //DRIVER
+    new Trigger(m_driverController::getRightBumper)
+      .onTrue(new InstantCommand(() -> { m_drive.setDriveMode(DriveMode.ROBOT_CENTRIC); }))
+      .onFalse(new InstantCommand(() -> { m_drive.setDriveMode(DriveMode.FIELD_CENTRIC); }));
+
     new Trigger(m_driverController::getBackButton).onTrue(new ZeroHeading(m_drive));
     new Trigger(m_driverController::getAButton).whileTrue(new RunRollersInward(m_intake));
     new Trigger(m_driverController::getBButton).whileTrue(new RunRollersOutward(m_intake));
@@ -94,6 +100,6 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    return new RunCommand(() -> m_drive.drive(1.0, 0.0, 0.0, true), m_drive); // DriveWithJoysticks(m_drive, () -> 1.0, () -> 0.0, () -> 0.0); // FollowTrajectory(simplePath, true, m_drive);
+    return new RunCommand(() -> m_drive.drive(1.0, 0.0, 0.0), m_drive); // DriveWithJoysticks(m_drive, () -> 1.0, () -> 0.0, () -> 0.0); // FollowTrajectory(simplePath, true, m_drive);
   }
 }
