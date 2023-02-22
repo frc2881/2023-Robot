@@ -78,26 +78,26 @@ public class Constants {
         //Front Left Module
         public static final int kFrontLeftDrivingCanId = 8;
         public static final int kFrontLeftTurningCanId = 5;
-        public static final int kFrontLeftCanCoderId = 14;
-        public static final double kFrontLeftChassisAngularOffset = -Math.toRadians(276.943);
+        public static final int kFrontLeftCanCoderId = 62;
+        public static final double kFrontLeftChassisAngularOffset = Math.toRadians(-27.421);
         
         //Front Right Module
         public static final int kFrontRightDrivingCanId = 4; 
         public static final int kFrontRightTurningCanId = 2;
-        public static final int kFrontRightCanCoderId = 60;
-        public static final double kFrontRightChassisAngularOffset = -Math.toRadians(156.533);
+        public static final int kFrontRightCanCoderId = 61;
+        public static final double kFrontRightChassisAngularOffset = Math.toRadians(-96.768+180);
         
          //Back Left Module
         public static final int kBackLeftDrivingCanId = 10;
         public static final int kBackLeftTurningCanId = 1;
-        public static final int kBackLeftCanCoderId = 62;
-        public static final double kBackLeftChassisAngularOffset = -Math.toRadians(106.875);
+        public static final int kBackLeftCanCoderId = 60;
+        public static final double kBackLeftChassisAngularOffset = Math.toRadians(-325.107);
         
         //Back Right Module
         public static final int kBackRightDrivingCanId = 7;
         public static final int kBackRightTurningCanId = 3;
-        public static final int kBackRightCanCoderId = 61;
-        public static final double kBackRightChassisAngularOffset = -Math.toRadians(0);
+        public static final int kBackRightCanCoderId = 14;
+        public static final double kBackRightChassisAngularOffset = Math.toRadians(-9.58);
 
         public static final boolean kGyroReversed = false;
       }
@@ -113,7 +113,7 @@ public class Constants {
         public static final boolean kTurningEncoderInverted = true;
     
         // Calculations required for driving motor conversion factors and feed forward
-        public static final double kNeoMotorFreeSpeedRpm = 5676 * 0.9;
+        public static final double kNeoMotorFreeSpeedRpm = 5550 * 0.9;
 
         public static final double kDrivingMotorFreeSpeedRps = kNeoMotorFreeSpeedRpm / 60.0;
         public static final double kWheelDiameterMeters = Units.inchesToMeters(4); // 3 : 0.0762; // 3.75 : 0.09525; //3.8 : 0.09652; // 4 : 0.1016; //Units.inchesToMeters(4.0);
@@ -153,8 +153,8 @@ public class Constants {
         public static final double kTurningMinOutput = -1;
         public static final double kTurningMaxOutput = 1;
     
-        public static final IdleMode kDrivingMotorIdleMode = IdleMode.kBrake;
-        public static final IdleMode kTurningMotorIdleMode = IdleMode.kBrake;
+        public static final IdleMode kDrivingMotorIdleMode = IdleMode.kCoast;
+        public static final IdleMode kTurningMotorIdleMode = IdleMode.kCoast;
     
         public static final int kDrivingMotorCurrentLimit = 50; // amps
         public static final int kTurningMotorCurrentLimit = 20; // amps
