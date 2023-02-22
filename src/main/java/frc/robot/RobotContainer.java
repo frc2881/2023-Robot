@@ -50,9 +50,9 @@ public class RobotContainer {
     m_swerve.setDefaultCommand(
       new DriveWithJoysticks(
         m_swerve,
-        () -> MathUtil.applyDeadband(-m_driverController.getLeftY(), Constants.Controllers.kDeadband),
-        () -> MathUtil.applyDeadband(-m_driverController.getLeftX(), Constants.Controllers.kDeadband),
-        () -> MathUtil.applyDeadband(-m_driverController.getRightX(), Constants.Controllers.kDeadband)
+        () -> modifyAxis(-m_driverController.getLeftY()),
+        () -> modifyAxis(-m_driverController.getLeftX()),
+        () ->modifyAxis(-m_driverController.getRightX())
       )
     );
   }
@@ -86,5 +86,27 @@ public class RobotContainer {
   {
     m_swerve.setDriveMotorIdleMode(IdleMode.kBrake);
     m_swerve.setTurnMotorIdleMode(IdleMode.kBrake);
+  }
+
+  private static double modifyAxis(double value)
+  {
+    value = deadBand(value, 0.075);
+
+    value = value * value * value;
+
+    return value;
+  }
+
+  private static double deadBand(double value, double deadband)
+  {
+    if (Math.abs(value) > deadband)
+    {
+      if (value > 0.0)
+        return (value - deadband)/(1.0 - deadband);
+      else
+        return (value + deadband)/(1.0 - deadband);
+    }
+    else
+      return 0.0;
   }
 }
