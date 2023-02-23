@@ -354,22 +354,22 @@ public class Constants {
         /*
          * The target pressure for bottom vacuum state in PSI
          */
-        public static final double kTargetPressureBottom = 17.25;
+        public static final double kTargetPressureBottom = 18.25;
 
         /*
          * The minimum pressure for bottom vacuum state in PSI
          */
-        public static final double kMinimumPressureBottom = 19;
+        public static final double kMinimumPressureBottom = 20;
 
         /*
          * The target pressure for top vacuum state in PSI
          */
-        public static final double kTargetPressureTop = 17.25;
+        public static final double kTargetPressureTop = 18.25;
 
         /*
          * The minimum pressure for top vacuum state in PSI
          */
-        public static final double kMinimumPressureTop = 19;
+        public static final double kMinimumPressureTop = 20;
 
       }
 
