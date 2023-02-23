@@ -93,6 +93,13 @@ public class Drive extends SubsystemBase {
     updateTelemetry();
   }
    
+  public void resetSwerve() {
+    m_frontLeft.resetTurningEncoder();
+    m_frontRight.resetTurningEncoder();
+    m_rearLeft.resetTurningEncoder();
+    m_rearRight.resetTurningEncoder();
+  }
+
   public void updatePose() {
     m_poseEstimator.update(
       m_gyro.getRotation2d(), 

@@ -33,6 +33,7 @@ public class SwerveModule {
   private final SparkMaxPIDController m_turningPIDController;
 
   private double m_chassisAngularOffset = 0;
+  private double m_resetOffset = 0;
   private SwerveModuleState m_desiredState = new SwerveModuleState(0.0, new Rotation2d());
 
   private double m_drivingCANId;
@@ -116,23 +117,17 @@ public class SwerveModule {
     m_drivingSparkMax.burnFlash();
     m_turningSparkMax.burnFlash();
 
-    // This allows time for the absolute position to be sent by the CANcoder (we know this isn't the best solution, we'll fix it later)
-    Timer.delay(1);
-
     // This is commented out because it is already being calculated by the CANcoder
     // m_chassisAngularOffset = chassisAngularOffset; 
-    
-    double initialAngle = m_turningAnalogSensor.getPosition() - chassisAngularOffset;
-    if(initialAngle > 0.1 || initialAngle < 0.0){
-      DataLog.log("ERROR - Initial Angle Bad: " + initialAngle + " Position from Analog: " + m_turningAnalogSensor.getPosition() + " CANId: " + turningCANId);
-      initialAngle = 0.0;
-    }
+    m_resetOffset = chassisAngularOffset;
+  }
+
+  public void resetTurningEncoder() {
+    double initialAngle = m_turningAnalogSensor.getPosition() - m_resetOffset;
     m_desiredState.angle = new Rotation2d(initialAngle);
     m_drivingEncoder.setPosition(0.0);
     m_turningEncoder.setPosition(initialAngle);
-    
   }
-
 
   /**
    * Returns the current state of the module.
