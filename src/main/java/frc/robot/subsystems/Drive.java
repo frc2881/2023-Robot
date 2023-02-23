@@ -25,7 +25,7 @@ import frc.robot.Constants;
 import frc.robot.lib.NavX;
 import frc.robot.lib.PhotonCameraWrapper;
 import frc.robot.lib.SwerveModule;
-import frc.robot.lib.Enums.DriveMode;
+import frc.robot.lib.Enums.SwerveDriveMode;
 
 public class Drive extends SubsystemBase {
   // Create SwerveModules
@@ -52,7 +52,7 @@ public class Drive extends SubsystemBase {
   // The gyro sensor
   private final NavX m_gyro = new NavX();
   
-  private DriveMode m_driveMode = DriveMode.FIELD_CENTRIC;
+  private SwerveDriveMode m_driveMode = SwerveDriveMode.FIELD_CENTRIC;
 
   public PhotonCameraWrapper m_leftPhotonCamera;
   public PhotonCameraWrapper m_rightPhotonCamera;
@@ -165,7 +165,7 @@ public class Drive extends SubsystemBase {
     // rot *= Constants.Drive.kMaxAngularSpeed;
 
     var swerveModuleStates = Constants.Drive.kDriveKinematics.toSwerveModuleStates(
-        (m_driveMode == DriveMode.FIELD_CENTRIC)
+        (m_driveMode == SwerveDriveMode.FIELD_CENTRIC)
             ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, Rotation2d.fromDegrees(m_gyro.getAngle()))
             : new ChassisSpeeds(xSpeed, ySpeed, rot));
     SwerveDriveKinematics.desaturateWheelSpeeds(
@@ -176,7 +176,7 @@ public class Drive extends SubsystemBase {
     m_rearRight.setDesiredState(swerveModuleStates[3]);
   }
 
-  public void setDriveMode(DriveMode driveMode) {
+  public void setDriveMode(SwerveDriveMode driveMode) {
     m_driveMode = driveMode;
   }
 
