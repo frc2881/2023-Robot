@@ -16,15 +16,15 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Arm extends SubsystemBase {
-  private Intake m_intake;
   private final CANSparkMax m_extensionMotor;
   private final SparkMaxPIDController m_extensionPID;
   private final RelativeEncoder m_extensionMotorEncoder;
   private final CANSparkMax m_tiltMotor;
   private final RelativeEncoder m_tiltMotorEncoder;
   private final SparkMaxPIDController m_tiltPID;
-  private boolean extendIsSafe;
-  private boolean tiltIsSafe;
+
+  private boolean m_isExtendSafe;
+  private boolean m_isTiltSafe;
 
   /** Creates a new Arm. */
   public Arm() {
@@ -69,9 +69,7 @@ public class Arm extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
-    SmartDashboard.putNumber("Arm/Tilt/Encoder Position", m_tiltMotorEncoder.getPosition());
-    SmartDashboard.putNumber("Arm/Extend/Encoder Position", m_extensionMotorEncoder.getPosition());
+    updateTelemetry();
   }
 
   /**
@@ -148,12 +146,12 @@ public class Arm extends SubsystemBase {
     double tilt = m_tiltMotorEncoder.getPosition();
 
     if(tilt < Constants.Arm.kMinSafeTilt){
-      extendIsSafe = false; 
+      m_isExtendSafe = false; 
     } else {
-      extendIsSafe = true;
+      m_isExtendSafe = true;
     }
 
-    return extendIsSafe;
+    return m_isExtendSafe;
   }
 
   public boolean isSafeToTilt(){
@@ -161,15 +159,24 @@ public class Arm extends SubsystemBase {
     double tiltPosition = m_tiltMotorEncoder.getPosition();
 
     if(tiltPosition > Constants.Arm.kMinSafeTilt){
-      tiltIsSafe = true;
+      m_isTiltSafe = true;
     } else{
       if(extensionPosition > 0){
-        tiltIsSafe = false;
+        m_isTiltSafe = false;
       } else{
-        tiltIsSafe = true;
+        m_isTiltSafe = true;
       }
     }
-    return tiltIsSafe;
+    return m_isTiltSafe;
   }
 
+  private void updateTelemetry() {
+    SmartDashboard.putNumber("Arm/Tilt/Position", m_tiltMotorEncoder.getPosition());
+    SmartDashboard.putNumber("Arm/Tilt/Motor/Speed", m_tiltMotor.get());
+    SmartDashboard.putBoolean("Arm/Tilt/IsSafe", m_isTiltSafe);
+
+    SmartDashboard.putNumber("Arm/Extend/Position", m_extensionMotorEncoder.getPosition());
+    SmartDashboard.putNumber("Arm/Extend/Motor/Speed", m_extensionMotor.get());
+    SmartDashboard.putBoolean("Arm/Extend/IsSafe", m_isExtendSafe);
+  }
 }
