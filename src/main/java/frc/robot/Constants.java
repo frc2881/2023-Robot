@@ -79,25 +79,25 @@ public class Constants {
         public static final int kFrontLeftDrivingCanId = 8;
         public static final int kFrontLeftTurningCanId = 5;
         public static final int kFrontLeftCanCoderId = 62;
-        public static final double kFrontLeftChassisAngularOffset = Math.toRadians(-27.421);
+        public static final double kFrontLeftChassisAngularOffset = 0;
         
         //Front Right Module
         public static final int kFrontRightDrivingCanId = 4; 
         public static final int kFrontRightTurningCanId = 2;
         public static final int kFrontRightCanCoderId = 61;
-        public static final double kFrontRightChassisAngularOffset = Math.toRadians(-96.768+180);
+        public static final double kFrontRightChassisAngularOffset = 0;
         
          //Back Left Module
         public static final int kBackLeftDrivingCanId = 10;
         public static final int kBackLeftTurningCanId = 1;
         public static final int kBackLeftCanCoderId = 60;
-        public static final double kBackLeftChassisAngularOffset = Math.toRadians(-325.107);
+        public static final double kBackLeftChassisAngularOffset = 0;
         
         //Back Right Module
         public static final int kBackRightDrivingCanId = 7;
         public static final int kBackRightTurningCanId = 3;
         public static final int kBackRightCanCoderId = 14;
-        public static final double kBackRightChassisAngularOffset = Math.toRadians(-9.58);
+        public static final double kBackRightChassisAngularOffset = 0;
 
         public static final boolean kGyroReversed = false;
       }

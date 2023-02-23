@@ -52,7 +52,7 @@ public class RobotContainer {
         m_swerve,
         () -> modifyAxis(-m_driverController.getLeftY()),
         () -> modifyAxis(-m_driverController.getLeftX()),
-        () ->modifyAxis(-m_driverController.getRightX())
+        () -> modifyAxis(-m_driverController.getRightX())
       )
     );
   }
