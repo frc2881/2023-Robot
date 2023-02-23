@@ -123,13 +123,15 @@ public class Suction extends SubsystemBase {
 
   private void updateTelemetry() {
     SmartDashboard.putBoolean("Suction/IsEnabled", m_isEnabled);
+    
     SmartDashboard.putNumber("Suction/Bottom/Pressure/Current", m_currentPressureBottom);
-    SmartDashboard.putNumber("Suction/Top/Pressure/Current", m_currentPressureTop);
     SmartDashboard.putNumber("Suction/Bottom/Pressure/Minimum", Constants.Suction.kMinimumPressureBottom);
-    SmartDashboard.putNumber("Suction/Top/Pressure/Minimum", Constants.Suction.kMinimumPressureTop);
     SmartDashboard.putNumber("Suction/Bottom/Pressure/Target", Constants.Suction.kTargetPressureBottom);
-    SmartDashboard.putNumber("Suction/Top/Pressure/Target", Constants.Suction.kTargetPressureTop);
     SmartDashboard.putNumber("Suction/Bottom/Motor/Speed", m_motorBottom.get());
+
+    SmartDashboard.putNumber("Suction/Top/Pressure/Current", m_currentPressureTop);
+    SmartDashboard.putNumber("Suction/Top/Pressure/Minimum", Constants.Suction.kMinimumPressureTop);
+    SmartDashboard.putNumber("Suction/Top/Pressure/Target", Constants.Suction.kTargetPressureTop);
     SmartDashboard.putNumber("Suction/Top/Motor/Speed", m_motorTop.get());
   }
 }
