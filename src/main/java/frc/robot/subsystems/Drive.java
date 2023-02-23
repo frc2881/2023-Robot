@@ -74,13 +74,13 @@ public class Drive extends SubsystemBase {
     m_leftPhotonCamera = new PhotonCameraWrapper(
       Constants.Vision.kLeftCameraName,
       Constants.Vision.kLeftRobotToCamera,
-      PoseStrategy.LOWEST_AMBIGUITY,
+      PoseStrategy.MULTI_TAG_PNP,
       Constants.Vision.kAprilTagFieldLayout
     );
     m_rightPhotonCamera = new PhotonCameraWrapper(
       Constants.Vision.kRightCameraName,
       Constants.Vision.kRightRobotToCamera,
-      PoseStrategy.LOWEST_AMBIGUITY,
+      PoseStrategy.MULTI_TAG_PNP,
       Constants.Vision.kAprilTagFieldLayout
     );
 
