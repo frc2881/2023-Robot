@@ -8,6 +8,7 @@ package frc.robot;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -22,6 +23,7 @@ import frc.robot.commands.arm.MoveTo.MoveToMedium;
 import frc.robot.commands.arm.Score.ScoreMedium;
 import frc.robot.commands.drive.DriveRobotCentric;
 import frc.robot.commands.drive.DriveWithJoysticks;
+import frc.robot.commands.drive.ResetSwerve;
 import frc.robot.commands.drive.ZeroHeading;
 import frc.robot.commands.intake.RunRollersInward;
 import frc.robot.commands.intake.RunRollersOutward;
@@ -58,6 +60,8 @@ public class RobotContainer {
         () -> Utils.applyDeadband(-m_driverController.getRightX(), Constants.Controllers.kDeadband)
       )
     );
+    Timer.delay(1);
+    m_drive.resetSwerve();
   }
 
   private void setupTriggers() {
@@ -68,6 +72,9 @@ public class RobotContainer {
 
     new Trigger(m_driverController::getBackButton)
       .onTrue(new ZeroHeading(m_drive));
+
+    new Trigger(m_driverController::getStartButton)
+      .whileTrue(new ResetSwerve(m_drive));
 
     new Trigger(m_driverController::getAButton)
       .whileTrue(new RunRollersInward(m_intake));
