@@ -31,7 +31,8 @@ import edu.wpi.first.math.geometry.Transform3d;
             poseStrategy, 
             new PhotonCamera(cameraName), 
             robotToCamera
-        );
+        ); 
+        photonPoseEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
      }
  
      /**
