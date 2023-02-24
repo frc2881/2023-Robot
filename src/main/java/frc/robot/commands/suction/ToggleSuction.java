@@ -9,17 +9,17 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 
 import frc.robot.subsystems.Suction;
 
-public class EnableSuction extends CommandBase {
+public class ToggleSuction extends CommandBase {
   private Suction m_suction;
 
-  public EnableSuction(Suction suction) {
+  public ToggleSuction(Suction suction) {
     m_suction = suction;
     addRequirements(m_suction);
   }
 
   @Override
   public void initialize() {
-    m_suction.enable();
+    m_suction.toggle();
   }
 
   @Override

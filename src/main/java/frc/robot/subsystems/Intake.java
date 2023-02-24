@@ -12,13 +12,13 @@ import com.revrobotics.ColorMatchResult;
 import com.revrobotics.ColorSensorV3;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
-import com.revrobotics.CANSparkMax.SoftLimitDirection;
 
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
 import frc.robot.Constants;
 
 public class Intake extends SubsystemBase {
@@ -37,7 +37,6 @@ public class Intake extends SubsystemBase {
     m_rollers.setInverted(false);
     m_rollers.setIdleMode(IdleMode.kBrake);
     m_rollers.setSmartCurrentLimit(Constants.Intake.kCurrentLimit);
-
 
     m_intakeArmMotor = new CANSparkMax(Constants.Intake.kIntakeArmCANId, MotorType.kBrushless);
     m_intakeArmMotor.restoreFactoryDefaults();
@@ -132,16 +131,12 @@ public class Intake extends SubsystemBase {
     }
 
     // Use for finding the Color values for cone/cube.
-    Color color = m_colorSensor.getColor();
+    // Color color = m_colorSensor.getColor();
+    // SmartDashboard.putNumber("Intake/GamePiece/Red", color.red);
+    // SmartDashboard.putNumber("Green", color.green);
+    // SmartDashboard.putNumber("Blue", color.blue);
 
-    SmartDashboard.putNumber("Red", color.red);
-    SmartDashboard.putNumber("Green", color.green);
-    SmartDashboard.putNumber("Blue", color.blue);
-
-    SmartDashboard.putNumber("Intake/EncoderVelocity", m_intakeArmMotorEncoder.getVelocity());
-    SmartDashboard.putNumber("Intake/MotorSpeed", m_intakeArmMotor.get()); 
-
-
+    updateTelemetry();
   }
 
   @Override
@@ -156,5 +151,10 @@ public class Intake extends SubsystemBase {
 
   public boolean isOut(){
     return isOut;
+  }
+
+  private void updateTelemetry() {
+    SmartDashboard.putNumber("Intake/EncoderVelocity", m_intakeArmMotorEncoder.getVelocity());
+    SmartDashboard.putNumber("Intake/MotorSpeed", m_intakeArmMotor.get()); 
   }
 }

@@ -8,28 +8,28 @@ package frc.robot.commands.arm;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+
 import frc.robot.subsystems.Arm;
 
-/** Extends the scoring arm. */
 public class ExtendArm extends CommandBase {
   private Arm m_arm;
   private DoubleSupplier m_speed;
 
   public ExtendArm(Arm arm, DoubleSupplier speed) {
     m_arm = arm;
+    addRequirements(m_arm);
+
     m_speed = speed;
   }
 
-  // Called when the command is initially scheduled.
   @Override
   public void initialize() {}
 
-  // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    boolean isSafe = true; //m_arm.isSafeToExtend();
-    if(isSafe == true){
-      m_arm.runExtension(m_speed.getAsDouble());
+    boolean isSafe = true; // TODO: m_arm.isSafeToExtend();
+    if (isSafe) {
+      m_arm.runExtension(-m_speed.getAsDouble());
     }
   }
 

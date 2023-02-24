@@ -19,8 +19,6 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.util.Color;
 
-
-/** Add your docs here. */
 public class Constants {
 
     public static final class Controllers {
@@ -33,12 +31,12 @@ public class Constants {
         /**
          * The CAN ID of the extension motor.
          */
-        public static final int kExtensionMotorId = 21; // TODO: Fix
+        public static final int kExtensionMotorId = 21;
 
         /*
          * The CAN ID of the elevation motor.
          */
-        public static final int kTiltMotorId = 20; // TODO: Fix
+        public static final int kTiltMotorId = 20;
 
         /*
          * The gear ratio for the arm that converts motor rotations into inches
@@ -59,7 +57,7 @@ public class Constants {
          /*
          * The maximum distance (in inches) that the arm can retract.
          */
-        public static final double kExtendReverseLimit = 0.0; 
+        public static final double kExtendReverseLimit = 0.25; // HACK: to prevent the lead screw from ramming in
 
          /*
          * The maximum distance (in inches) that the arm can elevate.
@@ -73,7 +71,6 @@ public class Constants {
 
         public static final double kMinSafeTilt = 2.6;
 
-        
         /*
          * Tilt PID Controller
          */
@@ -99,7 +96,6 @@ public class Constants {
          * Extension Max Speed
          */
         public static final double kExtensionMaxOutput = 1;
-
 
         /*
          * High Cone Tilt Height
@@ -130,8 +126,6 @@ public class Constants {
          * Low Cone Extension
          */
         public static final double kLowConeExtend = 1;
-
-        
 
         /*
          * High Cube Tilt Height
