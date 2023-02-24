@@ -24,7 +24,7 @@ public class ArmExtendOverride extends CommandBase {
 
   @Override
   public void execute() {
-    m_arm.runExtension(-0.10);
+    m_arm.runExtension(-0.15);
   }
 
   @Override

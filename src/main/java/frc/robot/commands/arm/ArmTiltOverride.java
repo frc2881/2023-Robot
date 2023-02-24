@@ -24,7 +24,7 @@ public class ArmTiltOverride extends CommandBase {
 
   @Override
   public void execute() {
-    m_arm.runTilt(-0.15);
+    m_arm.runTilt(-0.20);
   }
 
   @Override

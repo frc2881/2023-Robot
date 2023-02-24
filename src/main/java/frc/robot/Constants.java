@@ -78,11 +78,11 @@ public class Constants {
         /*
          * Tilt Min Speed
          */
-        public static final double kTiltMinOutput = -1;
+        public static final double kTiltMinOutput = -0.75;
         /*
          * Tilit Max Speed
          */
-        public static final double kTiltMaxOutput = 1;
+        public static final double kTiltMaxOutput = 0.75;
 
         /*
          * Extension PID Controller
@@ -91,11 +91,11 @@ public class Constants {
         /*
          * Extension Min Speed
          */
-        public static final double kExtensionMinOutput = -1;
+        public static final double kExtensionMinOutput = -0.75;
         /*
          * Extension Max Speed
          */
-        public static final double kExtensionMaxOutput = 1;
+        public static final double kExtensionMaxOutput = 0.75;
 
         /*
          * High Cone Tilt Height
