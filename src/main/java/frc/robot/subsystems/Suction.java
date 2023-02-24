@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.RobotController;
@@ -119,6 +120,14 @@ public class Suction extends SubsystemBase {
   public void disable() {
     m_isEnabled = false;
     m_isDisabling = true;
+  }
+
+  public void toggle() {
+    if (m_isEnabled) {
+      disable();
+    } else {
+      enable();
+    }
   }
 
   private void updateTelemetry() {

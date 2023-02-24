@@ -8,6 +8,7 @@ package frc.robot.commands.arm;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+
 import frc.robot.subsystems.Arm;
 
 /** Elevates the scoring arm. */
@@ -17,26 +18,24 @@ public class TiltArm extends CommandBase {
   
   public TiltArm(Arm arm, DoubleSupplier speed) {
     m_arm = arm;
+    addRequirements(m_arm);
+
     m_speed = speed;
   }
 
-  // Called when the command is initially scheduled.
   @Override
   public void initialize() {}
 
-  // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     m_arm.runTilt(-m_speed.getAsDouble());
   }
 
-  // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     m_arm.runTilt(0.0);
   }
 
-  // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     return false;

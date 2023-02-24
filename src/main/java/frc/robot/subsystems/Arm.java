@@ -90,7 +90,7 @@ public class Arm extends SubsystemBase {
 
   
   /*
-   * Sets the Extension position to given value. 15 inches of movement.
+   * Sets the Extension position to given value.
    */
   public void setDesiredExtensionPosition(double position) {
     // TODO: Add ability to set the speed
@@ -101,16 +101,17 @@ public class Arm extends SubsystemBase {
    * Sets the Tilt position to given value
    */
   public void setDesiredTiltPosition(double position) {
+    // TODO: Add ability to set the speed
     m_tiltPID.setReference(position, CANSparkMax.ControlType.kPosition);
   }
 
   // In inches
-  public Double getExtensionEncoderPosition(){
+  public Double getExtensionEncoderPosition() {
     return m_extensionMotorEncoder.getPosition();
   }
 
   // In inches
-  public Double getTiltEncoderPosition(){
+  public Double getTiltEncoderPosition() {
     return m_tiltMotorEncoder.getPosition();
   }
 
@@ -123,7 +124,7 @@ public class Arm extends SubsystemBase {
   }
 
   public void enableTiltSoftLimits(boolean enable){
-    if(enable == true){
+    if (enable) {
       m_tiltMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
       m_tiltMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
     } else {
@@ -133,7 +134,7 @@ public class Arm extends SubsystemBase {
   }
 
   public void enableExtendSoftLimits(boolean enable){
-    if(enable == true){
+    if (enable) {
       m_extensionMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
       m_extensionMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
     } else {
@@ -142,30 +143,19 @@ public class Arm extends SubsystemBase {
     }
   }
 
-  public boolean isSafeToExtend(){
+  public boolean isSafeToExtend() {
     double tilt = m_tiltMotorEncoder.getPosition();
-
-    if(tilt < Constants.Arm.kMinSafeTilt){
-      m_isExtendSafe = false; 
-    } else {
-      m_isExtendSafe = true;
-    }
-
+    m_isExtendSafe = tilt < Constants.Arm.kMinSafeTilt;
     return m_isExtendSafe;
   }
 
-  public boolean isSafeToTilt(){
+  public boolean isSafeToTilt() {
     double extensionPosition = m_extensionMotorEncoder.getPosition();
     double tiltPosition = m_tiltMotorEncoder.getPosition();
-
-    if(tiltPosition > Constants.Arm.kMinSafeTilt){
+    if (tiltPosition > Constants.Arm.kMinSafeTilt) {
       m_isTiltSafe = true;
-    } else{
-      if(extensionPosition > 0){
-        m_isTiltSafe = false;
-      } else{
-        m_isTiltSafe = true;
-      }
+    } else {
+      m_isTiltSafe = extensionPosition > 0;
     }
     return m_isTiltSafe;
   }
