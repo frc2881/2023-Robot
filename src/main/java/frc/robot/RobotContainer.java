@@ -24,7 +24,7 @@ import frc.robot.commands.arm.MoveTo.MoveToPickup;
 import frc.robot.commands.arm.Score.ScoreHigh;
 import frc.robot.commands.arm.Score.ScoreMedium;
 import frc.robot.commands.auto.FollowTrajectory;
-import frc.robot.commands.auto.SimpleAuto;
+import frc.robot.commands.auto.AutoA;
 import frc.robot.commands.drive.DriveRobotCentric;
 import frc.robot.commands.drive.DriveWithJoysticks;
 import frc.robot.commands.drive.ResetSwerve;
@@ -125,8 +125,7 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    //return new FollowTrajectory(simplePath, true, m_drive);
-    return new SimpleAuto(m_suction, m_arm, m_intake);
+    return new AutoA(m_suction, m_arm, m_intake);
   }
 
   public void resetRobot() {
