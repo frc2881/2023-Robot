@@ -57,7 +57,7 @@ public class Constants {
          /*
          * The maximum distance (in inches) that the arm can retract.
          */
-        public static final double kExtendReverseLimit = 0.25; // HACK: to prevent the lead screw from ramming in
+        public static final double kExtendReverseLimit = 0.0; // HACK: to prevent the lead screw from ramming in
 
          /*
          * The maximum distance (in inches) that the arm can elevate.

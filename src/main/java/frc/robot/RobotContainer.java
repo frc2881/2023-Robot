@@ -24,7 +24,8 @@ import frc.robot.commands.arm.MoveTo.MoveToPickup;
 import frc.robot.commands.arm.Score.ScoreHigh;
 import frc.robot.commands.arm.Score.ScoreMedium;
 import frc.robot.commands.auto.FollowTrajectory;
-import frc.robot.commands.auto.AutoA;
+import frc.robot.commands.auto.AutoScoreHigh;
+import frc.robot.commands.auto.AutoSequenceA;
 import frc.robot.commands.drive.DriveRobotCentric;
 import frc.robot.commands.drive.DriveWithJoysticks;
 import frc.robot.commands.drive.ResetSwerve;
@@ -47,7 +48,7 @@ public class RobotContainer {
   private final XboxController m_driverController = new XboxController(Constants.Controllers.kDriverControllerPort);
   private final XboxController m_manipulatorController = new XboxController(Constants.Controllers.kManipulatorControllerPort);
 
-  private final PathPlannerTrajectory simplePath = PathPlanner.loadPath("SimplePath", 1, 1);
+  private final PathPlannerTrajectory m_flatPath = PathPlanner.loadPath("Flat", 1, 1);
 
   public boolean m_robotResetState = true;
   
@@ -125,7 +126,7 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
-    return new AutoA(m_suction, m_arm, m_intake);
+    return new AutoSequenceA(m_drive, m_suction, m_arm, m_intake, m_flatPath);
   }
 
   public void resetRobot() {

@@ -18,8 +18,8 @@ import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Suction;
 
-public class AutoA extends SequentialCommandGroup {
-  public AutoA(Suction suction, Arm arm, Intake intake) {
+public class AutoScoreHigh extends SequentialCommandGroup {
+  public AutoScoreHigh(Suction suction, Arm arm, Intake intake) {
     addCommands(
       new EnableSuction(suction),
       new TiltArmToHeight(arm, intake, 0.15, 0.67),
@@ -28,8 +28,8 @@ public class AutoA extends SequentialCommandGroup {
       new ExtendArmToLength(arm, 0.15, 0.0),
       new ScoreHigh(arm, intake, 0.15, suction),
       new WaitCommand(0.5),
-      new DisableSuction(suction),
-      new ResetArm(arm, intake, 0.15)
+      new DisableSuction(suction)//,
+      //new ResetArm(arm, intake, 0.15)
     );
   }
 }
