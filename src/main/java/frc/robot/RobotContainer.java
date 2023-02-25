@@ -12,6 +12,7 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -59,7 +60,8 @@ public class RobotContainer {
 
   private void configureButtonBindings() {
     //DRIVER
-    m_driverController.back().onTrue(new ZeroHeading(m_swerve));    // Hi! Check this out! It's an important button to press...
+    m_driverController.back().onTrue(new ZeroHeading(m_swerve));
+    // Hi! Check this out! It's an important button to press...
     // Zeroes out the gyro
     // Yup. You want to press that when the robot is facing North to ensure alignment.
     // Also, when setting up the robot (if you don't have an auto for swerve)
@@ -96,8 +98,42 @@ public class RobotContainer {
     //!!
     // resettting module angle offsets is different from GYRO reset.
     // nerp
+    // The gyro can only handle "all of the wheels relative to where you want North to be"
+    // Module offsets are on a per module basis. Those regard the CANCoder!
+    // True!
 
-    // Reset offset after any swerve module repairs
+
+// we gotta clean up these comments LMAO and leave notes in here?
+
+// Fair. Although, I will say - if you ever come BACK to this, you'll want some *relevant* notes here. <<<<<<<<<
+
+// Okay thrifty bot huehuehue
+// amarillo...
+// yippee! Ask around if you can acquire some from another team, idk about their shipping
+// not really... sort of? lol
+// now... I could go on a MASSIVE explanation
+// Simple details:
+// The CANCoders function very well with Falcons. Falcons can directly read data from a CANCoder on the same network. Yes, CTRE. >:(
+// Sooo. Technically, of course you can *use* CANCoders and NEOs. People are doing it all over the place.
+// TTB encoder is a more "old school analog encoder". And! It can plug in directly to the Rio in an analog in port
+// OR!
+// Directly to a smax.
+// Meaning, you get the same benefit of keeping any PID business on the motor controller if you plug it in to the smax;;;
+  // You do need an adapter board though
+// https://www.revrobotics.com/rev-11-1881/
+
+// COOL MONEY POINT!
+// Sell the cancoders for a profit LMFAO
+// hj^ like literally, people need them BAD
+// so you genuinely could sell them for a profit IF that's okay with coaches
+// ask Brian (ladycans mentor) before buying those, idk if it's actually worth it to use ttb over cancoder for sure. on paper it should be...
+// but ofc... just ttb enc to rio otherwise! that totally works :) (kind of a lot of wires but ehhh lol)
+
+
+
+// which is why i mention cleanup
+// maybe
+    // Reset offset after any swerve module repairs [per module basis]
 
     //MANIPULATOR
     // new Trigger(m_manipulatorController::getAButton).onTrue(new EnableSuction(m_suction));

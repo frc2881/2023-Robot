@@ -8,6 +8,7 @@ package frc.robot.lib;
 import com.ctre.phoenix.sensors.AbsoluteSensorRange;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.ctre.phoenix.sensors.CANCoderConfiguration;
+import com.ctre.phoenix.sensors.SensorInitializationStrategy;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
@@ -43,18 +44,27 @@ public class SwerveModule {
    * MAXSwerve Module built with NEOs, SPARKS MAX, and a Through Bore
    * Encoder.
    */
+
+// In PhoenixTuner, you can set your turning motor encoders to be zeros there
+// Or, you could put the angular offsets of the turning encoders in Code
+// Zero by hand, and put -shuffleboard into constants for offset
+// TODO: Ask Colin if PhoenixTuner is better than Code
+
+
   public SwerveModule(int drivingCANId, int turningCANId, int canCoderCANId, double chassisAngularOffset) {
     m_drivingSparkMax = new CANSparkMax(drivingCANId, MotorType.kBrushless);
     m_turningSparkMax = new CANSparkMax(turningCANId, MotorType.kBrushless);
 
     m_drivingCANId = drivingCANId;
+    //Sus Line below, comment maybe if bad? :amogus:
+    m_chassisAngularOffset = chassisAngularOffset; 
 
     // Factory reset, so we get the SPARKS MAX to a known state before configuring
     // them. This is useful in case a SPARK MAX is swapped out.
     m_drivingSparkMax.restoreFactoryDefaults();
     m_turningSparkMax.restoreFactoryDefaults();
 
-    // SDS Module is inverted relative to the MAXSwerve
+    // SDS Module is inverted relative to the MAXSwerve (Wacky)
     m_drivingSparkMax.setInverted(true);;
     m_turningSparkMax.setInverted(true);;
 
@@ -68,6 +78,10 @@ public class SwerveModule {
     
     CANCoderConfiguration config = new CANCoderConfiguration();
     config.absoluteSensorRange = AbsoluteSensorRange.Unsigned_0_to_360;
+    //ITS THE LINE!!!!!!! THE LINE OF ALL TIME!!
+    //ALTERNATIVE: Do this in PheonixTurner if no work
+    config.initializationStrategy = SensorInitializationStrategy.BootToAbsolutePosition;
+    //module offset, not chassis offset
     config.magnetOffsetDegrees = m_chassisAngularOffset;
     config.sensorDirection = direction == Direction.CLOCKWISE;
 
@@ -123,10 +137,9 @@ public class SwerveModule {
     m_turningSparkMax.burnFlash();
 
     // This allows time for the absolute position to be sent by the CANcoder (we know this isn't the best solution, we'll fix it later)
+    // Best line ever
     Timer.delay(1);
 
-    // This is commented out because it is already being calculated by the CANcoder
-    m_chassisAngularOffset = chassisAngularOffset; 
     m_desiredState.angle = new Rotation2d(Math.toRadians(m_canCoder.getAbsolutePosition()));
     m_drivingEncoder.setPosition(0);
     m_turningEncoder.setPosition(Math.toRadians(m_canCoder.getAbsolutePosition()));
@@ -178,9 +191,10 @@ public class SwerveModule {
     m_drivingPIDController.setReference(optimizedDesiredState.speedMetersPerSecond, CANSparkMax.ControlType.kVelocity);
     m_turningPIDController.setReference(optimizedDesiredState.angle.getRadians(), CANSparkMax.ControlType.kPosition);
 
-    if(m_drivingCANId == 1 && DriverStation.isAutonomous()){
-      System.out.println(desiredState.angle.getRadians() + " " + correctedDesiredState.angle.getRadians() + " " + m_turningEncoder.getPosition());
-    }
+    //Wack
+    // if(m_drivingCANId == 1 && DriverStation.isAutonomous()){
+    //   System.out.println(desiredState.angle.getRadians() + " " + correctedDesiredState.angle.getRadians() + " " + m_turningEncoder.getPosition());
+    // }
 
     m_desiredState = desiredState;
 
