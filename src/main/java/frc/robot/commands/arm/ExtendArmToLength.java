@@ -16,8 +16,6 @@ public class ExtendArmToLength extends CommandBase {
 
   public ExtendArmToLength(Arm arm, Double speed, Double position) {
     m_arm = arm;
-    addRequirements(m_arm);
-
     m_speed = speed;
     m_position = position;
   }

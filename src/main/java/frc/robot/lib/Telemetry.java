@@ -11,8 +11,6 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import frc.robot.Robot;
-import frc.robot.lib.Enums.RobotMode;
-import frc.robot.lib.Enums.RobotStatus;
 
 public final class Telemetry {
   private static boolean m_isAllTelemetryEnabled = false;
@@ -21,23 +19,23 @@ public final class Telemetry {
   public static void start() {
     SmartDashboard.putBoolean("EnableAllTelemetry", m_isAllTelemetryEnabled);
 
-    Robot.addCustomPeriodic(Telemetry::updateRobotInfo, 0.3);
+    Robot.addCustomPeriodic(Telemetry::updateRobotInfo, 1);
     Robot.addCustomPeriodic(Telemetry::updateMatchInfo, 0.3);
-    Robot.addCustomPeriodic(Telemetry::updateFPGATimestamp, 1.0);
+    Robot.addCustomPeriodic(Telemetry::updateFPGATimestamp, 2.0);
     Robot.addCustomPeriodic(Telemetry::updateTelemetrySetting, 3.0);
   }
 
   /** This periodic function supports providing the current robot mode and status to the driver station dashbaoard app */
   private static void updateRobotInfo() {
-    RobotMode mode = RobotMode.DISABLED;
-    if (RobotState.isAutonomous()) { mode = RobotMode.AUTO; }
-    if (RobotState.isTeleop()) { mode = RobotMode.TELEOP; }
-    if (RobotState.isTest()) { mode = RobotMode.TEST; }
+    Robot.Mode mode = Robot.Mode.DISABLED;
+    if (RobotState.isAutonomous()) { mode = Robot.Mode.AUTO; }
+    if (RobotState.isTeleop()) { mode = Robot.Mode.TELEOP; }
+    if (RobotState.isTest()) { mode = Robot.Mode.TEST; }
     SmartDashboard.putString("Robot/Mode", mode.toString());
 
-    RobotStatus status = RobotStatus.DISABLED;
-    if (RobotState.isEnabled()) { status = RobotStatus.ENABLED; }
-    if (RobotState.isEStopped()) { status = RobotStatus.ESTOPPED; }
+    Robot.Status status = Robot.Status.DISABLED;
+    if (RobotState.isEnabled()) { status = Robot.Status.ENABLED; }
+    if (RobotState.isEStopped()) { status = Robot.Status.ESTOPPED; }
     SmartDashboard.putString("Robot/Status", status.toString());
   }
 

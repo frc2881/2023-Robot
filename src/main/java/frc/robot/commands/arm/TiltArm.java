@@ -18,8 +18,6 @@ public class TiltArm extends CommandBase {
   
   public TiltArm(Arm arm, DoubleSupplier speed) {
     m_arm = arm;
-    addRequirements(m_arm);
-
     m_speed = speed;
   }
 

@@ -17,8 +17,6 @@ public class ExtendArm extends CommandBase {
 
   public ExtendArm(Arm arm, DoubleSupplier speed) {
     m_arm = arm;
-    addRequirements(m_arm);
-
     m_speed = speed;
   }
 

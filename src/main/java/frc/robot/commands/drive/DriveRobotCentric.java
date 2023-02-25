@@ -7,7 +7,6 @@ package frc.robot.commands.drive;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-import frc.robot.lib.Enums.SwerveDriveMode;
 import frc.robot.subsystems.Drive;
 
 public class DriveRobotCentric extends CommandBase {
@@ -20,7 +19,7 @@ public class DriveRobotCentric extends CommandBase {
 
   @Override
   public void initialize() {
-    m_drive.setDriveMode(SwerveDriveMode.ROBOT_CENTRIC);
+    m_drive.setDriveMode(Drive.SwerveDriveMode.ROBOT_CENTRIC);
   }
 
   @Override
@@ -28,7 +27,7 @@ public class DriveRobotCentric extends CommandBase {
 
   @Override
   public void end(boolean interrupted) {
-    m_drive.setDriveMode(SwerveDriveMode.FIELD_CENTRIC);
+    m_drive.setDriveMode(Drive.SwerveDriveMode.FIELD_CENTRIC);
   }
 
   @Override

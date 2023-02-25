@@ -11,8 +11,10 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
 
+import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
 import frc.robot.Constants;
 
 public class Arm extends SubsystemBase {
@@ -46,8 +48,6 @@ public class Arm extends SubsystemBase {
     m_extensionPID.setD(Constants.Arm.kExtensionD);
     m_extensionPID.setOutputRange(Constants.Arm.kExtensionMinOutput,
                                   Constants.Arm.kExtensionMaxOutput);
-
-
 
     m_tiltMotor = new CANSparkMax(Constants.Arm.kTiltMotorId, MotorType.kBrushless);
     m_tiltMotor.setIdleMode(IdleMode.kBrake);
@@ -89,7 +89,6 @@ public class Arm extends SubsystemBase {
     m_tiltMotor.set(speed);
   }
 
-  
   /*
    * Sets the Extension position to given value.
    */
@@ -161,13 +160,21 @@ public class Arm extends SubsystemBase {
     return m_isTiltSafe;
   }
 
+  @Override
+  public void initSendable(SendableBuilder builder) {
+    super.initSendable(builder);
+
+    builder.addDoubleProperty("Tilt/Position", m_tiltMotorEncoder::getPosition, null);
+    builder.addDoubleProperty("Tilt/Motor/Speed", m_tiltMotor::get, null);
+    builder.addBooleanProperty("Tilt/IsSafe", this::isSafeToTilt, null);
+
+    builder.addDoubleProperty("Extend/Position", m_extensionMotorEncoder::getPosition, null);
+    builder.addDoubleProperty("Extend/Motor/Speed", m_extensionMotor::get, null);
+    builder.addBooleanProperty("Extend/IsSafe", this::isSafeToExtend, null);
+  }
+
   private void updateTelemetry() {
     SmartDashboard.putNumber("Arm/Tilt/Position", m_tiltMotorEncoder.getPosition());
-    SmartDashboard.putNumber("Arm/Tilt/Motor/Speed", m_tiltMotor.get());
-    SmartDashboard.putBoolean("Arm/Tilt/IsSafe", m_isTiltSafe);
-
     SmartDashboard.putNumber("Arm/Extend/Position", m_extensionMotorEncoder.getPosition());
-    SmartDashboard.putNumber("Arm/Extend/Motor/Speed", m_extensionMotor.get());
-    SmartDashboard.putBoolean("Arm/Extend/IsSafe", m_isExtendSafe);
   }
 }

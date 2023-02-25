@@ -14,7 +14,6 @@ public class ArmTiltOverride extends CommandBase {
 
   public ArmTiltOverride(Arm arm) {
     m_arm = arm;
-    addRequirements(m_arm);
   }
 
   @Override
