@@ -111,7 +111,7 @@ public class Swerve extends SubsystemBase {
    
   public void updatePose() {
     m_poseEstimator.update(
-      m_gyro.getRotation2d(), 
+      m_gyro.getRotation2d(),
       new SwerveModulePosition[] {
         m_frontLeft.getPosition(),
         m_frontRight.getPosition(),
