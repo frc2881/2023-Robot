@@ -43,6 +43,7 @@ public class Arm extends SubsystemBase {
     m_extensionPID = m_extensionMotor.getPIDController();
     m_extensionPID.setFeedbackDevice(m_extensionMotorEncoder);
     m_extensionPID.setP(Constants.Arm.kExtensionP);
+    m_extensionPID.setD(Constants.Arm.kExtensionD);
     m_extensionPID.setOutputRange(Constants.Arm.kExtensionMinOutput,
                                   Constants.Arm.kExtensionMaxOutput);
 

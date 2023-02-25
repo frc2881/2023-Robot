@@ -18,7 +18,7 @@ public class TiltArmToHeight extends CommandBase {
   public TiltArmToHeight(Arm arm, Intake intake, Double speed, Double position) {
     m_arm = arm;
     m_intake = intake;
-    addRequirements(m_arm, m_intake);
+    addRequirements(m_arm);
 
     m_speed = speed;
     m_position = position;

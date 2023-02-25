@@ -130,6 +130,14 @@ public class Suction extends SubsystemBase {
     }
   }
 
+  
+  public void reset() {
+    m_isEnabled = false;
+    m_isDisabling = false;
+    m_motorBottom.set(0);
+    m_motorTop.set(0);
+  }
+
   private void updateTelemetry() {
     SmartDashboard.putBoolean("Suction/IsEnabled", m_isEnabled);
     

@@ -47,6 +47,8 @@ public class RobotContainer {
   private final XboxController m_manipulatorController = new XboxController(Constants.Controllers.kManipulatorControllerPort);
 
   private final PathPlannerTrajectory simplePath = PathPlanner.loadPath("SimplePath", 1, 1);
+
+  public boolean m_robotResetState = true;
   
   public RobotContainer() {
     setupDrive(); 
@@ -123,5 +125,16 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
     return new FollowTrajectory(simplePath, true, m_drive);
+  }
+
+  public void resetRobot() {
+    if(m_robotResetState == true) {
+      m_suction.reset();
+      m_robotResetState = false;
+    }
+  }
+
+  public void robotShouldReset() {
+    m_robotResetState = true;
   }
 }
