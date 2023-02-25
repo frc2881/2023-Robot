@@ -15,7 +15,8 @@ import frc.robot.subsystems.Intake;
 public class MoveToHigh extends SequentialCommandGroup {
 
   public MoveToHigh(Arm arm, Intake intake, Double speed) {
-    addCommands(new TiltArmToHeight(arm, intake, speed, 16.5),
+    addCommands(new ExtendArmToLength(arm, speed, 0.0), 
+    new TiltArmToHeight(arm, intake, speed, 16.5),
     new ExtendArmToLength(arm, speed, 27.5));
   }
   

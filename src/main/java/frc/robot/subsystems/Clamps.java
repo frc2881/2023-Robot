@@ -5,11 +5,20 @@
 
 package frc.robot.subsystems;
 
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Clamps extends SubsystemBase {
+  private final CANSparkMax m_left;
+  private final CANSparkMax m_right;
+ 
+ public Clamps() {
+   m_left = new CANSparkMax(0, MotorType.kBrushless);
+   m_right = new CANSparkMax(0, MotorType.kBrushless);
+ }
 
-  public Clamps() {}
 
   @Override
   public void periodic() {
