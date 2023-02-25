@@ -89,6 +89,11 @@ public class Constants {
          */
         public static final double kExtensionP = 3;
         /*
+         * Extension PID Controller
+         */
+        public static final double kExtensionD = 1.5;
+
+        /*
          * Extension Min Speed
          */
         public static final double kExtensionMinOutput = -0.75;
@@ -182,9 +187,9 @@ public class Constants {
             new Translation2d(-kWheelBase / 2, -kTrackWidth / 2));
     
         // Angular offsets of the modules relative to the chassis in radians
-        public static final double kFrontLeftChassisAngularOffset = 5.9215;
-        public static final double kFrontRightChassisAngularOffset = 2.85;
-        public static final double kRearLeftChassisAngularOffset = 1.60;
+        public static final double kFrontLeftChassisAngularOffset = 5.93;
+        public static final double kFrontRightChassisAngularOffset = 2.84;
+        public static final double kRearLeftChassisAngularOffset = 1.58;
         public static final double kRearRightChassisAngularOffset = 4.45;
 
         /*   public static final double kFrontLeftChassisAngularOffset = 5.9175;

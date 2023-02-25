@@ -5,6 +5,8 @@
 
 package frc.robot.lib;
 
+import java.util.Arrays;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
@@ -123,6 +125,12 @@ public class SwerveModule {
   }
 
   public void resetTurningEncoder() {
+    //double[] sensorReadings = new double[100];
+    //for (int i = 0, ic = 100; i < ic; i += 1) {
+    //  sensorReadings[i] = m_turningAnalogSensor.getPosition() - m_resetOffset;
+      //Timer.delay(0.05);
+    //}
+    //double initialAngle = Arrays.stream(sensorReadings).average().orElse(Double.NaN);
     double initialAngle = m_turningAnalogSensor.getPosition() - m_resetOffset;
     m_desiredState.angle = new Rotation2d(initialAngle);
     m_drivingEncoder.setPosition(0.0);
