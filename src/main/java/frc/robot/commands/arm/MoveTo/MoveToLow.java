@@ -9,15 +9,15 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 import frc.robot.commands.arm.ExtendArmToLength;
 import frc.robot.commands.arm.TiltArmToHeight;
-import frc.robot.subsystems.Arm;
-import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.ArmExtension;
+import frc.robot.subsystems.ArmTilt;
 
 public class MoveToLow extends SequentialCommandGroup {
 
-  public MoveToLow(Arm arm, Intake intake, Double speed) {
-    addCommands(new ExtendArmToLength(arm, speed, 0.0), 
-    new TiltArmToHeight(arm, intake, speed, 6.0),
-    new ExtendArmToLength(arm, speed, 10.5));
+  public MoveToLow(ArmExtension armExtension, ArmTilt armTilt, Double speed) {
+    addCommands(new ExtendArmToLength(armExtension, speed, 0.0), 
+    new TiltArmToHeight(armTilt, speed, 6.0),
+    new ExtendArmToLength(armExtension, speed, 10.5));
   }
   
 }

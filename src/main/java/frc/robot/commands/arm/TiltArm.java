@@ -9,16 +9,18 @@ import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-import frc.robot.subsystems.Arm;
+import frc.robot.subsystems.ArmTilt;
 
 /** Elevates the scoring arm. */
 public class TiltArm extends CommandBase {
-  private Arm m_arm;
+  private ArmTilt m_armTilt;
   private DoubleSupplier m_speed;
   
-  public TiltArm(Arm arm, DoubleSupplier speed) {
-    m_arm = arm;
+  public TiltArm(ArmTilt armTilt, DoubleSupplier speed) {
+    m_armTilt = armTilt;
     m_speed = speed;
+
+    addRequirements(m_armTilt);
   }
 
   @Override
@@ -26,12 +28,17 @@ public class TiltArm extends CommandBase {
 
   @Override
   public void execute() {
-    m_arm.runTilt(-m_speed.getAsDouble());
+    m_armTilt.run(-m_speed.getAsDouble());
+    /*if(m_arm.isSafeToTilt()){
+      m_arm.runTilt(-m_speed.getAsDouble());
+    } else {
+      m_arm.runTilt(0.0);
+    }*/
   }
 
   @Override
   public void end(boolean interrupted) {
-    m_arm.runTilt(0.0);
+    m_armTilt.run(0.0);
   }
 
   @Override

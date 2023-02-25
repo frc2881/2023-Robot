@@ -6,13 +6,13 @@
 package frc.robot.commands.arm;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.subsystems.Arm;
-import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.ArmExtension;
+import frc.robot.subsystems.ArmTilt;
 
 public class ResetArm extends SequentialCommandGroup {
   
-  public ResetArm(Arm arm, Intake intake, Double speed) {
-    addCommands(new ExtendArmToLength(arm, speed, 0.0), 
-    new TiltArmToHeight(arm, intake, speed, 0.0));
+  public ResetArm(ArmExtension armExtension, ArmTilt armTilt, Double speed) {
+    addCommands(new ExtendArmToLength(armExtension, speed, 0.0), 
+    new TiltArmToHeight(armTilt, speed, 0.0));
   }
 }

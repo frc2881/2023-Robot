@@ -57,7 +57,7 @@ public class Constants {
          /*
          * The maximum distance (in inches) that the arm can retract.
          */
-        public static final double kExtendReverseLimit = 0.25; // HACK: to prevent the lead screw from ramming in
+        public static final double kExtendReverseLimit = 0.0;
 
          /*
          * The maximum distance (in inches) that the arm can elevate.
@@ -78,11 +78,11 @@ public class Constants {
         /*
          * Tilt Min Speed
          */
-        public static final double kTiltMinOutput = -0.75;
+        public static final double kTiltMinOutput = -1.0;
         /*
          * Tilit Max Speed
          */
-        public static final double kTiltMaxOutput = 0.75;
+        public static final double kTiltMaxOutput = 1.0;
 
         /*
          * Extension PID Controller
@@ -96,11 +96,12 @@ public class Constants {
         /*
          * Extension Min Speed
          */
-        public static final double kExtensionMinOutput = -0.75;
+        public static final double kExtensionMinOutput = -1.0;
         /*
          * Extension Max Speed
          */
-        public static final double kExtensionMaxOutput = 0.75;
+        public static final double kExtensionMaxOutput = 1.0;
+
 
         /*
          * High Cone Tilt Height

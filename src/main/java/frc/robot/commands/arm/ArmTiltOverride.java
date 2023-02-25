@@ -7,30 +7,32 @@ package frc.robot.commands.arm;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-import frc.robot.subsystems.Arm;
+import frc.robot.subsystems.ArmTilt;
 
 public class ArmTiltOverride extends CommandBase {
-  private Arm m_arm;
+  private ArmTilt m_armTilt;
 
-  public ArmTiltOverride(Arm arm) {
-    m_arm = arm;
+  public ArmTiltOverride(ArmTilt armTilt) {
+    m_armTilt = armTilt;
+
+    addRequirements(m_armTilt);
   }
 
   @Override
   public void initialize() {
-    m_arm.enableTiltSoftLimits(false);
+    m_armTilt.enableSoftLimits(false);
   }
 
   @Override
   public void execute() {
-    m_arm.runTilt(-0.20);
+    m_armTilt.run(-0.10);
   }
 
   @Override
   public void end(boolean interrupted) {
-    m_arm.enableTiltSoftLimits(true);
-    m_arm.resetTiltEncoder();
-    m_arm.runTilt(0.0);
+    m_armTilt.enableSoftLimits(true);
+    m_armTilt.resetEncoder();
+    m_armTilt.run(0.0);
   }
 
   @Override

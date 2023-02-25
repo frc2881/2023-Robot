@@ -17,19 +17,15 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.robot.Constants;
 
-public class Arm extends SubsystemBase {
+public class ArmExtension extends SubsystemBase {
   private final CANSparkMax m_extensionMotor;
   private final SparkMaxPIDController m_extensionPID;
   private final RelativeEncoder m_extensionMotorEncoder;
-  private final CANSparkMax m_tiltMotor;
-  private final RelativeEncoder m_tiltMotorEncoder;
-  private final SparkMaxPIDController m_tiltPID;
 
   private boolean m_isExtendSafe;
-  private boolean m_isTiltSafe;
 
   /** Creates a new Arm. */
-  public Arm() {
+  public ArmExtension() {
     m_extensionMotor = new CANSparkMax(Constants.Arm.kExtensionMotorId, MotorType.kBrushless);
     m_extensionMotor.setIdleMode(IdleMode.kBrake); 
     m_extensionMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
@@ -49,23 +45,6 @@ public class Arm extends SubsystemBase {
     m_extensionPID.setOutputRange(Constants.Arm.kExtensionMinOutput,
                                   Constants.Arm.kExtensionMaxOutput);
 
-    m_tiltMotor = new CANSparkMax(Constants.Arm.kTiltMotorId, MotorType.kBrushless);
-    m_tiltMotor.setIdleMode(IdleMode.kBrake);
-    m_tiltMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
-    m_tiltMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward,
-                       (float)Constants.Arm.kTiltForwardLimit);
-    m_tiltMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
-    m_tiltMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse,
-                       (float)Constants.Arm.kTiltReverseLimit);
-
-    m_tiltMotorEncoder = m_tiltMotor.getEncoder();
-    m_tiltMotorEncoder.setPositionConversionFactor(Constants.Arm.kTiltRotationsToInches);
-
-    m_tiltPID = m_tiltMotor.getPIDController();
-    m_tiltPID.setP(Constants.Arm.kTiltP);
-    m_tiltPID.setOutputRange(Constants.Arm.kTiltMinOutput,
-                             Constants.Arm.kTiltMaxOutput);
-
   }
 
   @Override
@@ -77,63 +56,30 @@ public class Arm extends SubsystemBase {
    * Extends or retracts the arm
    * @param speed positive value extends
    */
-  public void runExtension(double speed) { 
+  public void run(double speed) { 
     m_extensionMotor.set(speed);
-  }
-
-  /**
-   * Tilts the arm.
-   * @param speed positive value goes up.
-   */
-  public void runTilt(double speed) {
-    m_tiltMotor.set(speed);
   }
 
   /*
    * Sets the Extension position to given value.
    */
-  public void setDesiredExtensionPosition(double position) {
-    // TODO: Add ability to set the speed
+  public void setDesiredPosition(double position, double speed) {
+    //m_extensionPID.setSmartMotionMaxVelocity(speed, 0);
+    //m_extensionPID.setOutputRange(position, speed)
     m_extensionPID.setReference(position, CANSparkMax.ControlType.kPosition);
-  }
-  
-  /*
-   * Sets the Tilt position to given value
-   */
-  public void setDesiredTiltPosition(double position) {
-    // TODO: Add ability to set the speed
-    m_tiltPID.setReference(position, CANSparkMax.ControlType.kPosition);
+    
   }
 
   // In inches
-  public Double getExtensionEncoderPosition() {
+  public Double getEncoderPosition() {
     return m_extensionMotorEncoder.getPosition();
   }
 
-  // In inches
-  public Double getTiltEncoderPosition() {
-    return m_tiltMotorEncoder.getPosition();
+  public void resetEncoder() {
+    m_extensionMotorEncoder.setPosition(-0.15);
   }
 
-  public void resetTiltEncoder() {
-    m_tiltMotorEncoder.setPosition(-0.1);
-  }
-
-  public void resetExtensionEncoder() {
-    m_extensionMotorEncoder.setPosition(-0.1);
-  }
-
-  public void enableTiltSoftLimits(boolean enable){
-    if (enable) {
-      m_tiltMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
-      m_tiltMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
-    } else {
-      m_tiltMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, false);
-      m_tiltMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, false);
-    }
-  }
-
-  public void enableExtendSoftLimits(boolean enable){
+  public void enableSoftLimits(boolean enable){
     if (enable) {
       m_extensionMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
       m_extensionMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
@@ -143,7 +89,7 @@ public class Arm extends SubsystemBase {
     }
   }
 
-  public boolean isSafeToExtend() {
+  /*public boolean isSafeToExtend() {
     double tilt = m_tiltMotorEncoder.getPosition();
     m_isExtendSafe = tilt < Constants.Arm.kMinSafeTilt;
     return m_isExtendSafe;
@@ -158,23 +104,18 @@ public class Arm extends SubsystemBase {
       m_isTiltSafe = extensionPosition > 0;
     }
     return m_isTiltSafe;
-  }
+  }*/
 
   @Override
   public void initSendable(SendableBuilder builder) {
     super.initSendable(builder);
 
-    builder.addDoubleProperty("Tilt/Position", m_tiltMotorEncoder::getPosition, null);
-    builder.addDoubleProperty("Tilt/Motor/Speed", m_tiltMotor::get, null);
-    builder.addBooleanProperty("Tilt/IsSafe", this::isSafeToTilt, null);
-
     builder.addDoubleProperty("Extend/Position", m_extensionMotorEncoder::getPosition, null);
     builder.addDoubleProperty("Extend/Motor/Speed", m_extensionMotor::get, null);
-    builder.addBooleanProperty("Extend/IsSafe", this::isSafeToExtend, null);
+    //builder.addBooleanProperty("Extend/IsSafe", this::isSafeToExtend, null);
   }
 
   private void updateTelemetry() {
-    SmartDashboard.putNumber("Arm/Tilt/Position", m_tiltMotorEncoder.getPosition());
     SmartDashboard.putNumber("Arm/Extend/Position", m_extensionMotorEncoder.getPosition());
   }
 }

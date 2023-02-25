@@ -9,15 +9,17 @@ import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-import frc.robot.subsystems.Arm;
+import frc.robot.subsystems.ArmExtension;
 
 public class ExtendArm extends CommandBase {
-  private Arm m_arm;
+  private ArmExtension m_armExtension;
   private DoubleSupplier m_speed;
 
-  public ExtendArm(Arm arm, DoubleSupplier speed) {
-    m_arm = arm;
+  public ExtendArm(ArmExtension armExtension, DoubleSupplier speed) {
+    m_armExtension = armExtension;
     m_speed = speed;
+
+    addRequirements(m_armExtension);    
   }
 
   @Override
@@ -25,16 +27,19 @@ public class ExtendArm extends CommandBase {
 
   @Override
   public void execute() {
-    boolean isSafe = true; // TODO: m_arm.isSafeToExtend();
-    if (isSafe) {
+    m_armExtension.run(-m_speed.getAsDouble());
+    /* 
+    if (m_arm.isSafeToExtend() == true) {
       m_arm.runExtension(-m_speed.getAsDouble());
-    }
+    } else{
+      m_arm.runExtension(0.0);
+    } */
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_arm.runExtension(0.0);
+    m_armExtension.run(0.0);
   }
 
   // Returns true when the command should end.

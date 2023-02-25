@@ -9,15 +9,15 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 import frc.robot.commands.arm.TiltArmToHeight;
 import frc.robot.commands.arm.MoveTo.MoveToMedium;
-import frc.robot.subsystems.Arm;
-import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.ArmExtension;
+import frc.robot.subsystems.ArmTilt;
 import frc.robot.subsystems.Suction;
 
 public class ScoreMedium extends SequentialCommandGroup {
   
-  public ScoreMedium(Arm arm, Intake intake, Double speed, Suction suction) {
-    addCommands(new MoveToMedium(arm, intake, speed),
-    new TiltArmToHeight(arm, intake, speed, 11.5));
+  public ScoreMedium(ArmExtension armExtension, ArmTilt armTilt, Double speed, Suction suction) {
+    addCommands(new MoveToMedium(armExtension, armTilt, speed),
+    new TiltArmToHeight(armTilt, speed, 11.5));
   }
   
 }
