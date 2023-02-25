@@ -7,13 +7,13 @@ package frc.robot.commands.arm.MoveTo;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.arm.TiltArmToHeight;
-import frc.robot.subsystems.Arm;
-import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.ArmExtension;
+import frc.robot.subsystems.ArmTilt;
 
 public class MoveToPickup extends SequentialCommandGroup {
 
-  public MoveToPickup(Arm arm, Intake intake, Double speed) {
-    addCommands(new TiltArmToHeight(arm, intake, speed, 12.6));
+  public MoveToPickup(ArmExtension armExtension, ArmTilt armTilt, Double speed) {
+    addCommands(new TiltArmToHeight(armTilt, speed, 12.6));
   }
   
 }

@@ -6,36 +6,48 @@
 package frc.robot.commands.arm;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Arm;
-import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.ArmTilt;
 
 public class TiltArmToHeight extends CommandBase {
-  private Arm m_arm;
-  private Intake m_intake;
+  private ArmTilt m_armTilt;
   private Double m_speed;
   private Double m_position;
 
-  public TiltArmToHeight(Arm arm, Intake intake, Double speed, Double position) {
-    m_arm = arm;
-    m_intake = intake;
+  public TiltArmToHeight(ArmTilt armTilt, Double speed, Double position) {
+    m_armTilt = armTilt;
     m_speed = speed;
     m_position = position;
+
+    addRequirements(m_armTilt);
   }
 
   @Override
   public void initialize() {
-    m_arm.setDesiredTiltPosition(m_position);
+    System.out.println("Tilt Arm to height");
+    m_armTilt.setDesiredPosition(m_position, m_speed);
   }
 
   @Override
-  public void execute() {}
+  public void execute() {
+    /* 
+    boolean intakeIsOut = m_intake.isOut;
+    boolean isSafe = m_arm.isSafeToTilt();
+    
+    if(m_speed < 0){
+      if(intakeIsOut || isSafe == false){
+        m_arm.tilt(0.0);
+      } else {
+        m_arm.tilt(m_speed);
+      }
+    }*/
+  }
     
   @Override
   public void end(boolean interrupted) {}
 
   @Override
   public boolean isFinished() {
-    return Math.abs(m_arm.getTiltEncoderPosition() - m_position) < 0.1;
+    return Math.abs(m_armTilt.getEncoderPosition() - m_position) < 0.1;
   }
 
 }

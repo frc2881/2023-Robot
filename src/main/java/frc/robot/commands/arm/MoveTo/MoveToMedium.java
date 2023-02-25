@@ -9,15 +9,15 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 import frc.robot.commands.arm.ExtendArmToLength;
 import frc.robot.commands.arm.TiltArmToHeight;
-import frc.robot.subsystems.Arm;
-import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.ArmExtension;
+import frc.robot.subsystems.ArmTilt;
 
 public class MoveToMedium extends SequentialCommandGroup {
 
-  public MoveToMedium(Arm arm, Intake intake, Double speed) {
-    addCommands(new ExtendArmToLength(arm, speed, 0.0), 
-    new TiltArmToHeight(arm, intake, speed, 15.0),
-    new ExtendArmToLength(arm, speed, 12.0));
+  public MoveToMedium(ArmExtension armExtension, ArmTilt armTilt, Double speed) {
+    addCommands(new ExtendArmToLength(armExtension, speed, 0.0), 
+    new TiltArmToHeight(armTilt, speed, 15.0),
+    new ExtendArmToLength(armExtension, speed, 12.0));
   }
   
 }

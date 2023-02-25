@@ -7,30 +7,32 @@ package frc.robot.commands.arm;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-import frc.robot.subsystems.Arm;
+import frc.robot.subsystems.ArmExtension;
 
 public class ArmExtendOverride extends CommandBase {
-  private Arm m_arm;
+  private ArmExtension m_armExtension;
 
-  public ArmExtendOverride(Arm arm) {
-    m_arm = arm;
+  public ArmExtendOverride(ArmExtension armExtension) {
+    m_armExtension = armExtension;
+
+    addRequirements(m_armExtension);
   }
 
   @Override
   public void initialize() {
-    m_arm.enableExtendSoftLimits(false);
+    m_armExtension.enableSoftLimits(false);
   }
 
   @Override
   public void execute() {
-    m_arm.runExtension(-0.15);
+    m_armExtension.run(-0.15);
   }
 
   @Override
   public void end(boolean interrupted) {
-    m_arm.enableExtendSoftLimits(true);
-    m_arm.resetExtensionEncoder();
-    m_arm.runExtension(0.0);
+    m_armExtension.enableSoftLimits(true);
+    m_armExtension.resetEncoder();
+    m_armExtension.run(0.0);
   }
   
   @Override
