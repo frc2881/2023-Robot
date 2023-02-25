@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.RobotController;
 
 import frc.robot.Constants;
+import frc.robot.lib.DataLog;
 import frc.robot.lib.Utils;
 
 public class Suction extends SubsystemBase {
@@ -130,7 +131,10 @@ public class Suction extends SubsystemBase {
     }
   }
 
-  
+  public boolean hasVacuumSeal() {
+    return m_isTargetPressureBottomReached && m_isTargetPressureTopReached;
+  }
+
   public void reset() {
     m_isEnabled = false;
     m_isDisabling = false;
