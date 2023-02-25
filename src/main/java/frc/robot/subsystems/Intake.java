@@ -29,7 +29,7 @@ public class Intake extends SubsystemBase {
   private boolean m_pieceIsCube;
   private boolean m_pieceIsCone;
   private final RelativeEncoder m_intakeArmMotorEncoder;
-  public boolean isOut = true;
+  public boolean m_isExtended = true;
   
   public Intake() {
     m_rollers = new CANSparkMax(Constants.Intake.kIntakeRollersCANId, MotorType.kBrushless);
@@ -95,7 +95,6 @@ public class Intake extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
     Color detectedColor;
     int distance;
 
@@ -130,13 +129,11 @@ public class Intake extends SubsystemBase {
       m_intakeArmMotor.set(0.0); 
     }
 
-    // Use for finding the Color values for cone/cube.
-    // Color color = m_colorSensor.getColor();
-    // SmartDashboard.putNumber("Intake/GamePiece/Red", color.red);
-    // SmartDashboard.putNumber("Green", color.green);
-    // SmartDashboard.putNumber("Blue", color.blue);
-
     updateTelemetry();
+  }
+
+  public boolean isExtended () {
+    return m_isExtended;
   }
 
   @Override
@@ -147,14 +144,10 @@ public class Intake extends SubsystemBase {
     }
     builder.addBooleanProperty("Cone", () -> isCube(), null);
     builder.addBooleanProperty("Cube", () -> isCone(), null);
+
+    builder.addDoubleProperty("Encoder/Velocity", m_intakeArmMotorEncoder::getVelocity, null);
+    builder.addDoubleProperty("Motor/Speed", m_intakeArmMotor::get, null); 
   }
 
-  public boolean isOut(){
-    return isOut;
-  }
-
-  private void updateTelemetry() {
-    SmartDashboard.putNumber("Intake/EncoderVelocity", m_intakeArmMotorEncoder.getVelocity());
-    SmartDashboard.putNumber("Intake/MotorSpeed", m_intakeArmMotor.get()); 
-  }
+  private void updateTelemetry() {}
 }

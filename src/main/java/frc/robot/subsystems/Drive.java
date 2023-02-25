@@ -18,6 +18,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -25,31 +26,38 @@ import frc.robot.Constants;
 import frc.robot.lib.NavX;
 import frc.robot.lib.PhotonCameraWrapper;
 import frc.robot.lib.SwerveModule;
-import frc.robot.lib.Enums.SwerveDriveMode;
 
 public class Drive extends SubsystemBase {
-  // Create SwerveModules
+
+  public static enum SwerveDriveMode {
+    FIELD_CENTRIC, 
+    ROBOT_CENTRIC
+  }
+
   private final SwerveModule m_frontLeft = new SwerveModule(
-      Constants.Drive.kFrontLeftDrivingCanId,
-      Constants.Drive.kFrontLeftTurningCanId,
-      Constants.Drive.kFrontLeftChassisAngularOffset);
+    SwerveModule.Location.FrontLeft,
+    Constants.Drive.kFrontLeftDrivingCanId,
+    Constants.Drive.kFrontLeftTurningCanId,
+    Constants.Drive.kFrontLeftChassisAngularOffset);
 
   private final SwerveModule m_frontRight = new  SwerveModule(
-      Constants.Drive.kFrontRightDrivingCanId,
-      Constants.Drive.kFrontRightTurningCanId,
-      Constants.Drive.kFrontRightChassisAngularOffset);
+    SwerveModule.Location.FrontRight,
+    Constants.Drive.kFrontRightDrivingCanId,
+    Constants.Drive.kFrontRightTurningCanId,
+    Constants.Drive.kFrontRightChassisAngularOffset);
 
   private final SwerveModule m_rearLeft = new  SwerveModule(
-      Constants.Drive.kRearLeftDrivingCanId,
-      Constants.Drive.kRearLeftTurningCanId,
-      Constants.Drive.kRearLeftChassisAngularOffset);
+    SwerveModule.Location.RearLeft,
+    Constants.Drive.kRearLeftDrivingCanId,
+    Constants.Drive.kRearLeftTurningCanId,
+    Constants.Drive.kRearLeftChassisAngularOffset);
 
   private final SwerveModule m_rearRight = new  SwerveModule(
-      Constants.Drive.kRearRightDrivingCanId,
-      Constants.Drive.kRearRightTurningCanId, 
-      Constants.Drive.kRearRightChassisAngularOffset);
+    SwerveModule.Location.RearRight,
+    Constants.Drive.kRearRightDrivingCanId,
+    Constants.Drive.kRearRightTurningCanId, 
+    Constants.Drive.kRearRightChassisAngularOffset);
 
-  // The gyro sensor
   private final NavX m_gyro = new NavX();
   
   private SwerveDriveMode m_swerveDriveMode = SwerveDriveMode.FIELD_CENTRIC;
@@ -91,6 +99,9 @@ public class Drive extends SubsystemBase {
   public void periodic() {
     updatePose();
     updateTelemetry();
+    if (LiveWindow.isEnabled()) {
+      updateField();
+    }
   }
    
   public void resetSwerve() {
@@ -178,6 +189,7 @@ public class Drive extends SubsystemBase {
 
   public void setDriveMode(SwerveDriveMode driveMode) {
     m_swerveDriveMode = driveMode;
+    SmartDashboard.putString("Drive/Swerve/Mode", m_swerveDriveMode.toString());
   }
 
   /**
@@ -237,34 +249,23 @@ public class Drive extends SubsystemBase {
   @Override
   public void initSendable(SendableBuilder builder) {
     super.initSendable(builder);
+    
+    m_frontLeft.initSendable(builder);
+    m_frontRight.initSendable(builder);
+    m_rearLeft.initSendable(builder);
+    m_rearRight.initSendable(builder);
+
     m_gyro.initSendable(builder);
+    builder.addDoubleProperty("Heading", this::getHeading, null);
+    builder.addDoubleProperty("TurnRate", this::getTurnRate, null);
   }
 
   private void updateTelemetry() {
-    SmartDashboard.putNumber("Drive/Gyro/Angle", m_gyro.getAngle());
-    SmartDashboard.putNumber("Drive/Gyro/Yaw", m_gyro.getYaw());
-    SmartDashboard.putNumber("Drive/Gyro/Pitch", m_gyro.getPitch());
-    SmartDashboard.putNumber("Drive/Gyro/Heading", getHeading());
-    SmartDashboard.putNumber("Drive/Gyro/TurnRate", getTurnRate());
+    Pose2d pose = m_poseEstimator.getEstimatedPosition();
+    SmartDashboard.putNumberArray("Drive/Pose",  new double[] { pose.getX(), pose.getY(), pose.getRotation().getDegrees() });
+  }
 
-    SmartDashboard.putString("Drive/Swerve/Mode", m_swerveDriveMode.toString());
-
-    SmartDashboard.putNumber("Drive/Swerve/FrontLeft/Steering/AbsolutePosition", m_frontLeft.getSteeringAbsolutePosition());
-    SmartDashboard.putNumber("Drive/Swerve/FrontLeft/Steering/RelativePosition", m_frontLeft.getSteeringRelativePosition());
-    SmartDashboard.putNumber("Drive/Swerve/FrontLeft/Driving/Velocity", m_frontLeft.getDrivingVelocity());
-
-    SmartDashboard.putNumber("Drive/Swerve/FrontRight/Steering/AbsolutePosition", m_frontRight.getSteeringAbsolutePosition());
-    SmartDashboard.putNumber("Drive/Swerve/FrontRight/Steering/RelativePosition", m_frontRight.getSteeringRelativePosition());
-    SmartDashboard.putNumber("Drive/Swerve/FrontRight/Driving/Velocity", m_frontRight.getDrivingVelocity());
-
-    SmartDashboard.putNumber("Drive/Swerve/RearLeft/Steering/AbsolutePosition", m_rearLeft.getSteeringAbsolutePosition());
-    SmartDashboard.putNumber("Drive/Swerve/RearLeft/Steering/RelativePosition", m_rearLeft.getSteeringRelativePosition());
-    SmartDashboard.putNumber("Drive/Swerve/RearLeft/Driving/Velocity", m_rearLeft.getDrivingVelocity());
-
-    SmartDashboard.putNumber("Drive/Swerve/RearRight/Steering/AbsolutePosition", m_rearRight.getSteeringAbsolutePosition());
-    SmartDashboard.putNumber("Drive/Swerve/RearRight/Steering/RelativePosition", m_rearRight.getSteeringRelativePosition());
-    SmartDashboard.putNumber("Drive/Swerve/RearRight/Driving/Velocity", m_rearRight.getDrivingVelocity());
-
+  private void updateField() {
     m_field.setRobotPose(m_poseEstimator.getEstimatedPosition());
   }
 }

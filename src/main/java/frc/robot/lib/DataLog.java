@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
-import frc.robot.lib.Enums.RobotMode;
+import frc.robot.Robot;
 
 /**
  * This class provides methods for logging messages to the RioLog as the robot
@@ -58,7 +58,7 @@ public final class DataLog {
    *
    * @param mode is the new robot mode.
    */
-  public static void mode(RobotMode mode) {
+  public static void mode(Robot.Mode mode) {
     log(">".repeat(10) + " Robot mode: " + mode + " " + "<".repeat(10));
   }
 

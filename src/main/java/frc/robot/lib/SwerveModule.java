@@ -17,13 +17,23 @@ import com.revrobotics.SparkMaxPIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.util.sendable.Sendable;
+import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import frc.robot.Constants;
 
-public class SwerveModule {
+public class SwerveModule implements Sendable {
+
+  public static enum Location {
+    FrontLeft,
+    FrontRight,
+    RearLeft,
+    RearRight
+  }
+
+  private final Location m_location;
+
   private final CANSparkMax m_drivingSparkMax;
   private final CANSparkMax m_turningSparkMax;
 
@@ -38,18 +48,17 @@ public class SwerveModule {
   private double m_resetOffset = 0;
   private SwerveModuleState m_desiredState = new SwerveModuleState(0.0, new Rotation2d());
 
-  private double m_drivingCANId;
   /**
    * Constructs a MAXSwerveModule and configures the driving and turning motor,
    * encoder, and PID controller. This configuration is specific to the REV
    * MAXSwerve Module built with NEOs, SPARKS MAX, and a Through Bore
    * Encoder.
    */
-  public SwerveModule(int drivingCANId, int turningCANId, double chassisAngularOffset) {
+  public SwerveModule(Location location, int drivingCANId, int turningCANId, double chassisAngularOffset) {
+    m_location = location;
+
     m_drivingSparkMax = new CANSparkMax(drivingCANId, MotorType.kBrushless);
     m_turningSparkMax = new CANSparkMax(turningCANId, MotorType.kBrushless);
-
-    m_drivingCANId = drivingCANId;
 
     // Factory reset, so we get the SPARKS MAX to a known state before configuring
     // them. This is useful in case a SPARK MAX is swapped out.
@@ -128,7 +137,6 @@ public class SwerveModule {
     //double[] sensorReadings = new double[100];
     //for (int i = 0, ic = 100; i < ic; i += 1) {
     //  sensorReadings[i] = m_turningAnalogSensor.getPosition() - m_resetOffset;
-      //Timer.delay(0.05);
     //}
     //double initialAngle = Arrays.stream(sensorReadings).average().orElse(Double.NaN);
     double initialAngle = m_turningAnalogSensor.getPosition() - m_resetOffset;
@@ -183,12 +191,7 @@ public class SwerveModule {
     m_drivingPIDController.setReference(optimizedDesiredState.speedMetersPerSecond, CANSparkMax.ControlType.kVelocity);
     m_turningPIDController.setReference(optimizedDesiredState.angle.getRadians(), CANSparkMax.ControlType.kPosition);
 
-    if(m_drivingCANId == 1 && DriverStation.isAutonomous()){
-      System.out.println(desiredState.angle.getRadians() + " " + correctedDesiredState.angle.getRadians() + " " + m_turningEncoder.getPosition());
-    }
-
     m_desiredState = desiredState;
-
   }
 
   /** Zeroes all the SwerveModule encoders. */
@@ -210,5 +213,13 @@ public class SwerveModule {
 
   public double getDrivingVelocity(){
     return m_drivingEncoder.getVelocity();
+  }
+
+  @Override
+  public void initSendable(SendableBuilder builder) {
+    String key = m_location.toString() + "/";
+    builder.addDoubleProperty(key + "Steering/AbsolutePosition", this::getSteeringAbsolutePosition, null);
+    builder.addDoubleProperty(key + "Steering/RelativePosition", this::getSteeringRelativePosition, null);
+    builder.addDoubleProperty(key + "Driving/Velocity", this::getDrivingVelocity, null);
   }
 }

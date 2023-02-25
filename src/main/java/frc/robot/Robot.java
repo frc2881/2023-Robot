@@ -10,7 +10,6 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.lib.DataLog;
-import frc.robot.lib.Enums.RobotMode;
 import frc.robot.lib.Telemetry;
 
 public class Robot extends TimedRobot {
@@ -33,7 +32,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledInit() {
-    DataLog.mode(RobotMode.DISABLED);
+    DataLog.mode(Mode.DISABLED);
     m_robotContainer.robotShouldReset();
   }
 
@@ -45,7 +44,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    DataLog.mode(RobotMode.AUTO);
+    DataLog.mode(Mode.AUTO);
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
@@ -62,7 +61,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    DataLog.mode(RobotMode.TELEOP);
+    DataLog.mode(Mode.TELEOP);
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
@@ -79,7 +78,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void testInit() {
-    DataLog.mode(RobotMode.TEST);
+    DataLog.mode(Mode.TEST);
     CommandScheduler.getInstance().cancelAll();
     m_robotContainer.resetRobot();
   }
@@ -99,5 +98,28 @@ public class Robot extends TimedRobot {
     // In Practice mode and in a real competition getMatchTime() returns time left in this
     // part of the match.  Otherwise it just returns -1.0.
     return DriverStation.getMatchTime() != -1;
+  }
+
+  public static enum Mode 
+  {
+    DISABLED("DISABLED"), 
+    AUTO("AUTO"), 
+    TELEOP("TELEOP"), 
+    TEST("TEST");
+  
+    private String mode;
+    Mode(String mode) { this.mode = mode; }
+    public String getMode() { return mode; }
+  }
+
+  public static enum Status 
+  {
+    DISABLED("DISABLED"), 
+    ENABLED("ENABLED"),
+    ESTOPPED("ESTOPPED");
+  
+    private String status;
+    Status(String status) { this.status = status; }
+    public String gertStatus() { return status; }
   }
 }

@@ -14,7 +14,6 @@ public class ArmExtendOverride extends CommandBase {
 
   public ArmExtendOverride(Arm arm) {
     m_arm = arm;
-    addRequirements(m_arm);
   }
 
   @Override

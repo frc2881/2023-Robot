@@ -9,11 +9,11 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.RobotController;
@@ -54,6 +54,11 @@ public class Suction extends SubsystemBase {
 
     m_solenoidBottom = new Solenoid(PneumaticsModuleType.REVPH, Constants.Suction.kSolenoidBottomId);
     m_solenoidTop = new Solenoid(PneumaticsModuleType.REVPH, Constants.Suction.kSolenoidTopId);
+
+    SmartDashboard.putNumber("Suction/Bottom/Pressure/Minimum", Constants.Suction.kMinimumPressureBottom);
+    SmartDashboard.putNumber("Suction/Bottom/Pressure/Target", Constants.Suction.kTargetPressureBottom);
+    SmartDashboard.putNumber("Suction/Top/Pressure/Minimum", Constants.Suction.kMinimumPressureTop);
+    SmartDashboard.putNumber("Suction/Top/Pressure/Target", Constants.Suction.kTargetPressureTop);
   }
 
   @Override
@@ -106,8 +111,7 @@ public class Suction extends SubsystemBase {
         m_isTargetPressureTopReached = false;
         m_isDisabling = false;
       } else {
-        m_motorBottom.set(0);
-        m_motorTop.set(0);
+        reset();
       }
     } 
 
@@ -116,11 +120,13 @@ public class Suction extends SubsystemBase {
   
   public void enable() {  
     m_isEnabled = true;
+    SmartDashboard.putBoolean("Suction/IsEnabled", m_isEnabled);
   }
 
   public void disable() {
     m_isEnabled = false;
     m_isDisabling = true;
+    SmartDashboard.putBoolean("Suction/IsEnabled", m_isEnabled);
   }
 
   public void toggle() {
@@ -140,19 +146,19 @@ public class Suction extends SubsystemBase {
     m_isDisabling = false;
     m_motorBottom.set(0);
     m_motorTop.set(0);
+    SmartDashboard.putBoolean("Suction/IsEnabled", m_isEnabled);
+  }
+
+  @Override
+  public void initSendable(SendableBuilder builder) {
+    super.initSendable(builder);
+
+    builder.addDoubleProperty("Bottom/Motor/Speed", m_motorBottom::get, null);
+    builder.addDoubleProperty("Top/Motor/Speed", m_motorTop::get, null);
   }
 
   private void updateTelemetry() {
-    SmartDashboard.putBoolean("Suction/IsEnabled", m_isEnabled);
-    
     SmartDashboard.putNumber("Suction/Bottom/Pressure/Current", m_currentPressureBottom);
-    SmartDashboard.putNumber("Suction/Bottom/Pressure/Minimum", Constants.Suction.kMinimumPressureBottom);
-    SmartDashboard.putNumber("Suction/Bottom/Pressure/Target", Constants.Suction.kTargetPressureBottom);
-    SmartDashboard.putNumber("Suction/Bottom/Motor/Speed", m_motorBottom.get());
-
     SmartDashboard.putNumber("Suction/Top/Pressure/Current", m_currentPressureTop);
-    SmartDashboard.putNumber("Suction/Top/Pressure/Minimum", Constants.Suction.kMinimumPressureTop);
-    SmartDashboard.putNumber("Suction/Top/Pressure/Target", Constants.Suction.kTargetPressureTop);
-    SmartDashboard.putNumber("Suction/Top/Motor/Speed", m_motorTop.get());
   }
 }
