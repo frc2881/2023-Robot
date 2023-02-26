@@ -25,11 +25,12 @@ public class DriveWithJoysticks extends CommandBase {
     DoubleSupplier rotationSupplier
   ) {
     m_drive = drive;
-    addRequirements(m_drive);
 
     m_translationXSupplier = translationXSupplier;
     m_translationYSupplier = translationYSupplier;
     m_rotationSupplier = rotationSupplier;
+
+    addRequirements(drive);
   }
 
   @Override

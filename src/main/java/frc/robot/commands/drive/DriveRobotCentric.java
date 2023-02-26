@@ -14,7 +14,6 @@ public class DriveRobotCentric extends CommandBase {
 
   public DriveRobotCentric(Drive drive) {
     m_drive = drive;
-    addRequirements(drive);
   }
 
   @Override
