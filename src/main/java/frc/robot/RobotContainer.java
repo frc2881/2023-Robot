@@ -24,6 +24,10 @@ import frc.robot.commands.arm.MoveTo.MoveToPickup;
 import frc.robot.commands.arm.Score.ScoreHigh;
 import frc.robot.commands.arm.Score.ScoreMedium;
 import frc.robot.commands.auto.FollowTrajectory;
+import frc.robot.commands.clamps.AttachLeft;
+import frc.robot.commands.clamps.AttachRight;
+import frc.robot.commands.clamps.ReleaseLeft;
+import frc.robot.commands.clamps.ReleaseRight;
 import frc.robot.commands.auto.AutoScoreHigh;
 import frc.robot.commands.auto.AutoSequenceA;
 import frc.robot.commands.drive.DriveRobotCentric;
@@ -36,6 +40,7 @@ import frc.robot.commands.suction.ToggleSuction;
 import frc.robot.lib.Utils;
 import frc.robot.subsystems.ArmExtension;
 import frc.robot.subsystems.ArmTilt;
+import frc.robot.subsystems.Clamps;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Suction;
@@ -46,6 +51,7 @@ public class RobotContainer {
   private ArmExtension m_armExtension = new ArmExtension();
   private ArmTilt m_armTilt = new ArmTilt();
   private Intake m_intake = null; // HACK: disabling intake since not installed
+  private Clamps m_clamps = new Clamps();
 
   private final XboxController m_driverController = new XboxController(Constants.Controllers.kDriverControllerPort);
   private final XboxController m_manipulatorController = new XboxController(Constants.Controllers.kManipulatorControllerPort);
@@ -84,6 +90,13 @@ public class RobotContainer {
     new Trigger(m_driverController::getStartButton)
       .onTrue(new ResetSwerve(m_drive));
 
+    new Trigger(() -> m_driverController.getPOV() == 0).whileTrue(new AttachRight(m_clamps, 0.1));
+
+    new Trigger(() -> m_driverController.getPOV() == 90).whileTrue(new ReleaseRight(m_clamps, 0.1));
+
+    new Trigger(() -> m_driverController.getPOV() == 180).whileTrue(new AttachLeft(m_clamps, -0.1));
+
+    new Trigger(() -> m_driverController.getPOV() == 270).whileTrue(new ReleaseLeft(m_clamps, -0.1));
     // new Trigger(m_driverController::getAButton)
     //   .whileTrue(new RunRollersInward(m_intake));
 
@@ -91,21 +104,26 @@ public class RobotContainer {
     //   .whileTrue(new RunRollersOutward(m_intake));
 
     //MANIPULATOR
+
+    /* Toggles Suction on or off */
     new Trigger(m_manipulatorController::getAButton)
       .onTrue(new ToggleSuction(m_suction));
 
+    /* Runs the arm using joysticks */
     new Trigger(() -> Math.abs(m_manipulatorController.getLeftY()) > 0.1)
       .whileTrue(new ExtendArm(m_armExtension, m_manipulatorController::getLeftY));
 
     new Trigger(() -> Math.abs(m_manipulatorController.getRightY()) > 0.1)
       .whileTrue(new TiltArm(m_armTilt, m_manipulatorController::getRightY));
 
+    /* Overrides soft limits and zeros the arm */
     new Trigger(m_manipulatorController::getBackButton)
       .whileTrue(new ArmExtendOverride(m_armExtension));
 
     new Trigger(m_manipulatorController::getStartButton)
       .whileTrue(new ArmTiltOverride(m_armTilt));
     
+    /* Uses D-Pad to move the arm to position */
     new Trigger(() -> m_manipulatorController.getPOV() == 0)
       .whileTrue(new MoveToHigh(m_armExtension, m_armTilt, 0.15));
 
@@ -118,6 +136,7 @@ public class RobotContainer {
     new Trigger(() -> m_manipulatorController.getPOV() == 270)
       .whileTrue(new MoveToPickup(m_armExtension, m_armTilt, 0.15));
 
+    /* Uses D-Pad + Y button to score */
     new Trigger(() -> m_manipulatorController.getPOV() == 0)
       .and(m_manipulatorController::getYButton)
       .whileTrue(new ScoreHigh(m_armExtension, m_armTilt, 0.5, m_suction));

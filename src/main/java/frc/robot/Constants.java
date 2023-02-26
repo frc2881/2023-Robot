@@ -167,6 +167,14 @@ public class Constants {
     }
 
     public static final class Clamps {
+        
+        public static final int kLeftClampCANId = 12;
+
+        public static final int kRightClampCANId = 13;
+
+        public static final int kCurrentLimit = 20;
+
+        public static final float kReverseSoftLimit = 0;
 
     }
 

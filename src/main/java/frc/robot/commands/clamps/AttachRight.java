@@ -6,20 +6,29 @@
 package frc.robot.commands.clamps;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.Clamps;
 
 public class AttachRight extends CommandBase {
+  private Clamps m_clamps;
+  private Double m_speed;
 
-  public AttachRight() {
+  public AttachRight(Clamps clamps, Double speed) {
+    m_clamps = clamps;
+    m_speed = speed;
   }
 
   @Override
   public void initialize() {}
 
   @Override
-  public void execute() {}
+  public void execute() {
+    m_clamps.attachRight(m_speed);
+  }
 
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    m_clamps.attachRight(0.0);
+  }
 
   @Override
   public boolean isFinished() {
