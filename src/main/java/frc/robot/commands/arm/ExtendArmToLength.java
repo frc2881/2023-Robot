@@ -24,10 +24,7 @@ public class ExtendArmToLength extends CommandBase {
 
   @Override
   public void initialize() {
-    System.out.println("Extend Arm to Length");
     m_armExtension.setDesiredPosition(m_position, m_speed);
-    
-
   }
 
   @Override

@@ -57,7 +57,7 @@ public class Constants {
          /*
          * The maximum distance (in inches) that the arm can retract.
          */
-        public static final double kExtendReverseLimit = 0.1;
+        public static final double kExtendReverseLimit = 0.15;
 
          /*
          * The maximum distance (in inches) that the arm can elevate.
@@ -196,10 +196,10 @@ public class Constants {
             new Translation2d(-kWheelBase / 2, -kTrackWidth / 2));
     
         // Angular offsets of the modules relative to the chassis in radians
-        public static final double kFrontLeftChassisAngularOffset = 5.93;
-        public static final double kFrontRightChassisAngularOffset = 2.84;
-        public static final double kRearLeftChassisAngularOffset = 1.58;
-        public static final double kRearRightChassisAngularOffset = 4.45;
+        public static final double kFrontLeftChassisAngularOffset = 5.932;
+        public static final double kFrontRightChassisAngularOffset = 2.857;
+        public static final double kRearLeftChassisAngularOffset = 1.595;
+        public static final double kRearRightChassisAngularOffset = 4.465;
 
         /*   public static final double kFrontLeftChassisAngularOffset = 5.9175;
         public static final double kFrontRightChassisAngularOffset = 2.8580;

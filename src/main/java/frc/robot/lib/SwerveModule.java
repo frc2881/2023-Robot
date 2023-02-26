@@ -134,12 +134,14 @@ public class SwerveModule implements Sendable {
   }
 
   public void resetTurningEncoder() {
-    //double[] sensorReadings = new double[100];
-    //for (int i = 0, ic = 100; i < ic; i += 1) {
-    //  sensorReadings[i] = m_turningAnalogSensor.getPosition() - m_resetOffset;
-    //}
-    //double initialAngle = Arrays.stream(sensorReadings).average().orElse(Double.NaN);
-    double initialAngle = m_turningAnalogSensor.getPosition() - m_resetOffset;
+    double[] sensorReadings = new double[100];
+    for (int i = 0, ic = 100; i < ic; i += 1) {
+     sensorReadings[i] = m_turningAnalogSensor.getPosition() - m_resetOffset;
+    }
+    double initialAngle = Arrays.stream(sensorReadings).average().orElse(Double.NaN);
+    
+    //double initialAngle = m_turningAnalogSensor.getPosition() - m_resetOffset;
+    
     m_desiredState.angle = new Rotation2d(initialAngle);
     m_drivingEncoder.setPosition(0.0);
     m_turningEncoder.setPosition(initialAngle);

@@ -24,7 +24,6 @@ public class ArmTilt extends SubsystemBase {
 
   private boolean m_isTiltSafe;
 
-  /** Creates a new Arm. */
   public ArmTilt() {
 
     m_tiltMotor = new CANSparkMax(Constants.Arm.kTiltMotorId, MotorType.kBrushless);
@@ -63,10 +62,11 @@ public class ArmTilt extends SubsystemBase {
    * Sets the Tilt position to given value
    */
   public void setDesiredPosition(double position, double speed) {
-    //m_tiltPID.setSmartMotionMaxVelocity(speed, 0);
-    //m_tiltPID.setOutputRange(-speed, speed);
+    m_tiltPID.setOutputRange(
+      Constants.Arm.kTiltMinOutput * speed,
+      Constants.Arm.kTiltMaxOutput * speed
+    );
     m_tiltPID.setReference(position, CANSparkMax.ControlType.kPosition);
-    
   }
 
 
@@ -76,7 +76,7 @@ public class ArmTilt extends SubsystemBase {
   }
 
   public void resetEncoder() {
-    m_tiltMotorEncoder.setPosition(-0.1);
+    m_tiltMotorEncoder.setPosition(0);
   }
 
 
@@ -108,6 +108,10 @@ public class ArmTilt extends SubsystemBase {
     return m_isTiltSafe;
   }*/
 
+  public void reset() {
+    m_tiltMotor.set(0);
+  }
+
   @Override
   public void initSendable(SendableBuilder builder) {
     super.initSendable(builder);
@@ -120,6 +124,5 @@ public class ArmTilt extends SubsystemBase {
 
   private void updateTelemetry() {
     SmartDashboard.putNumber("Arm/Tilt/Position", m_tiltMotorEncoder.getPosition());
-
   }
 }

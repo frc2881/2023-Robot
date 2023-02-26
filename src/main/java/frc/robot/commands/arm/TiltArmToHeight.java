@@ -23,7 +23,6 @@ public class TiltArmToHeight extends CommandBase {
 
   @Override
   public void initialize() {
-    System.out.println("Tilt Arm to height");
     m_armTilt.setDesiredPosition(m_position, m_speed);
   }
 

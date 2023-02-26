@@ -23,14 +23,15 @@ public class AutoScoreHigh extends SequentialCommandGroup {
   public AutoScoreHigh(Suction suction, ArmExtension armExtension, ArmTilt armTilt, Intake intake) {
     addCommands(
       new EnableSuction(suction),
-      new TiltArmToHeight(armTilt, 0.15, 0.67),
-      new ExtendArmToLength(armExtension, 0.15, 5.1),
+      new TiltArmToHeight(armTilt, 0.75, 0.82),
+      new ExtendArmToLength(armExtension, 0.75, 5.6),
       new WaitUntilCommand(suction::hasVacuumSeal),
-      new ExtendArmToLength(armExtension, 0.15, 0.0),
-      new ScoreHigh(armExtension, armTilt, 0.15, suction),
+      new ExtendArmToLength(armExtension, 0.75, 0.0),
+      new ScoreHigh(armExtension, armTilt, 0.75, suction),
       new WaitCommand(0.5),
       new DisableSuction(suction),
-      new ResetArm(armExtension, armTilt, 0.15)
+      new WaitCommand(0.5),
+      new ResetArm(armExtension, armTilt, 1.0)
     );
   }
 }

@@ -40,19 +40,19 @@ public class Drive extends SubsystemBase {
     Constants.Drive.kFrontLeftTurningCanId,
     Constants.Drive.kFrontLeftChassisAngularOffset);
 
-  private final SwerveModule m_frontRight = new  SwerveModule(
+  private final SwerveModule m_frontRight = new SwerveModule(
     SwerveModule.Location.FrontRight,
     Constants.Drive.kFrontRightDrivingCanId,
     Constants.Drive.kFrontRightTurningCanId,
     Constants.Drive.kFrontRightChassisAngularOffset);
 
-  private final SwerveModule m_rearLeft = new  SwerveModule(
+  private final SwerveModule m_rearLeft = new SwerveModule(
     SwerveModule.Location.RearLeft,
     Constants.Drive.kRearLeftDrivingCanId,
     Constants.Drive.kRearLeftTurningCanId,
     Constants.Drive.kRearLeftChassisAngularOffset);
 
-  private final SwerveModule m_rearRight = new  SwerveModule(
+  private final SwerveModule m_rearRight = new SwerveModule(
     SwerveModule.Location.RearRight,
     Constants.Drive.kRearRightDrivingCanId,
     Constants.Drive.kRearRightTurningCanId, 

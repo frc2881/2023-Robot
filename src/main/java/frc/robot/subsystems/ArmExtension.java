@@ -24,7 +24,6 @@ public class ArmExtension extends SubsystemBase {
 
   private boolean m_isExtendSafe;
 
-  /** Creates a new Arm. */
   public ArmExtension() {
     m_extensionMotor = new CANSparkMax(Constants.Arm.kExtensionMotorId, MotorType.kBrushless);
     m_extensionMotor.setIdleMode(IdleMode.kBrake); 
@@ -64,10 +63,11 @@ public class ArmExtension extends SubsystemBase {
    * Sets the Extension position to given value.
    */
   public void setDesiredPosition(double position, double speed) {
-    //m_extensionPID.setSmartMotionMaxVelocity(speed, 0);
-    //m_extensionPID.setOutputRange(position, speed)
+    m_extensionPID.setOutputRange(
+      Constants.Arm.kExtensionMinOutput * speed,
+      Constants.Arm.kExtensionMaxOutput * speed
+    );
     m_extensionPID.setReference(position, CANSparkMax.ControlType.kPosition);
-    
   }
 
   // In inches
@@ -76,7 +76,7 @@ public class ArmExtension extends SubsystemBase {
   }
 
   public void resetEncoder() {
-    m_extensionMotorEncoder.setPosition(-0.15);
+    m_extensionMotorEncoder.setPosition(0);
   }
 
   public void enableSoftLimits(boolean enable){
@@ -105,6 +105,10 @@ public class ArmExtension extends SubsystemBase {
     }
     return m_isTiltSafe;
   }*/
+
+  public void reset() {
+    m_extensionMotor.set(0);
+  }
 
   @Override
   public void initSendable(SendableBuilder builder) {

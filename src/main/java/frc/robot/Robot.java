@@ -49,8 +49,7 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
     }
-    //TODO FIX 
-    //m_robotContainer.resetRobot();
+    //m_robotContainer.resetRobot(); // TODO: figure out why this was here before
   }
 
   @Override

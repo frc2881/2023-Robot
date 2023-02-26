@@ -8,11 +8,11 @@ package frc.robot;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.Constants.Arm;
 import frc.robot.commands.arm.ArmExtendOverride;
 import frc.robot.commands.arm.ArmTiltOverride;
 import frc.robot.commands.arm.ExtendArm;
@@ -23,12 +23,10 @@ import frc.robot.commands.arm.MoveTo.MoveToMedium;
 import frc.robot.commands.arm.MoveTo.MoveToPickup;
 import frc.robot.commands.arm.Score.ScoreHigh;
 import frc.robot.commands.arm.Score.ScoreMedium;
-import frc.robot.commands.auto.FollowTrajectory;
 import frc.robot.commands.clamps.AttachLeft;
 import frc.robot.commands.clamps.AttachRight;
 import frc.robot.commands.clamps.ReleaseLeft;
 import frc.robot.commands.clamps.ReleaseRight;
-import frc.robot.commands.auto.AutoScoreHigh;
 import frc.robot.commands.auto.AutoSequenceA;
 import frc.robot.commands.drive.DriveRobotCentric;
 import frc.robot.commands.drive.DriveWithJoysticks;
@@ -56,6 +54,8 @@ public class RobotContainer {
   private final XboxController m_driverController = new XboxController(Constants.Controllers.kDriverControllerPort);
   private final XboxController m_manipulatorController = new XboxController(Constants.Controllers.kManipulatorControllerPort);
 
+  private final SendableChooser<Command> m_autonomousChooser = new SendableChooser<Command>();
+
   private final PathPlannerTrajectory m_flatPath = PathPlanner.loadPath("Flat", 1, 1);
 
   public boolean m_robotResetState = true;
@@ -63,6 +63,7 @@ public class RobotContainer {
   public RobotContainer() {
     setupDrive(); 
     setupTriggers();
+    setupAuto();
   }
 
   private void setupDrive() {
@@ -74,13 +75,12 @@ public class RobotContainer {
         () -> Utils.applyDeadband(-m_driverController.getRightX(), Constants.Controllers.kDeadband)
       )
     );
-    Timer.delay(1);
     m_drive.resetSwerve();
   }
 
   private void setupTriggers() {
     
-    //DRIVER
+    // DRIVER
     new Trigger(() -> Math.abs(m_driverController.getRightTriggerAxis()) > 0.9)
       .whileTrue(new DriveRobotCentric(m_drive));
 
@@ -90,20 +90,25 @@ public class RobotContainer {
     new Trigger(m_driverController::getStartButton)
       .onTrue(new ResetSwerve(m_drive));
 
-    new Trigger(() -> m_driverController.getPOV() == 0).whileTrue(new AttachRight(m_clamps, 0.1));
+    new Trigger(() -> m_driverController.getPOV() == 0)
+      .whileTrue(new AttachRight(m_clamps, 0.1));
 
-    new Trigger(() -> m_driverController.getPOV() == 90).whileTrue(new ReleaseRight(m_clamps, 0.1));
+    new Trigger(() -> m_driverController.getPOV() == 90)
+      .whileTrue(new ReleaseRight(m_clamps, 0.1));
 
-    new Trigger(() -> m_driverController.getPOV() == 180).whileTrue(new AttachLeft(m_clamps, -0.1));
+    new Trigger(() -> m_driverController.getPOV() == 180)
+      .whileTrue(new AttachLeft(m_clamps, -0.1));
 
-    new Trigger(() -> m_driverController.getPOV() == 270).whileTrue(new ReleaseLeft(m_clamps, -0.1));
+    new Trigger(() -> m_driverController.getPOV() == 270)
+      .whileTrue(new ReleaseLeft(m_clamps, -0.1));
+
     // new Trigger(m_driverController::getAButton)
     //   .whileTrue(new RunRollersInward(m_intake));
 
     // new Trigger(m_driverController::getBButton)
     //   .whileTrue(new RunRollersOutward(m_intake));
 
-    //MANIPULATOR
+    // MANIPULATOR
 
     /* Toggles Suction on or off */
     new Trigger(m_manipulatorController::getAButton)
@@ -125,34 +130,44 @@ public class RobotContainer {
     
     /* Uses D-Pad to move the arm to position */
     new Trigger(() -> m_manipulatorController.getPOV() == 0)
-      .whileTrue(new MoveToHigh(m_armExtension, m_armTilt, 0.15));
+      .whileTrue(new MoveToHigh(m_armExtension, m_armTilt, 1.0));
 
     new Trigger(() -> m_manipulatorController.getPOV() == 90)
-      .whileTrue(new MoveToMedium(m_armExtension, m_armTilt, 0.15));
+      .whileTrue(new MoveToMedium(m_armExtension, m_armTilt, 1.0));
 
     new Trigger(() -> m_manipulatorController.getPOV() == 180)
-      .whileTrue(new MoveToLow(m_armExtension, m_armTilt, 0.15));
+      .whileTrue(new MoveToLow(m_armExtension, m_armTilt, 1.0));
 
     new Trigger(() -> m_manipulatorController.getPOV() == 270)
-      .whileTrue(new MoveToPickup(m_armExtension, m_armTilt, 0.15));
+      .whileTrue(new MoveToPickup(m_armExtension, m_armTilt, 1.0));
 
     /* Uses D-Pad + Y button to score */
     new Trigger(() -> m_manipulatorController.getPOV() == 0)
       .and(m_manipulatorController::getYButton)
-      .whileTrue(new ScoreHigh(m_armExtension, m_armTilt, 0.5, m_suction));
+      .whileTrue(new ScoreHigh(m_armExtension, m_armTilt, 1.0, m_suction));
 
     new Trigger(() -> m_manipulatorController.getPOV() == 90)
       .and(m_manipulatorController::getYButton)
-      .whileTrue(new ScoreMedium(m_armExtension, m_armTilt, 0.5, m_suction));
+      .whileTrue(new ScoreMedium(m_armExtension, m_armTilt, 1.0, m_suction));
+  }
+
+  public void setupAuto() {
+    m_autonomousChooser.setDefaultOption("None", null);
+    m_autonomousChooser.addOption("SequenceA", 
+      new AutoSequenceA(m_drive, m_suction, m_armExtension, m_armTilt, m_intake, m_flatPath)
+    );
+    SmartDashboard.putData("Auto/Command", m_autonomousChooser);
   }
 
   public Command getAutonomousCommand() {
-    return new AutoSequenceA(m_drive, m_suction, m_armExtension, m_armTilt, m_intake, m_flatPath);
+    return m_autonomousChooser.getSelected();
   }
 
   public void resetRobot() {
     if(m_robotResetState == true) {
       m_suction.reset();
+      m_armTilt.reset();
+      m_armExtension.reset();
       m_robotResetState = false;
     }
   }
