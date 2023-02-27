@@ -19,6 +19,7 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import frc.robot.Constants;
@@ -136,9 +137,15 @@ public class SwerveModule implements Sendable {
   public void resetTurningEncoder() {
     double[] sensorReadings = new double[100];
     for (int i = 0, ic = 100; i < ic; i += 1) {
-     sensorReadings[i] = m_turningAnalogSensor.getPosition() - m_resetOffset;
+     sensorReadings[i] = m_turningAnalogSensor.getPosition();
+     Timer.delay(0.005);
     }
-    double initialAngle = Arrays.stream(sensorReadings).average().orElse(Double.NaN);
+    double sensorReadingAvg = Arrays.stream(sensorReadings).average().orElse(Double.NaN); 
+    double initialAngle = sensorReadingAvg - m_resetOffset;
+
+    String key = m_location.toString() + "/";
+    SmartDashboard.putNumber(key + "InitialAngle", initialAngle);
+    SmartDashboard.putNumber(key + "InitialAngleSensorReadingsAvg", sensorReadingAvg);
     
     //double initialAngle = m_turningAnalogSensor.getPosition() - m_resetOffset;
     
