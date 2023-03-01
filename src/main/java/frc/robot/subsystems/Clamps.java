@@ -30,9 +30,9 @@ public class Clamps extends SubsystemBase {
     m_right.setIdleMode(IdleMode.kBrake);
     m_right.setSmartCurrentLimit(Constants.Clamps.kCurrentLimit);
     
-    /*m_right.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
+    m_right.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
     m_right.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse,
-                       Constants.Clamps.kReverseSoftLimit); */
+                       Constants.Clamps.kReverseSoftLimit);
   }
 
   @Override

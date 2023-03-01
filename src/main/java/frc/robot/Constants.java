@@ -48,7 +48,7 @@ public class Constants {
          * The gear ratio for the arm that converts motor rotations into inches
          * of elevation of the arm.
          */
-        public static final double kTiltRotationsToInches = (1.0 / 2.0) / 3.0; // This is not completely accurate so it's been changed to rotations
+        public static final double kTiltRotationsToInches = (1.0 / 2.0) / 3.0; 
         /*
          * The maximum distance (in inches) that the arm can extend.
          */
@@ -172,7 +172,7 @@ public class Constants {
 
         public static final int kRightClampCANId = 13;
 
-        public static final int kCurrentLimit = 20;
+        public static final int kCurrentLimit = 40;
 
         public static final float kReverseSoftLimit = 0;
 
@@ -357,22 +357,22 @@ public class Constants {
         /*
          * The target pressure for bottom vacuum state in PSI
          */
-        public static final double kTargetPressureBottom = 18.25;
+        public static final double kTargetPressureBottom = 19;
 
         /*
          * The minimum pressure for bottom vacuum state in PSI
          */
-        public static final double kMinimumPressureBottom = 20;
+        public static final double kMinimumPressureBottom = 21;
 
         /*
          * The target pressure for top vacuum state in PSI
          */
-        public static final double kTargetPressureTop = 18.25;
+        public static final double kTargetPressureTop = 19;
 
         /*
          * The minimum pressure for top vacuum state in PSI
          */
-        public static final double kMinimumPressureTop = 20;
+        public static final double kMinimumPressureTop = 21;
 
       }
 

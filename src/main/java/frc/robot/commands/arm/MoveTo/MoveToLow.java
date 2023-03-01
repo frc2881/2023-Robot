@@ -14,10 +14,19 @@ import frc.robot.subsystems.ArmTilt;
 
 public class MoveToLow extends SequentialCommandGroup {
 
-  public MoveToLow(ArmExtension armExtension, ArmTilt armTilt, Double speed) {
-    addCommands(new ExtendArmToLength(armExtension, speed, 0.0), 
-    new TiltArmToHeight(armTilt, speed, 6.0),
-    new ExtendArmToLength(armExtension, speed, 10.5));
+  public MoveToLow(
+    ArmExtension armExtension, 
+    ArmTilt armTilt, 
+    Double speed
+  ) {
+    addCommands(
+      new ExtendArmToLength(armExtension, speed, 0.0)
+        .withTimeout(1.0), 
+      new TiltArmToHeight(armTilt, speed, 6.0)
+        .withTimeout(1.0),
+      new ExtendArmToLength(armExtension, speed, 10.5)
+        .withTimeout(1.0)
+    );
   }
   
 }

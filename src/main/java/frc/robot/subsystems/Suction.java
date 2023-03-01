@@ -19,7 +19,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.RobotController;
 
 import frc.robot.Constants;
-import frc.robot.lib.DataLog;
 import frc.robot.lib.Utils;
 
 public class Suction extends SubsystemBase {

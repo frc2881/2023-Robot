@@ -26,6 +26,7 @@ public class ArmExtension extends SubsystemBase {
 
   public ArmExtension() {
     m_extensionMotor = new CANSparkMax(Constants.Arm.kExtensionMotorId, MotorType.kBrushless);
+    m_extensionMotor.restoreFactoryDefaults();
     m_extensionMotor.setIdleMode(IdleMode.kBrake); 
     m_extensionMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
     m_extensionMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward,
@@ -33,6 +34,8 @@ public class ArmExtension extends SubsystemBase {
     m_extensionMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
     m_extensionMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse,
                        (float)Constants.Arm.kExtendReverseLimit);
+    m_extensionMotor.setSmartCurrentLimit(20);
+    m_extensionMotor.setSecondaryCurrentLimit(20, 0);
 
     m_extensionMotorEncoder = m_extensionMotor.getEncoder();
     m_extensionMotorEncoder.setPositionConversionFactor(Constants.Arm.kExtendRotationsToInches);
