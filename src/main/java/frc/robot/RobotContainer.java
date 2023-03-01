@@ -27,7 +27,9 @@ import frc.robot.commands.clamps.AttachLeft;
 import frc.robot.commands.clamps.AttachRight;
 import frc.robot.commands.clamps.ReleaseLeft;
 import frc.robot.commands.clamps.ReleaseRight;
+import frc.robot.commands.auto.AutoScoreHigh;
 import frc.robot.commands.auto.AutoSequenceA;
+import frc.robot.commands.auto.AutoSequenceB;
 import frc.robot.commands.drive.DriveRobotCentric;
 import frc.robot.commands.drive.DriveWithJoysticks;
 import frc.robot.commands.drive.ResetSwerve;
@@ -55,14 +57,12 @@ public class RobotContainer {
   private final XboxController m_manipulatorController = new XboxController(Constants.Controllers.kManipulatorControllerPort);
 
   private final SendableChooser<Command> m_autonomousChooser = new SendableChooser<Command>();
-
-  private final PathPlannerTrajectory m_flatPath = PathPlanner.loadPath("Flat", 1, 1);
-
+ 
   public boolean m_robotResetState = true;
   
   public RobotContainer() {
     setupDrive(); 
-    setupTriggers();
+    setupControllers();
     setupAuto();
   }
 
@@ -78,7 +78,7 @@ public class RobotContainer {
     m_drive.resetSwerve();
   }
 
-  private void setupTriggers() {
+  private void setupControllers() {
     
     // DRIVER
     new Trigger(() -> Math.abs(m_driverController.getRightTriggerAxis()) > 0.9)
@@ -152,10 +152,35 @@ public class RobotContainer {
   }
 
   public void setupAuto() {
+    
+    PathPlannerTrajectory balancePath = PathPlanner.loadPath("Balance", 1.0, 1.0);
+    PathPlannerTrajectory balanceMidPath = PathPlanner.loadPath("Balance Mid", 1.0, 1.0);
+    PathPlannerTrajectory wallBalancePath = PathPlanner.loadPath("Wall Balance", 2, 3);
+    PathPlannerTrajectory dividerBalancePath = PathPlanner.loadPath("Divider Balance", 2, 3);
+    PathPlannerTrajectory moveWallPath = PathPlanner.loadPath("Move Wall", 1.5, 1.5);
+    PathPlannerTrajectory moveDividerPath = PathPlanner.loadPath("Move Divider", 1.5, 1.5);
+    PathPlannerTrajectory middleBalancePath = PathPlanner.loadPath("Middle Balance", 1.5, 1.5);
+
     m_autonomousChooser.setDefaultOption("None", null);
-    m_autonomousChooser.addOption("SequenceA", 
-      new AutoSequenceA(m_drive, m_suction, m_armExtension, m_armTilt, m_intake, m_flatPath)
-    );
+
+    m_autonomousChooser.addOption("Score", 
+      new AutoScoreHigh(m_suction, m_armExtension, m_armTilt, m_intake));
+
+    m_autonomousChooser.addOption("Middle Score Balance", 
+      new AutoSequenceA(m_drive, m_suction, m_armExtension, m_armTilt, m_intake, middleBalancePath, balanceMidPath));
+
+    m_autonomousChooser.addOption("Divider Score Move", 
+      new AutoSequenceB(m_drive, m_suction, m_armExtension, m_armTilt, m_intake, moveDividerPath));
+
+    m_autonomousChooser.addOption("Divider Score Balance", 
+      new AutoSequenceA(m_drive, m_suction, m_armExtension, m_armTilt, m_intake, dividerBalancePath, balancePath));
+
+    m_autonomousChooser.addOption("Wall Score Move", 
+      new AutoSequenceB(m_drive, m_suction, m_armExtension, m_armTilt, m_intake, moveWallPath));
+
+    m_autonomousChooser.addOption("Wall Score Balance", 
+      new AutoSequenceA(m_drive, m_suction, m_armExtension, m_armTilt, m_intake, wallBalancePath, balancePath));
+
     SmartDashboard.putData("Auto/Command", m_autonomousChooser);
   }
 
@@ -164,7 +189,7 @@ public class RobotContainer {
   }
 
   public void resetRobot() {
-    if(m_robotResetState == true) {
+    if (m_robotResetState) {
       m_suction.reset();
       m_armTilt.reset();
       m_armExtension.reset();

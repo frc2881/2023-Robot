@@ -12,7 +12,13 @@ import frc.robot.subsystems.ArmTilt;
 public class ResetArm extends SequentialCommandGroup {
   
   public ResetArm(ArmExtension armExtension, ArmTilt armTilt, Double speed) {
-    addCommands(new ExtendArmToLength(armExtension, speed, 0.0), 
-    new TiltArmToHeight(armTilt, speed, 0.0));
+    addCommands(
+      new TiltArmToHeight(armTilt, speed, 14.0)
+        .withTimeout(1.0),
+      new ExtendArmToLength(armExtension, speed, 0.0)
+        .withTimeout(2.5), 
+      new TiltArmToHeight(armTilt, speed, 0.0)
+        .withTimeout(2.5)
+    );
   }
 }

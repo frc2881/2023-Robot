@@ -15,9 +15,17 @@ import frc.robot.subsystems.Suction;
 
 public class ScoreMedium extends SequentialCommandGroup {
   
-  public ScoreMedium(ArmExtension armExtension, ArmTilt armTilt, Double speed, Suction suction) {
-    addCommands(new MoveToMedium(armExtension, armTilt, speed),
-    new TiltArmToHeight(armTilt, speed, 11.5));
+  public ScoreMedium(
+    ArmExtension armExtension, 
+    ArmTilt armTilt, 
+    Double speed, 
+    Suction suction
+  ) {
+    addCommands(
+      new MoveToMedium(armExtension, armTilt, speed),
+      new TiltArmToHeight(armTilt, speed, 11.5)
+        .withTimeout(1.0)
+    );
   }
   
 }

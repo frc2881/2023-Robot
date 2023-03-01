@@ -24,7 +24,7 @@ public class FollowTrajectory extends SequentialCommandGroup {
             new InstantCommand(() -> {
                 // Reset odometry for the first path you run during auto
                 if (isFirstPath) {
-                    drive.resetPose(trajectory.getInitialPose());
+                    drive.resetPose(trajectory.getInitialHolonomicPose());
                 }
             }),
             new PPSwerveControllerCommand(

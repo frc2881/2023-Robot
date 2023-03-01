@@ -27,6 +27,7 @@ public class ArmTilt extends SubsystemBase {
   public ArmTilt() {
 
     m_tiltMotor = new CANSparkMax(Constants.Arm.kTiltMotorId, MotorType.kBrushless);
+    m_tiltMotor.restoreFactoryDefaults();
     m_tiltMotor.setIdleMode(IdleMode.kBrake);
     m_tiltMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
     m_tiltMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward,
@@ -34,6 +35,8 @@ public class ArmTilt extends SubsystemBase {
     m_tiltMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
     m_tiltMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse,
                        (float)Constants.Arm.kTiltReverseLimit);
+    m_tiltMotor.setSmartCurrentLimit(20);
+    m_tiltMotor.setSecondaryCurrentLimit(20, 0);
 
     m_tiltMotorEncoder = m_tiltMotor.getEncoder();
     m_tiltMotorEncoder.setPositionConversionFactor(Constants.Arm.kTiltRotationsToInches);

@@ -15,9 +15,17 @@ import frc.robot.subsystems.Suction;
 
 public class ScoreHigh extends SequentialCommandGroup {
 
-  public ScoreHigh(ArmExtension armExtension, ArmTilt armTilt, Double speed, Suction suction) {
-    addCommands(new MoveToHigh(armExtension, armTilt,  speed),
-    new TiltArmToHeight(armTilt, speed, 14.5));
+  public ScoreHigh(
+    ArmExtension armExtension, 
+    ArmTilt armTilt, 
+    Double speed, 
+    Suction suction
+  ) {
+    addCommands(
+      new MoveToHigh(armExtension, armTilt, speed),
+      new TiltArmToHeight(armTilt, speed * 0.9, 14.5)
+        .withTimeout(1.5)
+    );
   }
   
 }

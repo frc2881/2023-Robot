@@ -14,10 +14,19 @@ import frc.robot.subsystems.ArmTilt;
 
 public class MoveToMedium extends SequentialCommandGroup {
 
-  public MoveToMedium(ArmExtension armExtension, ArmTilt armTilt, Double speed) {
-    addCommands(new ExtendArmToLength(armExtension, speed, 0.0), 
-    new TiltArmToHeight(armTilt, speed, 15.0),
-    new ExtendArmToLength(armExtension, speed, 12.0));
+  public MoveToMedium(
+    ArmExtension armExtension, 
+    ArmTilt armTilt, 
+    Double speed
+  ) {
+    addCommands(
+      new ExtendArmToLength(armExtension, speed, 0.0)
+        .withTimeout(1.0), 
+      new TiltArmToHeight(armTilt, speed, 15.0)
+        .withTimeout(1.5),
+      new ExtendArmToLength(armExtension, speed, 12.0)
+        .withTimeout(1.0)
+    );
   }
   
 }
