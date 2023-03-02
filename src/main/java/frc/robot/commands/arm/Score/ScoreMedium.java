@@ -24,7 +24,7 @@ public class ScoreMedium extends SequentialCommandGroup {
     addCommands(
       new MoveToMedium(armExtension, armTilt, speed),
       new TiltArmToHeight(armTilt, speed * 0.5, 11.5)
-        .withTimeout(1.0)
+        .withTimeout(2.0)
     );
   }
   

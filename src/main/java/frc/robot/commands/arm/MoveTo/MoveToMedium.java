@@ -21,11 +21,11 @@ public class MoveToMedium extends SequentialCommandGroup {
   ) {
     addCommands(
       new ExtendArmToLength(armExtension, speed, 0.0)
-        .withTimeout(1.0), 
+        .withTimeout(2.5), 
       new TiltArmToHeight(armTilt, speed, 15.0)
-        .withTimeout(1.5),
+        .withTimeout(2.0),
       new ExtendArmToLength(armExtension, speed, 12.0)
-        .withTimeout(1.0)
+        .withTimeout(2.5)
     );
   }
   

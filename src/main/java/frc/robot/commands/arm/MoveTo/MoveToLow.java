@@ -21,11 +21,11 @@ public class MoveToLow extends SequentialCommandGroup {
   ) {
     addCommands(
       new ExtendArmToLength(armExtension, speed, 0.0)
-        .withTimeout(1.0), 
+        .withTimeout(2.5), 
       new TiltArmToHeight(armTilt, speed, 6.0)
-        .withTimeout(1.0),
+        .withTimeout(2.0),
       new ExtendArmToLength(armExtension, speed, 10.5)
-        .withTimeout(1.0)
+        .withTimeout(2.5)
     );
   }
   

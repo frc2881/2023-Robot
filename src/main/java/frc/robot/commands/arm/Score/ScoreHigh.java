@@ -24,7 +24,7 @@ public class ScoreHigh extends SequentialCommandGroup {
     addCommands(
       new MoveToHigh(armExtension, armTilt, speed),
       new TiltArmToHeight(armTilt, speed * 0.5, 14.5)
-        .withTimeout(1.5)
+        .withTimeout(2.0)
     );
   }
   

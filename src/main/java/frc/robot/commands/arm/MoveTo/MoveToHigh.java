@@ -21,9 +21,9 @@ public class MoveToHigh extends SequentialCommandGroup {
   ) {
     addCommands(
       new ExtendArmToLength(armExtension, speed, 0.0)
-        .withTimeout(1.0), 
+        .withTimeout(2.5), 
       new TiltArmToHeight(armTilt, speed, 16.5)
-        .withTimeout(1.5),
+        .withTimeout(2.0),
       new ExtendArmToLength(armExtension, speed, 27.5)
         .withTimeout(2.5)
     );
