@@ -1,4 +1,4 @@
-// Copyright (c) 2022 FRC Team 2881 - The Lady Cans
+// Copyright (c) 2023 FRC Team 2881 - The Lady Cans
 //
 // Open Source Software; you can modify and/or share it under the terms of BSD
 // license file in the root directory of this project.
@@ -17,21 +17,23 @@ import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Suction;
 
-public class AutoSequenceB extends SequentialCommandGroup {
-  public AutoSequenceB(
+public class AutoScoreBalance extends SequentialCommandGroup {
+  public AutoScoreBalance(
     Drive drive, 
     Suction suction, 
     ArmExtension armExtension, 
     ArmTilt armTilt, 
     Intake intake, 
-    PathPlannerTrajectory trajectory
+    PathPlannerTrajectory moveTrajectory, 
+    PathPlannerTrajectory balanceTrajectory
   ) {
     addCommands(
-      new AutoScoreHigh(suction, armExtension, armTilt, intake),
+      new AutoScore(suction, armExtension, armTilt, intake),
       new ParallelCommandGroup(
         new ResetArm(armExtension, armTilt, 1.0),
-        new FollowTrajectory(trajectory, true, drive)
-      )
+        new FollowTrajectory(moveTrajectory, true, drive)
+      ),
+      new FollowTrajectory(balanceTrajectory, false, drive)
     );
   }
 }

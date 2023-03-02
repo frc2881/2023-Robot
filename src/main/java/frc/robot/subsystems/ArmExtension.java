@@ -14,15 +14,12 @@ import com.revrobotics.SparkMaxPIDController;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
 import frc.robot.Constants;
 
 public class ArmExtension extends SubsystemBase {
   private final CANSparkMax m_extensionMotor;
   private final SparkMaxPIDController m_extensionPID;
   private final RelativeEncoder m_extensionMotorEncoder;
-
-  private boolean m_isExtendSafe;
 
   public ArmExtension() {
     m_extensionMotor = new CANSparkMax(Constants.Arm.kExtensionMotorId, MotorType.kBrushless);

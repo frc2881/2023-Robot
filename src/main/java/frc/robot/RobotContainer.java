@@ -27,9 +27,11 @@ import frc.robot.commands.clamps.AttachLeft;
 import frc.robot.commands.clamps.AttachRight;
 import frc.robot.commands.clamps.ReleaseLeft;
 import frc.robot.commands.clamps.ReleaseRight;
-import frc.robot.commands.auto.AutoScoreHigh;
-import frc.robot.commands.auto.AutoSequenceA;
-import frc.robot.commands.auto.AutoSequenceB;
+import frc.robot.commands.auto.AutoScore;
+import frc.robot.commands.auto.AutoBalance;
+import frc.robot.commands.auto.AutoMove;
+import frc.robot.commands.auto.AutoScoreBalance;
+import frc.robot.commands.auto.AutoScoreMove;
 import frc.robot.commands.drive.DriveRobotCentric;
 import frc.robot.commands.drive.DriveWithJoysticks;
 import frc.robot.commands.drive.ResetSwerve;
@@ -155,31 +157,39 @@ public class RobotContainer {
     
     PathPlannerTrajectory balancePath = PathPlanner.loadPath("Balance", 1.0, 1.0);
     PathPlannerTrajectory balanceMidPath = PathPlanner.loadPath("Balance Mid", 1.0, 1.0);
-    PathPlannerTrajectory wallBalancePath = PathPlanner.loadPath("Wall Balance", 2, 3);
-    PathPlannerTrajectory dividerBalancePath = PathPlanner.loadPath("Divider Balance", 2, 3);
     PathPlannerTrajectory moveWallPath = PathPlanner.loadPath("Move Wall", 1.5, 1.5);
     PathPlannerTrajectory moveDividerPath = PathPlanner.loadPath("Move Divider", 1.5, 1.5);
-    PathPlannerTrajectory middleBalancePath = PathPlanner.loadPath("Middle Balance", 1.5, 1.5);
+    PathPlannerTrajectory wallBalancePath = PathPlanner.loadPath("Wall Balance", 2, 3);
+    PathPlannerTrajectory dividerBalancePath = PathPlanner.loadPath("Divider Balance", 2, 3);
+    PathPlannerTrajectory middleBalancePath = PathPlanner.loadPath("Middle Balance", 2, 3);
 
     m_autonomousChooser.setDefaultOption("None", null);
 
     m_autonomousChooser.addOption("Score", 
-      new AutoScoreHigh(m_suction, m_armExtension, m_armTilt, m_intake));
+      new AutoScore(m_suction, m_armExtension, m_armTilt, m_intake));
+
+    m_autonomousChooser.addOption("Middle Balance",
+      new AutoBalance(m_drive, middleBalancePath, balanceMidPath));
 
     m_autonomousChooser.addOption("Middle Score Balance", 
-      new AutoSequenceA(m_drive, m_suction, m_armExtension, m_armTilt, m_intake, middleBalancePath, balanceMidPath));
+      new AutoScoreBalance(m_drive, m_suction, m_armExtension, m_armTilt, m_intake, middleBalancePath, balanceMidPath));
 
+    m_autonomousChooser.addOption("Divider Move", 
+      new AutoMove(m_drive, moveDividerPath));
+    
     m_autonomousChooser.addOption("Divider Score Move", 
-      new AutoSequenceB(m_drive, m_suction, m_armExtension, m_armTilt, m_intake, moveDividerPath));
+      new AutoScoreMove(m_drive, m_suction, m_armExtension, m_armTilt, m_intake, moveDividerPath));
 
     m_autonomousChooser.addOption("Divider Score Balance", 
-      new AutoSequenceA(m_drive, m_suction, m_armExtension, m_armTilt, m_intake, dividerBalancePath, balancePath));
+      new AutoScoreBalance(m_drive, m_suction, m_armExtension, m_armTilt, m_intake, dividerBalancePath, balancePath));
+
+    m_autonomousChooser.addOption("Wall Move", new AutoMove(m_drive, moveWallPath));
 
     m_autonomousChooser.addOption("Wall Score Move", 
-      new AutoSequenceB(m_drive, m_suction, m_armExtension, m_armTilt, m_intake, moveWallPath));
+      new AutoScoreMove(m_drive, m_suction, m_armExtension, m_armTilt, m_intake, moveWallPath));
 
     m_autonomousChooser.addOption("Wall Score Balance", 
-      new AutoSequenceA(m_drive, m_suction, m_armExtension, m_armTilt, m_intake, wallBalancePath, balancePath));
+      new AutoScoreBalance(m_drive, m_suction, m_armExtension, m_armTilt, m_intake, wallBalancePath, balancePath));
 
     SmartDashboard.putData("Auto/Command", m_autonomousChooser);
   }

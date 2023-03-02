@@ -22,8 +22,6 @@ public class ArmTilt extends SubsystemBase {
   private final RelativeEncoder m_tiltMotorEncoder;
   private final SparkMaxPIDController m_tiltPID;
 
-  private boolean m_isTiltSafe;
-
   public ArmTilt() {
 
     m_tiltMotor = new CANSparkMax(Constants.Arm.kTiltMotorId, MotorType.kBrushless);

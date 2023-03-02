@@ -18,9 +18,9 @@ import frc.robot.subsystems.ArmTilt;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Suction;
 
-public class AutoScoreHigh extends SequentialCommandGroup {
+public class AutoScore extends SequentialCommandGroup {
 
-  public AutoScoreHigh(
+  public AutoScore(
     Suction suction, 
     ArmExtension armExtension, 
     ArmTilt armTilt, 
