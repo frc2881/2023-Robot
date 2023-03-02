@@ -20,7 +20,7 @@ public class MoveToPickup extends SequentialCommandGroup {
   ) {
     addCommands(
       new TiltArmToHeight(armTilt, speed, 12.6)
-        .withTimeout(1.0)
+        .withTimeout(2.0)
     );
   }
   
