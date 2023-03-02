@@ -5,6 +5,7 @@
 
 package frc.robot.lib;
 
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
@@ -37,6 +38,8 @@ public final class Telemetry {
     if (RobotState.isEnabled()) { status = Robot.Status.ENABLED; }
     if (RobotState.isEStopped()) { status = Robot.Status.ESTOPPED; }
     SmartDashboard.putString("Robot/Status", status.toString());
+
+    SmartDashboard.putNumber("Robot/BatteryVoltage", RobotController.getBatteryVoltage());
   }
 
   /** This periodic function supports providing the current match time to the driver station dashboard app during competition mode. */
