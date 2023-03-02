@@ -18,7 +18,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.util.sendable.SendableBuilder;
-import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -123,7 +123,7 @@ public class Drive extends SubsystemBase {
     });
     
     // TODO: resolve issue of auto starting on red side doesn't invert/translate path starting point
-    if (!DriverStation.isAutonomous()) {
+    if (!RobotState.isAutonomous()) {
       Optional<EstimatedRobotPose> leftCameraResult = m_leftPhotonCamera.getEstimatedGlobalPose(m_poseEstimator.getEstimatedPosition());
       if (leftCameraResult.isPresent()) {
         EstimatedRobotPose camPose = leftCameraResult.get();
