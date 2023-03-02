@@ -143,6 +143,13 @@ public class SwerveModule implements Sendable {
     double sensorReadingAvg = Arrays.stream(sensorReadings).average().orElse(Double.NaN); 
     double initialAngle = sensorReadingAvg - m_resetOffset;
 
+    if (initialAngle > Math.PI) {
+      initialAngle -= 2 * Math.PI;
+    }
+    if (initialAngle < -Math.PI) {
+      initialAngle += 2 * Math.PI;
+    }
+
     String key = m_location.toString() + "/";
     SmartDashboard.putNumber(key + "InitialAngle", initialAngle);
     SmartDashboard.putNumber(key + "InitialAngleSensorReadingsAvg", sensorReadingAvg);
