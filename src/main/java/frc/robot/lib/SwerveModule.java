@@ -45,6 +45,11 @@ public class SwerveModule implements Sendable {
   private final SparkMaxPIDController m_drivingPIDController;
   private final SparkMaxPIDController m_turningPIDController;
 
+  private double[] m_samples = new double[50];
+  private int m_index = 0;
+  private double m_sum = 0.0;
+  private boolean m_valid = false;
+
   private double m_chassisAngularOffset = 0;
   private double m_resetOffset = 0;
   private SwerveModuleState m_desiredState = new SwerveModuleState(0.0, new Rotation2d());
@@ -134,8 +139,20 @@ public class SwerveModule implements Sendable {
     m_resetOffset = chassisAngularOffset;
   }
 
+  public void sample(){
+    m_sum -= m_samples[m_index];
+    m_samples[m_index] = m_turningAnalogSensor.getPosition();
+    m_sum += m_samples[m_index];
+    m_index++;
+    
+    if(m_index == 50){
+      m_index = 0;
+      m_valid = true;
+    }
+  }
+
   public void resetTurningEncoder() {
-    double[] sensorReadings = new double[100];
+    /*double[] sensorReadings = new double[100];
     for (int i = 0, ic = 100; i < ic; i += 1) {
      sensorReadings[i] = m_turningAnalogSensor.getPosition();
      Timer.delay(0.005);
@@ -152,10 +169,16 @@ public class SwerveModule implements Sendable {
 
     String key = m_location.toString() + "/";
     SmartDashboard.putNumber(key + "InitialAngle", initialAngle);
-    SmartDashboard.putNumber(key + "InitialAngleSensorReadingsAvg", sensorReadingAvg);
+    SmartDashboard.putNumber(key + "InitialAngleSensorReadingsAvg", sensorReadingAvg);*/
     
     //double initialAngle = m_turningAnalogSensor.getPosition() - m_resetOffset;
     
+    if(!m_valid){
+      return;
+    }
+
+    double initialAngle = (m_sum/50.0) - m_resetOffset;
+
     m_desiredState.angle = new Rotation2d(initialAngle);
     m_drivingEncoder.setPosition(0.0);
     m_turningEncoder.setPosition(initialAngle);

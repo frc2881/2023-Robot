@@ -7,6 +7,7 @@ package frc.robot.commands.auto;
 import com.pathplanner.lib.PathPlannerTrajectory;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.commands.drive.ResetSwerve;
 import frc.robot.subsystems.Drive;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -20,7 +21,8 @@ public class AutoBalance extends SequentialCommandGroup {
   PathPlannerTrajectory balanceTrajectory) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(new FollowTrajectory(moveTrajectory, true, drive),
+    addCommands(new ResetSwerve(drive),
+    new FollowTrajectory(moveTrajectory, true, drive),
     new FollowTrajectory(balanceTrajectory, false, drive));
   }
 }

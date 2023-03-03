@@ -6,6 +6,7 @@
 package frc.robot.commands.arm;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Constants;
 import frc.robot.subsystems.ArmExtension;
 import frc.robot.subsystems.ArmTilt;
 
@@ -15,7 +16,7 @@ public class ResetArm extends SequentialCommandGroup {
     addCommands(
       new TiltArmToHeight(armTilt, speed, 14.0)
         .withTimeout(1.0),
-      new ExtendArmToLength(armExtension, speed, 0.0)
+      new ExtendArmToLength(armExtension, speed, Constants.Arm.kExtendReverseLimit)
         .withTimeout(2.5), 
       new TiltArmToHeight(armTilt, speed, 0.0)
         .withTimeout(2.5)

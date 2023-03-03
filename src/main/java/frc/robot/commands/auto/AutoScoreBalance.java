@@ -9,8 +9,8 @@ import com.pathplanner.lib.PathPlannerTrajectory;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-
 import frc.robot.commands.arm.ResetArm;
+import frc.robot.commands.drive.ResetSwerve;
 import frc.robot.subsystems.ArmExtension;
 import frc.robot.subsystems.ArmTilt;
 import frc.robot.subsystems.Drive;
@@ -28,6 +28,7 @@ public class AutoScoreBalance extends SequentialCommandGroup {
     PathPlannerTrajectory balanceTrajectory
   ) {
     addCommands(
+      new ResetSwerve(drive),
       new AutoScore(suction, armExtension, armTilt, intake),
       new ParallelCommandGroup(
         new ResetArm(armExtension, armTilt, 1.0),

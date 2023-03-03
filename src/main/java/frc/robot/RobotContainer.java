@@ -200,6 +200,7 @@ public class RobotContainer {
 
   public void resetRobot() {
     if (m_robotResetState) {
+      m_drive.resetEncoders();
       m_suction.reset();
       m_armTilt.reset();
       m_armExtension.reset();

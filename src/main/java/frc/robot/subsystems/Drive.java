@@ -103,6 +103,15 @@ public class Drive extends SubsystemBase {
     if (LiveWindow.isEnabled()) {
       updateField();
     }
+
+    sampleModules();
+  }
+
+  private void sampleModules(){
+    m_frontLeft.sample();
+    m_frontRight.sample();
+    m_rearLeft.sample();
+    m_rearRight.sample();
   }
    
   public void resetSwerve() {
