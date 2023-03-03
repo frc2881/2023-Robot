@@ -93,16 +93,16 @@ public class RobotContainer {
       .onTrue(new ResetSwerve(m_drive));
 
     new Trigger(() -> m_driverController.getRightBumper())
-      .whileTrue(new AttachRight(m_clamps, 0.1));
+      .whileTrue(new AttachRight(m_clamps, 0.15));
 
     new Trigger(() -> m_driverController.getPOV() == 90)
-      .whileTrue(new ReleaseRight(m_clamps, 0.1));
+      .whileTrue(new ReleaseRight(m_clamps, 0.15));
 
     new Trigger(() -> m_driverController.getLeftBumper())
-      .whileTrue(new AttachLeft(m_clamps, -0.1));
+      .whileTrue(new AttachLeft(m_clamps, -0.15));
 
     new Trigger(() -> m_driverController.getPOV() == 270)
-      .whileTrue(new ReleaseLeft(m_clamps, -0.1));
+      .whileTrue(new ReleaseLeft(m_clamps, -0.15));
 
     // new Trigger(m_driverController::getAButton)
     //   .whileTrue(new RunRollersInward(m_intake));

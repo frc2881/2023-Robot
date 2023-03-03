@@ -6,7 +6,7 @@
 package frc.robot.commands.arm.MoveTo;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-
+import frc.robot.Constants;
 import frc.robot.commands.arm.ExtendArmToLength;
 import frc.robot.commands.arm.TiltArmToHeight;
 import frc.robot.subsystems.ArmExtension;
@@ -21,11 +21,11 @@ public class MoveToMedium extends SequentialCommandGroup {
   ) {
     addCommands(
       new ExtendArmToLength(armExtension, speed, 0.0)
-        .withTimeout(2.5), 
+        .withTimeout(Constants.Arm.kExtensionTimeOut), 
       new TiltArmToHeight(armTilt, speed, 15.0)
-        .withTimeout(2.0),
+        .withTimeout(Constants.Arm.kTiltTimeOut),
       new ExtendArmToLength(armExtension, speed, 12.0)
-        .withTimeout(2.5)
+        .withTimeout(Constants.Arm.kExtensionTimeOut)
     );
   }
   
