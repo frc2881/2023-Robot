@@ -103,7 +103,6 @@ public class Drive extends SubsystemBase {
     if (LiveWindow.isEnabled()) {
       updateField();
     }
-
     sampleModules();
   }
 
