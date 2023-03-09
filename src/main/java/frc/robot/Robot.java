@@ -34,7 +34,6 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledInit() {
     DataLog.mode(Mode.DISABLED);
-    m_robotContainer.robotShouldReset();
   }
 
   @Override

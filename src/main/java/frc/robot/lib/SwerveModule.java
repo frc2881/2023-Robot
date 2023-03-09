@@ -5,8 +5,6 @@
 
 package frc.robot.lib;
 
-import java.util.Arrays;
-
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
@@ -17,11 +15,12 @@ import com.revrobotics.SparkMaxPIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.util.datalog.DataLog;
+import edu.wpi.first.util.datalog.DoubleLogEntry;
 import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.util.sendable.SendableBuilder;
-import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
 import frc.robot.Constants;
 
 public class SwerveModule implements Sendable {
@@ -53,6 +52,12 @@ public class SwerveModule implements Sendable {
   private double m_chassisAngularOffset = 0;
   private double m_resetOffset = 0;
   private SwerveModuleState m_desiredState = new SwerveModuleState(0.0, new Rotation2d());
+
+
+  private final DoubleLogEntry m_logAbsoluteEncoderPosition;
+  private final DoubleLogEntry m_logRelativeEncoderPosition;
+  private final DoubleLogEntry m_logAbsoluteEncoderAverage;
+
 
   /**
    * Constructs a MAXSwerveModule and configures the driving and turning motor,
@@ -137,17 +142,31 @@ public class SwerveModule implements Sendable {
     // This is commented out because it is already being calculated by the CANcoder
     // m_chassisAngularOffset = chassisAngularOffset; 
     m_resetOffset = chassisAngularOffset;
+
+    
+    DataLog log = DataLogManager.getLog();
+    m_logAbsoluteEncoderPosition = new DoubleLogEntry(log, "drive/" + m_location.toString() + "/AbsoluteEncoderPosition");
+    m_logRelativeEncoderPosition = new DoubleLogEntry(log, "drive/"+ m_location.toString() + "/RelativeEncoderPosition");
+    m_logAbsoluteEncoderAverage = new DoubleLogEntry(log, "drive/" + m_location.toString() + "/AbsoluteEncoderAverage");
+
   }
 
   public void sample(){
+    m_logRelativeEncoderPosition.append(m_turningEncoder.getPosition());
     m_sum -= m_samples[m_index];
     m_samples[m_index] = m_turningAnalogSensor.getPosition();
+    m_logAbsoluteEncoderPosition.append(m_samples[m_index]);
     m_sum += m_samples[m_index];
+    m_logAbsoluteEncoderAverage.append(m_sum / 50);
     m_index += 1;
     if (m_index == 50) {
       m_index = 0;
       m_valid = true;
     }
+
+    //absolute encoder position
+    //encoder sum
+    //relative encoder position
   }
 
   public void resetTurningEncoder() {
