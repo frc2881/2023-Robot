@@ -21,7 +21,7 @@ import frc.robot.Robot;
  * This class provides methods for logging messages to the RioLog as the robot
  * starts, the robot mode changes, and as commands start and end.
  */
-public final class DataLog {
+public final class Logger {
 
   static {
     DataLogManager.start();
@@ -49,7 +49,7 @@ public final class DataLog {
    */
   public static void start() {
     log("*".repeat(20) + " Robot Start, version " +
-        DataLog.class.getPackage().getImplementationVersion() + " " +
+        Logger.class.getPackage().getImplementationVersion() + " " +
         "*".repeat(20));
   }
 

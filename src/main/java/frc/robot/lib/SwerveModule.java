@@ -6,6 +6,7 @@
 package frc.robot.lib;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.REVLibError;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxAnalogSensor;
@@ -77,8 +78,23 @@ public class SwerveModule implements Sendable {
     m_turningSparkMax.restoreFactoryDefaults();
 
     // SDS Module is inverted relative to the MAXSwerve
-    m_drivingSparkMax.setInverted(true);;
-    m_turningSparkMax.setInverted(true);;
+    for (int i = 0; i < 10; i += 1) {
+      m_drivingSparkMax.setInverted(true); 
+     if (m_drivingSparkMax.getLastError() != REVLibError.kOk ) {
+      Logger.log(m_location.toString() + " swerve module driving motor controller inversion error.");
+     } else {
+      break;
+     }
+    }
+
+    for (int i = 0; i < 10; i += 1) {
+      m_turningSparkMax.setInverted(true); 
+     if (m_turningSparkMax.getLastError() != REVLibError.kOk ) {
+      Logger.log(m_location.toString() + " swerve module turning motor controller inversion error.");
+     } else {
+      break;
+     }
+    }
 
     // Setup encoders and PID controllers for the driving and turning SPARKS MAX.
     m_drivingEncoder = m_drivingSparkMax.getEncoder();
