@@ -17,10 +17,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.util.datalog.DataLog;
-import edu.wpi.first.util.datalog.DoubleLogEntry;
 import edu.wpi.first.util.sendable.SendableBuilder;
-import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -82,7 +79,6 @@ public class Drive extends SubsystemBase {
 
   private final Field2d m_field = new Field2d();
 
-
   public Drive() {
     m_leftPhotonCamera = new PhotonCameraWrapper(
       Constants.Vision.kLeftCameraName,
@@ -97,7 +93,6 @@ public class Drive extends SubsystemBase {
       Constants.Vision.kAprilTagFieldLayout
     );
 
-    DataLog log = DataLogManager.getLog();
     SmartDashboard.putData("Field", m_field);
   }
 

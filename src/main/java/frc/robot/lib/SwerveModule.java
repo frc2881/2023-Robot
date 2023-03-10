@@ -80,20 +80,20 @@ public class SwerveModule implements Sendable {
     // SDS Module is inverted relative to the MAXSwerve
     for (int i = 0; i < 10; i += 1) {
       m_drivingSparkMax.setInverted(true); 
-     if (m_drivingSparkMax.getLastError() != REVLibError.kOk ) {
-      Logger.log(m_location.toString() + " swerve module driving motor controller inversion error.");
-     } else {
-      break;
-     }
+      if (m_drivingSparkMax.getLastError() != REVLibError.kOk ) {
+        Logger.log(m_location.toString() + " swerve module driving motor controller inversion error.");
+      } else {
+        break;
+      }
     }
 
     for (int i = 0; i < 10; i += 1) {
       m_turningSparkMax.setInverted(true); 
-     if (m_turningSparkMax.getLastError() != REVLibError.kOk ) {
-      Logger.log(m_location.toString() + " swerve module turning motor controller inversion error.");
-     } else {
-      break;
-     }
+      if (m_turningSparkMax.getLastError() != REVLibError.kOk ) {
+        Logger.log(m_location.toString() + " swerve module turning motor controller inversion error.");
+      } else {
+        break;
+      }
     }
 
     // Setup encoders and PID controllers for the driving and turning SPARKS MAX.
@@ -159,12 +159,10 @@ public class SwerveModule implements Sendable {
     // m_chassisAngularOffset = chassisAngularOffset; 
     m_resetOffset = chassisAngularOffset;
 
-    
     DataLog log = DataLogManager.getLog();
     m_logAbsoluteEncoderPosition = new DoubleLogEntry(log, "drive/" + m_location.toString() + "/AbsoluteEncoderPosition");
     m_logRelativeEncoderPosition = new DoubleLogEntry(log, "drive/"+ m_location.toString() + "/RelativeEncoderPosition");
     m_logAbsoluteEncoderAverage = new DoubleLogEntry(log, "drive/" + m_location.toString() + "/AbsoluteEncoderAverage");
-
   }
 
   public void sample(){
@@ -179,10 +177,6 @@ public class SwerveModule implements Sendable {
       m_index = 0;
       m_valid = true;
     }
-
-    //absolute encoder position
-    //encoder sum
-    //relative encoder position
   }
 
   public void resetTurningEncoder() {
