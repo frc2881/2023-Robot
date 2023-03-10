@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
-import frc.robot.lib.DataLog;
+import frc.robot.lib.Logger;
 import frc.robot.lib.Telemetry;
 
 public class Robot extends TimedRobot {
@@ -21,7 +21,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     m_robotInstance = this;
-    DataLog.start();
+    Logger.start();
     Telemetry.start(); 
     m_robotContainer = new RobotContainer();    
   }
@@ -33,8 +33,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledInit() {
-    DataLog.mode(Mode.DISABLED);
-    m_robotContainer.robotShouldReset();
+    Logger.mode(Mode.DISABLED);
   }
 
   @Override
@@ -45,7 +44,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    DataLog.mode(Mode.AUTO);
+    Logger.mode(Mode.AUTO);
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
@@ -61,7 +60,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    DataLog.mode(Mode.TELEOP);
+    Logger.mode(Mode.TELEOP);
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
@@ -78,7 +77,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void testInit() {
-    DataLog.mode(Mode.TEST);
+    Logger.mode(Mode.TEST);
     CommandScheduler.getInstance().cancelAll();
     m_robotContainer.resetRobot();
   }

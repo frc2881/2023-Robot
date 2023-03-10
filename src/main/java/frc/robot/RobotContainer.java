@@ -60,7 +60,6 @@ public class RobotContainer {
 
   private final SendableChooser<Command> m_autonomousChooser = new SendableChooser<Command>();
  
-  public boolean m_robotResetState = true;
   
   public RobotContainer() {
     setupDrive(); 
@@ -199,16 +198,10 @@ public class RobotContainer {
   }
 
   public void resetRobot() {
-    if (m_robotResetState) {
-      m_drive.resetEncoders();
+      m_drive.resetSwerve();
       m_suction.reset();
       m_armTilt.reset();
       m_armExtension.reset();
-      m_robotResetState = false;
-    }
   }
 
-  public void robotShouldReset() {
-    m_robotResetState = true;
-  }
 }
