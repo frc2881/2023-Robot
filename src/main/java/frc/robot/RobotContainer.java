@@ -8,7 +8,10 @@ package frc.robot;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 
+import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -46,8 +49,11 @@ import frc.robot.subsystems.Clamps;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Suction;
+import pabeles.concurrency.ConcurrencyOps.NewInstance;
 
 public class RobotContainer {
+  private static RobotContainer m_robotContainerInstance;
+  private final PowerDistribution m_powerDistribution = new PowerDistribution(1, ModuleType.kRev);
   private Drive m_drive = new Drive();
   private Suction m_suction = new Suction();
   private ArmExtension m_armExtension = new ArmExtension();
@@ -62,6 +68,7 @@ public class RobotContainer {
  
   
   public RobotContainer() {
+    m_robotContainerInstance = this;
     setupDrive(); 
     setupControllers();
     setupAuto();
@@ -195,6 +202,11 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
     return m_autonomousChooser.getSelected();
+  }
+
+  public static void rumbleControllers() {
+    m_robotContainerInstance.m_driverController.setRumble(RumbleType.kBothRumble, 1);
+    m_robotContainerInstance.m_manipulatorController.setRumble(RumbleType.kBothRumble, 1);
   }
 
   public void resetRobot() {

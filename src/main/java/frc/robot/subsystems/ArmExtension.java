@@ -31,8 +31,8 @@ public class ArmExtension extends SubsystemBase {
     m_extensionMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
     m_extensionMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse,
                        (float)Constants.Arm.kExtendReverseLimit);
-    m_extensionMotor.setSmartCurrentLimit(20);
-    m_extensionMotor.setSecondaryCurrentLimit(20, 0);
+    m_extensionMotor.setSmartCurrentLimit(60);
+    m_extensionMotor.setSecondaryCurrentLimit(60, 0);
 
     m_extensionMotorEncoder = m_extensionMotor.getEncoder();
     m_extensionMotorEncoder.setPositionConversionFactor(Constants.Arm.kExtendRotationsToInches);

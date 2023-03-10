@@ -337,7 +337,7 @@ public class Constants {
         /**
          * The maximum current to send to the suction motor.
          */
-        public static final int kCurrentLimit = 30;
+        public static final int kCurrentLimit = 20;
 
         /**
          * The maximum speed that the suction motor runs during regular hold of the game piece.
