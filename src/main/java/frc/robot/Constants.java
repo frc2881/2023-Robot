@@ -107,6 +107,8 @@ public class Constants {
 
         public static final double kTiltTimeOut = 4;
 
+        public static final double kExtensionResetPosition = 3.0;
+
 
         /*
          * High Cone Tilt Height

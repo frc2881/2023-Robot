@@ -100,11 +100,9 @@ public class Suction extends SubsystemBase {
       
     } else {
       if (m_isDisabling){
-        m_motorTop.set(Constants.Suction.kMaxSpeed);
+        m_motorTop.set(0);
         m_motorBottom.set(0);
         m_solenoidBottom.set(true);
-        Timer.delay(Constants.Suction.kDelay);
-        m_motorTop.set(0);
         m_solenoidTop.set(true);
         m_isTargetPressureBottomReached = false;
         m_isTargetPressureTopReached = false;

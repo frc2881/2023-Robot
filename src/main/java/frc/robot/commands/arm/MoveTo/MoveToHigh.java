@@ -21,7 +21,7 @@ public class MoveToHigh extends SequentialCommandGroup {
     Double speed
   ) {
     addCommands(
-      new ExtendArmToLength(armExtension, speed, 3.0)
+      new ExtendArmToLength(armExtension, speed, Constants.Arm.kExtensionResetPosition)
         .withTimeout(Constants.Arm.kExtensionTimeOut), 
       new TiltArmToHeight(armTilt, speed, 10.0),
       new ParallelCommandGroup(
