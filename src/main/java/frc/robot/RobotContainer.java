@@ -15,6 +15,8 @@ import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.arm.ArmExtendOverride;
 import frc.robot.commands.arm.ArmTiltOverride;
@@ -30,6 +32,7 @@ import frc.robot.commands.clamps.AttachLeft;
 import frc.robot.commands.clamps.AttachRight;
 import frc.robot.commands.clamps.ReleaseLeft;
 import frc.robot.commands.clamps.ReleaseRight;
+import frc.robot.commands.controllers.RumbleControllers;
 import frc.robot.commands.auto.AutoScore;
 import frc.robot.commands.auto.AutoBalance;
 import frc.robot.commands.auto.AutoMove;
@@ -49,10 +52,8 @@ import frc.robot.subsystems.Clamps;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Suction;
-import pabeles.concurrency.ConcurrencyOps.NewInstance;
 
 public class RobotContainer {
-  private static RobotContainer m_robotContainerInstance;
   private final PowerDistribution m_powerDistribution = new PowerDistribution(1, ModuleType.kRev);
   private Drive m_drive = new Drive();
   private Suction m_suction = new Suction();
@@ -68,7 +69,6 @@ public class RobotContainer {
  
   
   public RobotContainer() {
-    m_robotContainerInstance = this;
     setupDrive(); 
     setupControllers();
     setupAuto();
@@ -157,6 +157,9 @@ public class RobotContainer {
     new Trigger(() -> m_manipulatorController.getPOV() == 90)
       .and(m_manipulatorController::getYButton)
       .whileTrue(new ScoreMedium(m_armExtension, m_armTilt, 1.0, m_suction));
+
+    new Trigger(() -> m_suction.hasVacuumSeal())
+      .onTrue(new RumbleControllers(m_driverController, m_manipulatorController));
   }
 
   public void setupAuto() {
@@ -203,12 +206,7 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     return m_autonomousChooser.getSelected();
   }
-
-  public static void rumbleControllers() {
-    m_robotContainerInstance.m_driverController.setRumble(RumbleType.kBothRumble, 1);
-    m_robotContainerInstance.m_manipulatorController.setRumble(RumbleType.kBothRumble, 1);
-  }
-
+  
   public void resetRobot() {
       m_drive.resetSwerve();
       m_suction.reset();
