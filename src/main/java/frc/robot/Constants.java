@@ -78,11 +78,11 @@ public class Constants {
         /*
          * Tilt Min Speed
          */
-        public static final double kTiltMinOutput = -0.75;
+        public static final double kTiltMinOutput = -1.0;
         /*
          * Tilit Max Speed
          */
-        public static final double kTiltMaxOutput = 0.75;
+        public static final double kTiltMaxOutput = 1.0;
 
         /*
          * Extension PID Controller
@@ -96,16 +96,18 @@ public class Constants {
         /*
          * Extension Min Speed
          */
-        public static final double kExtensionMinOutput = -0.75;
+        public static final double kExtensionMinOutput = -1.0;
         /*
          * Extension Max Speed
          */
-        public static final double kExtensionMaxOutput = 0.75;
+        public static final double kExtensionMaxOutput = 1.0;
 
         
         public static final double kExtensionTimeOut = 5;
 
         public static final double kTiltTimeOut = 4;
+
+        public static final double kExtensionResetPosition = 3.0;
 
 
         /*
