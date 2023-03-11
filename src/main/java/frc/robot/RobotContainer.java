@@ -36,6 +36,7 @@ import frc.robot.commands.clamps.AttachRight;
 import frc.robot.commands.clamps.ReleaseLeft;
 import frc.robot.commands.clamps.ReleaseRight;
 import frc.robot.commands.controllers.RumbleControllers;
+import frc.robot.commands.controllers.RumbleControllers.RumblePattern;
 import frc.robot.commands.drive.DriveRobotCentric;
 import frc.robot.commands.drive.DriveWithJoysticks;
 import frc.robot.commands.drive.ResetSwerve;
@@ -157,7 +158,8 @@ public class RobotContainer {
       .whileTrue(new ScoreMedium(m_armExtension, m_armTilt, 1.0, m_suction));
 
     new Trigger(() -> (RobotState.isTeleop() && m_suction.hasVacuumSeal()))
-      .onTrue(new RumbleControllers(m_driverController, m_manipulatorController));
+      .onTrue(new RumbleControllers(m_driverController, m_manipulatorController, RumblePattern.GOOD))
+      .onFalse(new RumbleControllers(m_driverController, m_manipulatorController, RumblePattern.BAD));
   }
 
   public void setupAuto() {
