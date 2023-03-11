@@ -11,16 +11,22 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
 
+import edu.wpi.first.util.datalog.DataLog;
+import edu.wpi.first.util.datalog.DoubleLogEntry;
 import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
 import frc.robot.Constants;
 
 public class ArmTilt extends SubsystemBase {
   private final CANSparkMax m_tiltMotor;
   private final RelativeEncoder m_tiltMotorEncoder;
   private final SparkMaxPIDController m_tiltPID;
+  private final DoubleLogEntry m_logTiltPosition;
+  private final DoubleLogEntry m_logTiltOutput;
+  private final DoubleLogEntry m_logTiltBusVoltage;
+  private final DoubleLogEntry m_logTiltCurrent;
 
   public ArmTilt() {
 
@@ -44,11 +50,18 @@ public class ArmTilt extends SubsystemBase {
     m_tiltPID.setOutputRange(Constants.Arm.kTiltMinOutput,
                              Constants.Arm.kTiltMaxOutput);
 
+    DataLog log = DataLogManager.getLog();
+    m_logTiltPosition = new DoubleLogEntry(log, "/armTilt/position");
+    m_logTiltOutput = new DoubleLogEntry(log, "/armTilt/output");
+    m_logTiltBusVoltage = new DoubleLogEntry(log, "armTilt/busVoltage");
+    m_logTiltCurrent = new DoubleLogEntry(log, "/armTilt/current");
+
   }
 
   @Override
   public void periodic() {
     updateTelemetry();
+    logTilt();
   }
 
   /**
@@ -125,5 +138,12 @@ public class ArmTilt extends SubsystemBase {
 
   private void updateTelemetry() {
     SmartDashboard.putNumber("Arm/Tilt/Position", m_tiltMotorEncoder.getPosition());
+  }
+
+  public void logTilt() {
+    m_logTiltPosition.append(m_tiltMotorEncoder.getPosition());
+    m_logTiltOutput.append(m_tiltMotor.getAppliedOutput());
+    m_logTiltBusVoltage.append(m_tiltMotor.getBusVoltage());
+    m_logTiltCurrent.append(m_tiltMotor.getOutputCurrent());
   }
 }

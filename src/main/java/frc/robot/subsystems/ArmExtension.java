@@ -11,7 +11,10 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
 
+import edu.wpi.first.util.datalog.DataLog;
+import edu.wpi.first.util.datalog.DoubleLogEntry;
 import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -20,6 +23,10 @@ public class ArmExtension extends SubsystemBase {
   private final CANSparkMax m_extensionMotor;
   private final SparkMaxPIDController m_extensionPID;
   private final RelativeEncoder m_extensionMotorEncoder;
+  private final DoubleLogEntry m_logExtensionPosition;
+  private final DoubleLogEntry m_logExtensionOutput;
+  private final DoubleLogEntry m_logExtensionBusVoltage;
+  private final DoubleLogEntry m_logExtensionCurrent;
 
   public ArmExtension() {
     m_extensionMotor = new CANSparkMax(Constants.Arm.kExtensionMotorId, MotorType.kBrushless);
@@ -44,11 +51,18 @@ public class ArmExtension extends SubsystemBase {
     m_extensionPID.setOutputRange(Constants.Arm.kExtensionMinOutput,
                                   Constants.Arm.kExtensionMaxOutput);
 
+    DataLog log = DataLogManager.getLog();
+    m_logExtensionPosition = new DoubleLogEntry(log, "/armExtension/position");
+    m_logExtensionOutput = new DoubleLogEntry(log, "/armExtension/output");
+    m_logExtensionBusVoltage = new DoubleLogEntry(log, "/armExtension/busVoltage");
+    m_logExtensionCurrent = new DoubleLogEntry(log, "/armExtension/current");
+
   }
 
   @Override
   public void periodic() {
     updateTelemetry();
+    logExtension();
   }
 
   /**
@@ -121,5 +135,12 @@ public class ArmExtension extends SubsystemBase {
 
   private void updateTelemetry() {
     SmartDashboard.putNumber("Arm/Extend/Position", m_extensionMotorEncoder.getPosition());
+  }
+
+  private void logExtension() {
+    m_logExtensionPosition.append(m_extensionMotorEncoder.getPosition());
+    m_logExtensionOutput.append(m_extensionMotor.getAppliedOutput());
+    m_logExtensionBusVoltage.append(m_extensionMotor.getBusVoltage());
+    m_logExtensionCurrent.append(m_extensionMotor.getOutputCurrent());
   }
 }
