@@ -9,6 +9,7 @@ import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 
 import edu.wpi.first.wpilibj.PowerDistribution;
+import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -155,7 +156,7 @@ public class RobotContainer {
       .and(m_manipulatorController::getYButton)
       .whileTrue(new ScoreMedium(m_armExtension, m_armTilt, 1.0, m_suction));
 
-    new Trigger(() -> m_suction.hasVacuumSeal())
+    new Trigger(() -> (RobotState.isTeleop() && m_suction.hasVacuumSeal()))
       .onTrue(new RumbleControllers(m_driverController, m_manipulatorController));
   }
 
