@@ -42,7 +42,7 @@ public class Constants {
          * The gear ratio for the arm that converts motor rotations into inches
          * of extension of the arm.
          */
-        public static final double kExtendRotationsToInches = (1.0 / 2.0) / 4.0;
+        public static final double kExtendRotationsToInches = (1.0 / 2.0) / 3.0;
 
         /*
          * The gear ratio for the arm that converts motor rotations into inches
