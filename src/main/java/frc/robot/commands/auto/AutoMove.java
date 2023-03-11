@@ -8,7 +8,6 @@ package frc.robot.commands.auto;
 import com.pathplanner.lib.PathPlannerTrajectory;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.commands.drive.ResetSwerve;
 import frc.robot.subsystems.Drive;
 
 public class AutoMove extends SequentialCommandGroup {
@@ -17,7 +16,6 @@ public class AutoMove extends SequentialCommandGroup {
     Drive drive,
     PathPlannerTrajectory trajectory) {
       addCommands(
-      new ResetSwerve(drive),
       new FollowTrajectory(trajectory, true, drive)
     );
   }

@@ -20,7 +20,7 @@ public class MoveToLow extends SequentialCommandGroup {
     Double speed
   ) {
     addCommands(
-      new ExtendArmToLength(armExtension, speed, Constants.Arm.kExtendReverseLimit)
+      new ExtendArmToLength(armExtension, speed, Constants.Arm.kExtensionResetPosition)
         .withTimeout(Constants.Arm.kExtensionTimeOut), 
       new TiltArmToHeight(armTilt, speed, 6.0)
         .withTimeout(Constants.Arm.kTiltTimeOut),
