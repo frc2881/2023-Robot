@@ -146,7 +146,7 @@ public class RobotContainer {
       .whileTrue(new MoveToLow(m_armExtension, m_armTilt, 1.0));
 
     new Trigger(() -> m_manipulatorController.getPOV() == 270)
-      .whileTrue(new MoveToPickup(m_armExtension, m_armTilt, 1.0));
+      .whileTrue(new MoveToPickup(m_armExtension, m_armTilt, 1.0, m_suction));
 
     /* Uses D-Pad + Y button to score */
     new Trigger(() -> m_manipulatorController.getPOV() == 0)
