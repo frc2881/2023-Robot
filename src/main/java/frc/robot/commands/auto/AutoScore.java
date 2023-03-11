@@ -6,10 +6,8 @@
 package frc.robot.commands.auto;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
-
-import frc.robot.commands.arm.ExtendArmToLength;
-import frc.robot.commands.arm.TiltArmToHeight;
 import frc.robot.commands.arm.Score.ScoreHigh;
 import frc.robot.commands.suction.DisableSuction;
 import frc.robot.commands.suction.EnableSuction;
@@ -27,14 +25,9 @@ public class AutoScore extends SequentialCommandGroup {
     Intake intake
   ) {
     addCommands(
+      new WaitCommand(0.02),
       new EnableSuction(suction),
-      new TiltArmToHeight(armTilt, 0.95, 0.82)
-        .withTimeout(1.0),
-      new ExtendArmToLength(armExtension, 0.95, 5.6)
-        .withTimeout(1.0),
       new WaitUntilCommand(suction::hasVacuumSeal),
-      new ExtendArmToLength(armExtension, 0.95, 0.0)
-        .withTimeout(1.0),
       new ScoreHigh(armExtension, armTilt, 1.0, suction),
       new DisableSuction(suction)
     );

@@ -5,6 +5,7 @@
 
 package frc.robot.commands.arm.MoveTo;
 
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
 import frc.robot.commands.arm.ExtendArmToLength;
@@ -20,12 +21,14 @@ public class MoveToHigh extends SequentialCommandGroup {
     Double speed
   ) {
     addCommands(
-      new ExtendArmToLength(armExtension, speed, Constants.Arm.kExtendReverseLimit)
+      new ExtendArmToLength(armExtension, speed, 3.0)
         .withTimeout(Constants.Arm.kExtensionTimeOut), 
-      new TiltArmToHeight(armTilt, speed, 16.5)
-        .withTimeout(Constants.Arm.kTiltTimeOut),
-      new ExtendArmToLength(armExtension, speed, 27.5)
-        .withTimeout(Constants.Arm.kExtensionTimeOut)
+      new TiltArmToHeight(armTilt, speed, 10.0),
+      new ParallelCommandGroup(
+        new TiltArmToHeight(armTilt, speed, 16.5)
+          .withTimeout(Constants.Arm.kTiltTimeOut),
+        new ExtendArmToLength(armExtension, speed, 27.5)
+          .withTimeout(Constants.Arm.kExtensionTimeOut))
     );
   }
   
