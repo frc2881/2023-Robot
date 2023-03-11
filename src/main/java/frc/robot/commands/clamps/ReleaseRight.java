@@ -11,9 +11,9 @@ public class ReleaseRight extends CommandBase {
   private Clamps m_clamps;
   private Double m_speed;
 
-  public ReleaseRight(Clamps clamps, Double speed) {
+  public ReleaseRight(Clamps clamps) {
     m_clamps = clamps;
-    m_speed = speed;
+    m_speed = 0.15;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 

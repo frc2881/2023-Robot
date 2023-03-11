@@ -10,11 +10,11 @@ import frc.robot.subsystems.Clamps;
 
 public class AttachLeft extends CommandBase {
   private Clamps m_clamps;
-  private Double m_speed;
+  private Double m_speed; 
 
-  public AttachLeft(Clamps clamps, Double speed) {
+  public AttachLeft(Clamps clamps) {
     m_clamps = clamps;
-    m_speed = speed;
+    m_speed = -0.15;
 
     addRequirements(m_clamps);
 

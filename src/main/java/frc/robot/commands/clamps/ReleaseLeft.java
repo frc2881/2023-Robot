@@ -11,9 +11,9 @@ public class ReleaseLeft extends CommandBase {
   private Clamps m_clamps;
   private Double m_speed;
   /** Creates a new ReleaseLeft. */
-  public ReleaseLeft(Clamps clamps, Double speed) {
+  public ReleaseLeft(Clamps clamps) {
     m_clamps = clamps;
-    m_speed = speed;
+    m_speed = -0.15;
 
     addRequirements(m_clamps);
 
