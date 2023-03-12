@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.arm.ArmExtendOverride;
 import frc.robot.commands.arm.ArmTiltOverride;
@@ -51,7 +52,10 @@ import frc.robot.subsystems.ArmTilt;
 import frc.robot.subsystems.Clamps;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.PrettyLights;
 import frc.robot.subsystems.Suction;
+import frc.robot.subsystems.PrettyLights.PanelLocation;
+import frc.robot.subsystems.PrettyLights.Pattern;
 
 public class RobotContainer {
   private final PowerDistribution m_powerDistribution = new PowerDistribution(1, ModuleType.kRev);
@@ -61,6 +65,7 @@ public class RobotContainer {
   private ArmTilt m_armTilt = new ArmTilt();
   private Intake m_intake = null; // HACK: disabling intake since not installed
   private Clamps m_clamps = new Clamps();
+  private PrettyLights m_lights = new PrettyLights();
 
   private final XboxController m_driverController = new XboxController(Constants.Controllers.kDriverControllerPort);
   private final XboxController m_manipulatorController = new XboxController(Constants.Controllers.kManipulatorControllerPort);
@@ -71,6 +76,7 @@ public class RobotContainer {
     setupDrive(); 
     setupControllers();
     setupAuto();
+    setupLights();
   }
 
   private void setupDrive() {
@@ -120,6 +126,18 @@ public class RobotContainer {
     /* Toggles Suction on or off */
     new Trigger(m_manipulatorController::getAButton)
       .onTrue(new ToggleSuction(m_suction));
+
+    new Trigger(m_manipulatorController::getXButton)
+      .onTrue(new InstantCommand(() -> {m_lights.setPattern(Pattern.Heart, PanelLocation.Both);}));
+
+    new Trigger(m_manipulatorController::getBButton)
+      .onTrue(new InstantCommand(() -> {m_lights.setPattern(Pattern.None, PanelLocation.Both);}));
+
+    new Trigger(m_manipulatorController::getLeftBumper)
+      .onTrue(new InstantCommand(() -> {m_lights.setPattern(Pattern.Cube, PanelLocation.Both);}));
+
+    new Trigger(m_manipulatorController::getRightBumper)
+      .onTrue(new InstantCommand(() -> {m_lights.setPattern(Pattern.Cone, PanelLocation.Both);}));
 
     /* Runs the arm using joysticks */
     new Trigger(() -> Math.abs(m_manipulatorController.getLeftY()) > 0.1)
@@ -211,6 +229,10 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
     return m_autonomousChooser.getSelected();
+  }
+
+  private void setupLights() {
+    m_lights.setPattern(Pattern.Heart, PanelLocation.Both);
   }
   
   public void resetRobot() {
