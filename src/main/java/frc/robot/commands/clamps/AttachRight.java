@@ -12,9 +12,9 @@ public class AttachRight extends CommandBase {
   private Clamps m_clamps;
   private Double m_speed;
 
-  public AttachRight(Clamps clamps, Double speed) {
+  public AttachRight(Clamps clamps) {
     m_clamps = clamps;
-    m_speed = speed;
+    m_speed = 0.15;
   }
 
   @Override

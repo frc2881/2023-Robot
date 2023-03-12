@@ -67,7 +67,7 @@ public class Constants {
          /*
          * The maximum distance (in rotations) that the arm can go down.
          */
-        public static final double kTiltReverseLimit = 0.0;
+        public static final double kTiltReverseLimit = 0.15;
 
         public static final double kMinSafeTilt = 2.6;
 
@@ -109,68 +109,6 @@ public class Constants {
 
         public static final double kExtensionResetPosition = 3.0;
 
-
-        /*
-         * High Cone Tilt Height
-         */
-        public static final double kHighConeTilt = 1;
-
-        /*
-         * Middle Cone Tilt Height
-         */
-        public static final double kMiddleConeTilt = 1;
-
-        /*
-         * Low Cone Tilt Height
-         */
-        public static final double kLowConeTilt = 1;
-
-        /*
-         * High Cone Extension
-         */
-        public static final double kHighConeExtend = 1;
-
-        /*
-         * Middle Cone Extension
-         */
-        public static final double kMiddleConeExtend = 1;
-
-        /*
-         * Low Cone Extension
-         */
-        public static final double kLowConeExtend = 1;
-
-        /*
-         * High Cube Tilt Height
-         */
-        public static final double kHighCubeTilt = 1;
-
-        /*
-         * Middle Cube Tilt Height
-         */
-        public static final double kMiddleCubeTilt = 1;
-
-        /*
-         * Low Cube Tilt Height
-         */
-        public static final double kLowCubeTilt = 1;
-
-        /*
-         * High Cube Extension
-         */
-        public static final double kHighCubeExtend = 1;
-
-        /*
-         * Middle Cube Extension
-         */
-        public static final double kMiddleCubeExtend = 1;
-
-        /*
-         * Low Cube Extension
-         */
-        public static final double kLowCubeExtend = 1;
-
-
     }
 
     public static final class Clamps {
@@ -203,10 +141,10 @@ public class Constants {
             new Translation2d(-kWheelBase / 2, -kTrackWidth / 2));
     
         // Angular offsets of the modules relative to the chassis in radians
-        public static final double kFrontLeftChassisAngularOffset = 5.939637; 
-        public static final double kFrontRightChassisAngularOffset = 2.844299; 
-        public static final double kRearLeftChassisAngularOffset = 1.606404; 
-        public static final double kRearRightChassisAngularOffset = 4.464904; 
+        public static final double kFrontLeftChassisAngularOffset = 2.7472 + Math.PI; 
+        public static final double kFrontRightChassisAngularOffset = 6.0334 - Math.PI; 
+        public static final double kRearLeftChassisAngularOffset =  4.8214 - Math.PI; 
+        public static final double kRearRightChassisAngularOffset = 1.2263 + Math.PI; 
     
         // SPARK MAX CAN IDs
         public static final int kFrontLeftDrivingCanId = 15;
@@ -364,22 +302,22 @@ public class Constants {
         /*
          * The target pressure for bottom vacuum state in PSI
          */
-        public static final double kTargetPressureBottom = 19;
+        public static final double kTargetPressureBottom = 19.5;
 
         /*
          * The minimum pressure for bottom vacuum state in PSI
          */
-        public static final double kMinimumPressureBottom = 21;
+        public static final double kMinimumPressureBottom = 21.5;
 
         /*
          * The target pressure for top vacuum state in PSI
          */
-        public static final double kTargetPressureTop = 19;
+        public static final double kTargetPressureTop = 19.5;
 
         /*
          * The minimum pressure for top vacuum state in PSI
          */
-        public static final double kMinimumPressureTop = 21;
+        public static final double kMinimumPressureTop = 21.5;
 
       }
 
