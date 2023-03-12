@@ -8,8 +8,10 @@ package frc.robot.subsystems;
 import java.util.Optional;
 
 import org.photonvision.EstimatedRobotPose;
+import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 
+import edu.wpi.first.apriltag.AprilTagFieldLayout.OriginPosition;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -18,7 +20,9 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotState;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -80,30 +84,49 @@ public class Drive extends SubsystemBase {
   private final Field2d m_field = new Field2d();
 
   public Drive() {
-    m_leftPhotonCamera = new PhotonCameraWrapper(
-      Constants.Vision.kLeftCameraName,
-      Constants.Vision.kLeftRobotToCamera,
-      PoseStrategy.MULTI_TAG_PNP,
-      Constants.Vision.kAprilTagFieldLayout
-    );
-    m_rightPhotonCamera = new PhotonCameraWrapper(
-      Constants.Vision.kRightCameraName,
-      Constants.Vision.kRightRobotToCamera,
-      PoseStrategy.MULTI_TAG_PNP,
-      Constants.Vision.kAprilTagFieldLayout
-    );
-
     SmartDashboard.putData("Field", m_field);
   }
 
   @Override
   public void periodic() {
+    initializePhotonCameras();
     updatePose();
     updateTelemetry();
     if (LiveWindow.isEnabled()) {
       updateField();
     }
     sampleModules();
+  }
+  private void initializePhotonCameras() {
+    if (m_leftPhotonCamera != null) { return; }
+
+    Alliance allience = DriverStation.getAlliance();
+
+    if (allience != Alliance.Invalid) {
+      Constants.Vision.kAprilTagFieldLayout.setOrigin(
+        allience == Alliance.Red 
+          ? OriginPosition.kRedAllianceWallRightSide
+          : OriginPosition.kBlueAllianceWallRightSide);
+
+      m_leftPhotonCamera = new PhotonCameraWrapper(
+        Constants.Vision.kLeftCameraName,
+        Constants.Vision.kLeftRobotToCamera,
+        PoseStrategy.MULTI_TAG_PNP,
+        Constants.Vision.kAprilTagFieldLayout
+      );
+
+      m_rightPhotonCamera = new PhotonCameraWrapper(
+        Constants.Vision.kRightCameraName,
+        Constants.Vision.kRightRobotToCamera,
+        PoseStrategy.MULTI_TAG_PNP,
+        Constants.Vision.kAprilTagFieldLayout
+      );  
+    }
+  }
+
+  public void resetPhotonCameras() {
+    m_leftPhotonCamera = null;
+    m_rightPhotonCamera = null;
   }
 
   private void sampleModules(){
@@ -130,20 +153,21 @@ public class Drive extends SubsystemBase {
         m_rearRight.getPosition()
     });
     
-    // TODO: resolve issue of auto starting on red side doesn't invert/translate path starting point
-    if (!RobotState.isAutonomous()) {
-      Optional<EstimatedRobotPose> leftCameraResult = m_leftPhotonCamera.getEstimatedGlobalPose(m_poseEstimator.getEstimatedPosition());
-      if (leftCameraResult.isPresent()) {
-        EstimatedRobotPose camPose = leftCameraResult.get();
-        m_poseEstimator.addVisionMeasurement(camPose.estimatedPose.toPose2d(), camPose.timestampSeconds);
-      } else {
-        Optional<EstimatedRobotPose> rightCameraResult = m_rightPhotonCamera.getEstimatedGlobalPose(m_poseEstimator.getEstimatedPosition());
-        if (rightCameraResult.isPresent()) {
-          EstimatedRobotPose camPose = rightCameraResult.get();
+    if (m_leftPhotonCamera != null && m_rightPhotonCamera != null) {
+      if (!RobotState.isAutonomous()) {
+        Optional<EstimatedRobotPose> leftCameraResult = m_leftPhotonCamera.getEstimatedGlobalPose(m_poseEstimator.getEstimatedPosition());
+        if (leftCameraResult.isPresent()) {
+          EstimatedRobotPose camPose = leftCameraResult.get();
           m_poseEstimator.addVisionMeasurement(camPose.estimatedPose.toPose2d(), camPose.timestampSeconds);
+        } else {
+          Optional<EstimatedRobotPose> rightCameraResult = m_rightPhotonCamera.getEstimatedGlobalPose(m_poseEstimator.getEstimatedPosition());
+          if (rightCameraResult.isPresent()) {
+            EstimatedRobotPose camPose = rightCameraResult.get();
+            m_poseEstimator.addVisionMeasurement(camPose.estimatedPose.toPose2d(), camPose.timestampSeconds);
+          }
         }
       }
-    }
+    }  
   }
 
   /**
