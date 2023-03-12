@@ -5,7 +5,9 @@
 
 package frc.robot.commands.arm.MoveTo;
 
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 import frc.robot.commands.arm.ExtendArmToLength;
 import frc.robot.commands.arm.TiltArmToHeight;
@@ -19,12 +21,16 @@ public class MoveToMedium extends SequentialCommandGroup {
     ArmTilt armTilt, 
     Double speed
   ) {
+
     addCommands(
-      new ExtendArmToLength(armExtension, speed, Constants.Arm.kExtensionResetPosition)
-        .withTimeout(Constants.Arm.kExtensionTimeOut), 
-      new TiltArmToHeight(armTilt, speed, 15.0)
+      new ConditionalCommand(
+        new ExtendArmToLength(armExtension, speed, Constants.Arm.kExtensionResetPosition)
+          .withTimeout(Constants.Arm.kExtensionTimeOut),
+          new WaitCommand(0.001), 
+        () -> (armExtension.getEncoderPosition() > Constants.Arm.kExtensionResetPosition)),
+      new TiltArmToHeight(armTilt, speed, 13.5)
         .withTimeout(Constants.Arm.kTiltTimeOut),
-      new ExtendArmToLength(armExtension, speed, 12.0)
+      new ExtendArmToLength(armExtension, speed, 13.0)
         .withTimeout(Constants.Arm.kExtensionTimeOut)
     );
   }

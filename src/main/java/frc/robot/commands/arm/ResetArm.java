@@ -18,7 +18,7 @@ public class ResetArm extends SequentialCommandGroup {
         .withTimeout(1.0),
       new ExtendArmToLength(armExtension, speed, Constants.Arm.kExtendReverseLimit)
         .withTimeout(2.5), 
-      new TiltArmToHeight(armTilt, speed, 0.0)
+      new TiltArmToHeight(armTilt, speed, Constants.Arm.kTiltReverseLimit)
         .withTimeout(2.5)
     );
   }

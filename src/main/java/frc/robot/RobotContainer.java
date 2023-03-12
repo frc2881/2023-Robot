@@ -9,8 +9,8 @@ import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 
 import edu.wpi.first.wpilibj.PowerDistribution;
-import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
+import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -27,6 +27,7 @@ import frc.robot.commands.arm.MoveTo.MoveToPickup;
 import frc.robot.commands.arm.Score.ScoreHigh;
 import frc.robot.commands.arm.Score.ScoreMedium;
 import frc.robot.commands.auto.AutoBalance;
+import frc.robot.commands.auto.AutoMiddleScoreMove;
 import frc.robot.commands.auto.AutoMove;
 import frc.robot.commands.auto.AutoScore;
 import frc.robot.commands.auto.AutoScoreBalance;
@@ -66,7 +67,6 @@ public class RobotContainer {
 
   private final SendableChooser<Command> m_autonomousChooser = new SendableChooser<Command>();
  
-  
   public RobotContainer() {
     setupDrive(); 
     setupControllers();
@@ -157,7 +157,8 @@ public class RobotContainer {
       .and(m_manipulatorController::getYButton)
       .whileTrue(new ScoreMedium(m_armExtension, m_armTilt, 1.0, m_suction));
 
-    new Trigger(() -> (RobotState.isTeleop() && m_suction.hasVacuumSeal()))
+    // RUMBLES
+    new Trigger(() -> (RobotState.isTeleop() && m_suction.hasMinVacuum()))
       .onTrue(new RumbleControllers(m_driverController, m_manipulatorController, RumblePattern.GOOD))
       .onFalse(new RumbleControllers(m_driverController, m_manipulatorController, RumblePattern.BAD));
   }
@@ -168,10 +169,11 @@ public class RobotContainer {
     PathPlannerTrajectory balanceMidPath = PathPlanner.loadPath("Balance Mid", 1.0, 1.0);
     PathPlannerTrajectory moveWallPath = PathPlanner.loadPath("Move Wall", 1.5, 1.5);
     PathPlannerTrajectory moveDividerPath = PathPlanner.loadPath("Move Divider", 1.5, 1.5);
+    PathPlannerTrajectory moveMiddlePath = PathPlanner.loadPath("Move Middle", 3, 3);
     PathPlannerTrajectory wallBalancePath = PathPlanner.loadPath("Wall Balance", 2, 3);
     PathPlannerTrajectory dividerBalancePath = PathPlanner.loadPath("Divider Balance", 2, 3);
     PathPlannerTrajectory middleBalancePath = PathPlanner.loadPath("Middle Balance", 2, 3);
-
+    
     m_autonomousChooser.setDefaultOption("None", null);
 
     m_autonomousChooser.addOption("Score", 
@@ -179,6 +181,9 @@ public class RobotContainer {
 
     m_autonomousChooser.addOption("Middle Balance",
       new AutoBalance(m_drive, middleBalancePath, balanceMidPath));
+
+    m_autonomousChooser.addOption("Middle Score Move",
+      new AutoMiddleScoreMove(m_drive, m_suction, m_armExtension, m_armTilt, m_intake, moveMiddlePath));
 
     m_autonomousChooser.addOption("Middle Score Balance", 
       new AutoScoreBalance(m_drive, m_suction, m_armExtension, m_armTilt, m_intake, middleBalancePath, balanceMidPath));
@@ -192,7 +197,8 @@ public class RobotContainer {
     m_autonomousChooser.addOption("Divider Score Balance", 
       new AutoScoreBalance(m_drive, m_suction, m_armExtension, m_armTilt, m_intake, dividerBalancePath, balancePath));
 
-    m_autonomousChooser.addOption("Wall Move", new AutoMove(m_drive, moveWallPath));
+    m_autonomousChooser.addOption("Wall Move", 
+      new AutoMove(m_drive, moveWallPath));
 
     m_autonomousChooser.addOption("Wall Score Move", 
       new AutoScoreMove(m_drive, m_suction, m_armExtension, m_armTilt, m_intake, moveWallPath));
