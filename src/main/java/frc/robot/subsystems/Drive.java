@@ -8,7 +8,6 @@ package frc.robot.subsystems;
 import java.util.Optional;
 
 import org.photonvision.EstimatedRobotPose;
-import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout.OriginPosition;
@@ -89,7 +88,7 @@ public class Drive extends SubsystemBase {
 
   @Override
   public void periodic() {
-    initializePhotonCameras();
+    updatePhotonCameras();
     updatePose();
     updateTelemetry();
     if (LiveWindow.isEnabled()) {
@@ -98,8 +97,8 @@ public class Drive extends SubsystemBase {
     sampleModules();
   }
   
-  private void initializePhotonCameras() {
-    if (m_leftPhotonCamera != null) { return; }
+  private void updatePhotonCameras() {
+    if ( m_leftPhotonCamera != null &&  m_rightPhotonCamera != null) { return; }
 
     Alliance allience = DriverStation.getAlliance();
 
@@ -126,8 +125,14 @@ public class Drive extends SubsystemBase {
   }
 
   public void resetPhotonCameras() {
-    m_leftPhotonCamera = null;
-    m_rightPhotonCamera = null;
+    if (m_leftPhotonCamera != null) {
+      m_leftPhotonCamera.dispose();
+      m_leftPhotonCamera = null;
+    }
+    if (m_rightPhotonCamera != null) {
+      m_rightPhotonCamera.dispose();
+      m_rightPhotonCamera = null;
+    }
   }
 
   private void sampleModules(){
@@ -153,22 +158,25 @@ public class Drive extends SubsystemBase {
         m_rearLeft.getPosition(),
         m_rearRight.getPosition()
     });
-    
-    if (m_leftPhotonCamera != null && m_rightPhotonCamera != null) {
-      if (!RobotState.isAutonomous()) {
-        Optional<EstimatedRobotPose> leftCameraResult = m_leftPhotonCamera.getEstimatedGlobalPose(m_poseEstimator.getEstimatedPosition());
-        if (leftCameraResult.isPresent()) {
-          EstimatedRobotPose camPose = leftCameraResult.get();
-          m_poseEstimator.addVisionMeasurement(camPose.estimatedPose.toPose2d(), camPose.timestampSeconds);
-        } else {
-          Optional<EstimatedRobotPose> rightCameraResult = m_rightPhotonCamera.getEstimatedGlobalPose(m_poseEstimator.getEstimatedPosition());
-          if (rightCameraResult.isPresent()) {
-            EstimatedRobotPose camPose = rightCameraResult.get();
-            m_poseEstimator.addVisionMeasurement(camPose.estimatedPose.toPose2d(), camPose.timestampSeconds);
-          }
-        }
+    if (!RobotState.isAutonomous()) {
+      updateVisionMeasurement(m_leftPhotonCamera);
+      updateVisionMeasurement(m_rightPhotonCamera);        
+    }
+  }
+
+  private void updateVisionMeasurement(PhotonCameraWrapper photonCamera) {
+    if (photonCamera != null) {
+      Optional<EstimatedRobotPose> pipelineResult = photonCamera.getEstimatedGlobalPose(m_poseEstimator.getEstimatedPosition());
+      if (pipelineResult.isPresent()) {
+        EstimatedRobotPose estimatedRobotPose = pipelineResult.get();
+        Pose2d estimatedPose = estimatedRobotPose.estimatedPose.toPose2d();
+        Pose2d currentPose = getPose();
+        double translationDistance = estimatedPose.getTranslation().getDistance(currentPose.getTranslation());
+        //if (translationDistance <= 1.0) {
+          m_poseEstimator.addVisionMeasurement(estimatedPose, estimatedRobotPose.timestampSeconds);
+        //}
       }
-    }  
+    }
   }
 
   /**
@@ -187,14 +195,14 @@ public class Drive extends SubsystemBase {
    */
   public void resetPose(Pose2d pose) {
     m_poseEstimator.resetPosition(
-        Rotation2d.fromDegrees(m_gyro.getAngle()),
-        new SwerveModulePosition[] {
-            m_frontLeft.getPosition(),
-            m_frontRight.getPosition(),
-            m_rearLeft.getPosition(),
-            m_rearRight.getPosition()
-        },
-        pose);
+      Rotation2d.fromDegrees(m_gyro.getAngle()),
+      new SwerveModulePosition[] {
+        m_frontLeft.getPosition(),
+        m_frontRight.getPosition(),
+        m_rearLeft.getPosition(),
+        m_rearRight.getPosition()
+      },
+      pose);
   }
 
   /**
@@ -213,11 +221,12 @@ public class Drive extends SubsystemBase {
     // rot *= Constants.Drive.kMaxAngularSpeed;
 
     var swerveModuleStates = Constants.Drive.kDriveKinematics.toSwerveModuleStates(
-        (m_swerveDriveMode == SwerveDriveMode.FIELD_CENTRIC)
-            ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, Rotation2d.fromDegrees(m_gyro.getAngle()))
-            : new ChassisSpeeds(xSpeed, ySpeed, rot));
-    SwerveDriveKinematics.desaturateWheelSpeeds(
-        swerveModuleStates, Constants.Drive.kMaxSpeedMetersPerSecond);
+      (m_swerveDriveMode == SwerveDriveMode.FIELD_CENTRIC)
+        ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, Rotation2d.fromDegrees(m_gyro.getAngle()))
+        : new ChassisSpeeds(xSpeed, ySpeed, rot));
+
+    SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.Drive.kMaxSpeedMetersPerSecond);
+
     m_frontLeft.setDesiredState(swerveModuleStates[0]);
     m_frontRight.setDesiredState(swerveModuleStates[1]);
     m_rearLeft.setDesiredState(swerveModuleStates[2]);
@@ -281,6 +290,9 @@ public class Drive extends SubsystemBase {
    */
   public double getTurnRate() {
     return m_gyro.getRate() * (Constants.Drive.kGyroReversed ? -1.0 : 1.0);
+  }
+  public double getRoll() {
+    return m_gyro.getRoll();
   }
 
   @Override

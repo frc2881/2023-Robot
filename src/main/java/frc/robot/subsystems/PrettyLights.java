@@ -5,10 +5,9 @@
 
 package frc.robot.subsystems;
 
-import com.fasterxml.jackson.databind.ser.std.StdKeySerializers.Default;
-
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -24,17 +23,16 @@ public class PrettyLights extends SubsystemBase {
     None,
     Heart,
     Cone,
-    Cube
+    Cube,
+    Charge
   }
 
   public static enum ColorPreset 
   {
-    Pink(0x33001A),
     Cone(0x1A0F00),
-    Cube(0x0D001A), 
-    Silver(0xCCCCCC), 
-    Green(0x00CC00),
-    Red(0xCC0000),
+    Cube(0x0D001A),
+    Charge(0x003300), 
+    Pink(0x33001A),
     Black(0x000000);
   
     private int color;
@@ -83,6 +81,9 @@ public class PrettyLights extends SubsystemBase {
       case Cube:
         shape = m_shapeCube;
         break;
+      case Charge:
+        shape = m_shapeCharge;
+        break;
       case None:
         shape = m_shapeBlank;
         break;
@@ -94,6 +95,8 @@ public class PrettyLights extends SubsystemBase {
     else {
       setShape(shape, panel);
     }
+
+    SmartDashboard.putString("Lights/Pattern", pattern.toString());
   }
 
   private final int[] m_panelFront = {
@@ -122,6 +125,7 @@ public class PrettyLights extends SubsystemBase {
   private final int PK = ColorPreset.Pink.getColor();
   private final int CN = ColorPreset.Cone.getColor();
   private final int CB = ColorPreset.Cube.getColor();
+  private final int CH = ColorPreset.Charge.getColor();
 
   private final int[] m_shapeBlank = {
     __, __, __, __, __, __, __, __,
@@ -165,6 +169,17 @@ public class PrettyLights extends SubsystemBase {
     __, CB, CB, CB, CB, CB, CB, __,
     __, __, CB, CB, CB, CB, __, __,
     __, __, __, __, __, __, __, __
+  };
+
+  private final int[] m_shapeCharge = {
+    __, __, __, __, CH, __, __, __,
+    __, __, __, CH, CH, __, __, __,
+    __, __, CH, CH, __, __, __, __,
+    __, CH, CH, CH, __, __, __, __,
+    CH, CH, CH, CH, CH, CH, CH, CH,
+    __, __, __, __, __, CH, CH, __,
+    __, __, __, __, CH, CH, __, __,
+    __, __, __, CH, __, __, __, __
   };
 }
 

@@ -8,6 +8,7 @@ package frc.robot;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.RobotState;
@@ -33,6 +34,7 @@ import frc.robot.commands.auto.AutoMove;
 import frc.robot.commands.auto.AutoScore;
 import frc.robot.commands.auto.AutoScoreBalance;
 import frc.robot.commands.auto.AutoScoreMove;
+import frc.robot.commands.auto.Balance;
 import frc.robot.commands.clamps.AttachLeft;
 import frc.robot.commands.clamps.AttachRight;
 import frc.robot.commands.clamps.ReleaseLeft;
@@ -42,6 +44,7 @@ import frc.robot.commands.controllers.RumbleControllers.RumblePattern;
 import frc.robot.commands.drive.DriveRobotCentric;
 import frc.robot.commands.drive.DriveWithJoysticks;
 import frc.robot.commands.drive.ResetSwerve;
+import frc.robot.commands.drive.SetX;
 import frc.robot.commands.drive.ZeroHeading;
 //import frc.robot.commands.intake.RunRollersInward;
 //import frc.robot.commands.intake.RunRollersOutward;
@@ -114,6 +117,15 @@ public class RobotContainer {
 
     new Trigger(() -> m_driverController.getPOV() == 270)
       .whileTrue(new ReleaseLeft(m_clamps));
+
+    new Trigger(m_driverController::getAButton)
+      .whileTrue(new Balance(m_drive, true));
+
+    new Trigger(m_driverController::getBButton)
+      .whileTrue(new Balance(m_drive, false));
+    
+    new Trigger(m_driverController::getXButton)
+      .onTrue(new SetX(m_drive));
 
     // new Trigger(m_driverController::getAButton)
     //   .whileTrue(new RunRollersInward(m_intake));
@@ -233,6 +245,9 @@ public class RobotContainer {
 
   private void setupLights() {
     m_lights.setPattern(Pattern.Heart, PanelLocation.Both);
+
+    new Trigger(() -> (DriverStation.getMatchTime() <= 35))
+      .onTrue(new InstantCommand(() -> { m_lights.setPattern(Pattern.Charge, PanelLocation.Both); }));
   }
   
   public void resetRobot() {

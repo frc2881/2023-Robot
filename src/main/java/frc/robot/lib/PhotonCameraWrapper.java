@@ -16,32 +16,39 @@ import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Transform3d;
 
- public class PhotonCameraWrapper {
-     public PhotonCamera photonCamera;
-     public PhotonPoseEstimator photonPoseEstimator;
+public class PhotonCameraWrapper {
+	private PhotonCamera m_photonCamera;
+	private PhotonPoseEstimator m_photonPoseEstimator;
  
-     public PhotonCameraWrapper(
-        String cameraName, 
-        Transform3d robotToCamera,
-        PoseStrategy poseStrategy,
-        AprilTagFieldLayout aprilTagFieldLayout
-    ) {  
-        photonPoseEstimator = new PhotonPoseEstimator(
-            aprilTagFieldLayout,
-            poseStrategy, 
-            new PhotonCamera(cameraName), 
-            robotToCamera
-        ); 
-        photonPoseEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
-     }
+	public PhotonCameraWrapper(
+		String cameraName, 
+		Transform3d robotToCamera,
+		PoseStrategy poseStrategy,
+		AprilTagFieldLayout aprilTagFieldLayout
+	) {  
+		m_photonCamera = new PhotonCamera(cameraName);
+		m_photonPoseEstimator = new PhotonPoseEstimator(
+			aprilTagFieldLayout,
+			poseStrategy, 
+			m_photonCamera, 
+			robotToCamera
+		); 
+		m_photonPoseEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
+	}
  
-     /**
-      * @param estimatedRobotPose The current best guess at robot pose
-      * @return A pair of the fused camera observations to a single Pose2d on the field, and the time
-      *     of the observation. Assumes a planar field and the robot is always firmly on the ground
-      */
-     public Optional<EstimatedRobotPose> getEstimatedGlobalPose(Pose2d prevEstimatedRobotPose) {
-         photonPoseEstimator.setReferencePose(prevEstimatedRobotPose);
-         return photonPoseEstimator.update();
-     }
- }
+	/**
+	* @param estimatedRobotPose The current best guess at robot pose
+	* @return A pair of the fused camera observations to a single Pose2d on the field, and the time
+	*     of the observation. Assumes a planar field and the robot is always firmly on the ground
+	*/
+	public Optional<EstimatedRobotPose> getEstimatedGlobalPose(Pose2d prevEstimatedRobotPose) {
+		m_photonPoseEstimator.setReferencePose(prevEstimatedRobotPose);
+		return m_photonPoseEstimator.update();
+	}
+
+	public void dispose() {
+		if (m_photonCamera.isConnected()) {
+			//m_photonCamera.close();
+		}
+	}
+}

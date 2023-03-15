@@ -158,6 +158,9 @@ public class Constants {
         public static final int kRearRightTurningCanId = 8;
     
         public static final boolean kGyroReversed = false;
+
+        public static final double kMaxRoll = 15.0;
+        public static final double kMinRoll = 13.5;
       }
     
       public static final class SwerveModule {
@@ -216,6 +219,7 @@ public class Constants {
     
         public static final int kDrivingMotorCurrentLimit = 50; // amps
         public static final int kTurningMotorCurrentLimit = 20; // amps
+        
       }
 
       public static final class Intake {
