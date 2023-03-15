@@ -31,7 +31,7 @@ public class PrettyLights extends SubsystemBase {
   {
     Cone(0x1A0F00),
     Cube(0x0D001A),
-    Charge(0x003300), 
+    Charge(0x33001A), 
     Pink(0x33001A),
     Black(0x000000);
   
@@ -155,8 +155,8 @@ public class PrettyLights extends SubsystemBase {
     __, __, __, CN, CN, __, __, __,
     __, __, CN, CN, CN, CN, __, __,
     __, __, CN, CN, CN, CN, __, __,
-    __, CN, CN, CN, CN, CN, CN, __,
-    __, CN, CN, CN, CN, CN, CN, __,
+    __, __, CN, CN, CN, CN, __, __,
+    CN, CN, CN, CN, CN, CN, CN, CN,
     CN, CN, CN, CN, CN, CN, CN, CN
   };
 
@@ -172,13 +172,13 @@ public class PrettyLights extends SubsystemBase {
   };
 
   private final int[] m_shapeCharge = {
+    __, __, __, __, __, __, __, __,
     __, __, __, __, CH, __, __, __,
-    __, __, __, CH, CH, __, __, __,
+    __, __, __, CH, __, __, __, __,
     __, __, CH, CH, __, __, __, __,
-    __, CH, CH, CH, __, __, __, __,
-    CH, CH, CH, CH, CH, CH, CH, CH,
-    __, __, __, __, __, CH, CH, __,
+    __, CH, CH, CH, CH, CH, CH, __,
     __, __, __, __, CH, CH, __, __,
+    __, __, __, __, CH, __, __, __,
     __, __, __, CH, __, __, __, __
   };
 }

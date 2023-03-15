@@ -143,7 +143,7 @@ public class RobotContainer {
       .onTrue(new InstantCommand(() -> {m_lights.setPattern(Pattern.Heart, PanelLocation.Both);}));
 
     new Trigger(m_manipulatorController::getBButton)
-      .onTrue(new InstantCommand(() -> {m_lights.setPattern(Pattern.None, PanelLocation.Both);}));
+      .onTrue(new InstantCommand(() -> {m_lights.setPattern(Pattern.Charge, PanelLocation.Both);}));
 
     new Trigger(m_manipulatorController::getLeftBumper)
       .onTrue(new InstantCommand(() -> {m_lights.setPattern(Pattern.Cube, PanelLocation.Both);}));

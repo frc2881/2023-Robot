@@ -173,6 +173,7 @@ public class Drive extends SubsystemBase {
         Pose2d currentPose = getPose();
         double translationDistance = estimatedPose.getTranslation().getDistance(currentPose.getTranslation());
         //if (translationDistance <= 1.0) {
+          SmartDashboard.putNumber("Drive/TranslationDistance", translationDistance);
           m_poseEstimator.addVisionMeasurement(estimatedPose, estimatedRobotPose.timestampSeconds);
         //}
       }
