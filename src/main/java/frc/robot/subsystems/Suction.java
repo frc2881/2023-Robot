@@ -9,8 +9,11 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.util.datalog.DataLog;
+import edu.wpi.first.util.datalog.DoubleLogEntry;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.Solenoid;
@@ -33,6 +36,17 @@ public class Suction extends SubsystemBase {
   private double m_currentPressureBottom = 0;
   private double m_currentPressureTop = 0;
 
+  private DoubleLogEntry m_logSuctionBottomPressure;
+  private DoubleLogEntry m_logSuctionBottomOutput;
+  private DoubleLogEntry m_logSuctionBottomBusVoltage;
+  private DoubleLogEntry m_logSuctionBottomCurrent;
+
+  private DoubleLogEntry m_logSuctionTopPressure; 
+  private DoubleLogEntry m_logSuctionTopOutput;
+  private DoubleLogEntry m_logSuctionTopBusVoltage;
+  private DoubleLogEntry m_logSuctionTopCurrent;
+  
+
   public Suction() {
     m_AnalogInputPressureBottom = new AnalogInput(Constants.Suction.kPressureSensorBottomId);
     m_AnalogInputPressureTop = new AnalogInput(Constants.Suction.kPressureSensorTopId);
@@ -51,6 +65,18 @@ public class Suction extends SubsystemBase {
 
     m_solenoidBottom = new Solenoid(PneumaticsModuleType.REVPH, Constants.Suction.kSolenoidBottomId);
     m_solenoidTop = new Solenoid(PneumaticsModuleType.REVPH, Constants.Suction.kSolenoidTopId);
+
+    DataLog log = DataLogManager.getLog();
+    m_logSuctionBottomPressure = new DoubleLogEntry(log, "/suction/bottom/pressure");
+    m_logSuctionBottomOutput = new DoubleLogEntry(log, "/suction/bottom/output");
+    m_logSuctionBottomBusVoltage = new DoubleLogEntry(log, "/suction/bottom/busVoltage");
+    m_logSuctionBottomCurrent = new DoubleLogEntry(log, "/suction/bottom/current");
+
+    m_logSuctionTopPressure = new DoubleLogEntry(log, "/suction/top/pressure");
+    m_logSuctionTopOutput = new DoubleLogEntry(log, "/suction/top/output");
+    m_logSuctionTopBusVoltage = new DoubleLogEntry(log, "/suction/top/busVoltage");
+    m_logSuctionTopCurrent = new DoubleLogEntry(log, "/suction/top/current");
+    
 
     SmartDashboard.putNumber("Suction/Bottom/Pressure/Minimum", Constants.Suction.kMinimumPressureBottom);
     SmartDashboard.putNumber("Suction/Bottom/Pressure/Target", Constants.Suction.kTargetPressureBottom);
@@ -111,6 +137,8 @@ public class Suction extends SubsystemBase {
     } 
 
     updateTelemetry();
+
+    logSuction();
   }
   
   public void enable() {  
@@ -163,5 +191,17 @@ public class Suction extends SubsystemBase {
   private void updateTelemetry() {
     SmartDashboard.putNumber("Suction/Bottom/Pressure/Current", m_currentPressureBottom);
     SmartDashboard.putNumber("Suction/Top/Pressure/Current", m_currentPressureTop);
+  }
+
+  private void logSuction() {
+    m_logSuctionBottomPressure.append(m_currentPressureBottom);
+    m_logSuctionBottomOutput.append(m_motorBottom.getAppliedOutput());
+    m_logSuctionBottomBusVoltage.append(m_motorBottom.getBusVoltage());
+    m_logSuctionBottomCurrent.append(m_motorBottom.getOutputCurrent());
+    
+    m_logSuctionTopPressure.append(m_currentPressureTop);
+    m_logSuctionTopOutput.append(m_motorTop.getAppliedOutput());
+    m_logSuctionTopBusVoltage.append(m_motorTop.getBusVoltage());
+    m_logSuctionTopCurrent.append(m_motorTop.getOutputCurrent());
   }
 }
