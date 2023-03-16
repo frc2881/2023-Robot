@@ -48,7 +48,7 @@ public class PhotonCameraWrapper {
 
 	public void dispose() {
 		if (m_photonCamera.isConnected()) {
-			//m_photonCamera.close();
+			//m_photonCamera.close(); // BUG: Photon Camera class currently throws an exception here
 		}
 	}
 }

@@ -22,8 +22,6 @@ import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.livewindow.LiveWindow;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -69,6 +67,8 @@ public class Drive extends SubsystemBase {
   public PhotonCameraWrapper m_leftPhotonCamera;
   public PhotonCameraWrapper m_rightPhotonCamera;
 
+  private boolean m_hasInitialVisionMeasurement = false;
+
   private final SwerveDrivePoseEstimator m_poseEstimator = 
     new SwerveDrivePoseEstimator(
       Constants.Drive.kDriveKinematics, 
@@ -80,20 +80,13 @@ public class Drive extends SubsystemBase {
         m_rearRight.getPosition()}, 
       new Pose2d());
 
-  private final Field2d m_field = new Field2d();
-
-  public Drive() {
-    SmartDashboard.putData("Field", m_field);
-  }
+  public Drive() {}
 
   @Override
   public void periodic() {
     updatePhotonCameras();
     updatePose();
     updateTelemetry();
-    if (LiveWindow.isEnabled()) {
-      updateField();
-    }
     sampleModules();
   }
   
@@ -133,6 +126,7 @@ public class Drive extends SubsystemBase {
       m_rightPhotonCamera.dispose();
       m_rightPhotonCamera = null;
     }
+    m_hasInitialVisionMeasurement = false;
   }
 
   private void sampleModules(){
@@ -172,9 +166,9 @@ public class Drive extends SubsystemBase {
         Pose2d estimatedPose = estimatedRobotPose.estimatedPose.toPose2d();
         Pose2d currentPose = getPose();
         double translationDistance = estimatedPose.getTranslation().getDistance(currentPose.getTranslation());
-        //if (translationDistance <= 1.0) {
-          SmartDashboard.putNumber("Drive/TranslationDistance", translationDistance);
+        //if (!m_hasInitialVisionMeasurement || translationDistance <= 1.0) {
           m_poseEstimator.addVisionMeasurement(estimatedPose, estimatedRobotPose.timestampSeconds);
+          m_hasInitialVisionMeasurement = true;
         //}
       }
     }
@@ -204,6 +198,7 @@ public class Drive extends SubsystemBase {
         m_rearRight.getPosition()
       },
       pose);
+      m_hasInitialVisionMeasurement = false;
   }
 
   /**
@@ -313,9 +308,5 @@ public class Drive extends SubsystemBase {
   private void updateTelemetry() {
     Pose2d pose = m_poseEstimator.getEstimatedPosition();
     SmartDashboard.putNumberArray("Drive/Pose",  new double[] { pose.getX(), pose.getY(), pose.getRotation().getDegrees() });
-  }
-
-  private void updateField() {
-    m_field.setRobotPose(m_poseEstimator.getEstimatedPosition());
   }
 }
