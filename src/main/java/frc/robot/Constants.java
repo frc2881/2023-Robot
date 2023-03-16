@@ -141,10 +141,10 @@ public class Constants {
             new Translation2d(-kWheelBase / 2, -kTrackWidth / 2));
     
         // Angular offsets of the modules relative to the chassis in radians
-        public static final double kFrontLeftChassisAngularOffset = 2.7472 + Math.PI; 
-        public static final double kFrontRightChassisAngularOffset = 6.0334 - Math.PI; 
-        public static final double kRearLeftChassisAngularOffset =  4.8214 - Math.PI; 
-        public static final double kRearRightChassisAngularOffset = 1.2263 + Math.PI; 
+        public static final double kFrontLeftChassisAngularOffset = 5.9241; 
+        public static final double kFrontRightChassisAngularOffset = 2.8438; 
+        public static final double kRearLeftChassisAngularOffset =  1.5975; 
+        public static final double kRearRightChassisAngularOffset = 4.4625; 
     
         // SPARK MAX CAN IDs
         public static final int kFrontLeftDrivingCanId = 15;

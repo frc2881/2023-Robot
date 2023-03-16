@@ -204,6 +204,8 @@ public class SwerveModule implements Sendable {
     m_logTurningBusVoltage.append(m_turningSparkMax.getBusVoltage());
     m_logTurningOutputCurrent.append(m_turningSparkMax.getOutputCurrent());
     m_logTurningAppliedOutput.append(m_turningSparkMax.getAppliedOutput());
+
+    SmartDashboard.putNumber("Drive/Swerve/" + m_location.toString() + "/TurningAbsoluteEncoderAverage", m_sum / 50);
   }
 
   public void resetTurningEncoder() {
