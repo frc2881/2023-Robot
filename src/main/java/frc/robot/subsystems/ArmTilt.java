@@ -24,9 +24,9 @@ public class ArmTilt extends SubsystemBase {
   private final RelativeEncoder m_tiltMotorEncoder;
   private final SparkMaxPIDController m_tiltPID;
   private final DoubleLogEntry m_logTiltPosition;
-  private final DoubleLogEntry m_logTiltOutput;
+  private final DoubleLogEntry m_logTiltAppliedOutput;
   private final DoubleLogEntry m_logTiltBusVoltage;
-  private final DoubleLogEntry m_logTiltCurrent;
+  private final DoubleLogEntry m_logTiltOutputCurrent;
 
   public ArmTilt() {
 
@@ -52,9 +52,9 @@ public class ArmTilt extends SubsystemBase {
 
     DataLog log = DataLogManager.getLog();
     m_logTiltPosition = new DoubleLogEntry(log, "/armTilt/position");
-    m_logTiltOutput = new DoubleLogEntry(log, "/armTilt/output");
+    m_logTiltAppliedOutput = new DoubleLogEntry(log, "/armTilt/output");
     m_logTiltBusVoltage = new DoubleLogEntry(log, "armTilt/busVoltage");
-    m_logTiltCurrent = new DoubleLogEntry(log, "/armTilt/current");
+    m_logTiltOutputCurrent = new DoubleLogEntry(log, "/armTilt/current");
 
   }
 
@@ -142,8 +142,8 @@ public class ArmTilt extends SubsystemBase {
 
   public void logTilt() {
     m_logTiltPosition.append(m_tiltMotorEncoder.getPosition());
-    m_logTiltOutput.append(m_tiltMotor.getAppliedOutput());
+    m_logTiltAppliedOutput.append(m_tiltMotor.getAppliedOutput());
     m_logTiltBusVoltage.append(m_tiltMotor.getBusVoltage());
-    m_logTiltCurrent.append(m_tiltMotor.getOutputCurrent());
+    m_logTiltOutputCurrent.append(m_tiltMotor.getOutputCurrent());
   }
 }

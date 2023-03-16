@@ -55,9 +55,18 @@ public class SwerveModule implements Sendable {
   private SwerveModuleState m_desiredState = new SwerveModuleState(0.0, new Rotation2d());
 
 
-  private final DoubleLogEntry m_logAbsoluteEncoderPosition;
-  private final DoubleLogEntry m_logRelativeEncoderPosition;
-  private final DoubleLogEntry m_logAbsoluteEncoderAverage;
+  private final DoubleLogEntry m_logDrivingAppliedOutput;
+  private final DoubleLogEntry m_logDrivingBusVoltage;
+  private final DoubleLogEntry m_logDrivingOutputCurrent;
+  private final DoubleLogEntry m_logDrivingVelocity;
+
+  private final DoubleLogEntry m_logTurningAbsoluteEncoderPosition;
+  private final DoubleLogEntry m_logTurningRelativeEncoderPosition;
+  private final DoubleLogEntry m_logTurningAbsoluteEncoderAverage;
+
+  private final DoubleLogEntry m_logTurningAppliedOutput;
+  private final DoubleLogEntry m_logTurningBusVoltage;
+  private final DoubleLogEntry m_logTurningOutputCurrent;
 
 
   /**
@@ -160,23 +169,41 @@ public class SwerveModule implements Sendable {
     m_resetOffset = chassisAngularOffset;
 
     DataLog log = DataLogManager.getLog();
-    m_logAbsoluteEncoderPosition = new DoubleLogEntry(log, "drive/" + m_location.toString() + "/AbsoluteEncoderPosition");
-    m_logRelativeEncoderPosition = new DoubleLogEntry(log, "drive/"+ m_location.toString() + "/RelativeEncoderPosition");
-    m_logAbsoluteEncoderAverage = new DoubleLogEntry(log, "drive/" + m_location.toString() + "/AbsoluteEncoderAverage");
+
+    m_logDrivingAppliedOutput = new DoubleLogEntry(log, "drive/" + m_location.toString() + "/driving/appliedOutput");
+    m_logDrivingBusVoltage = new DoubleLogEntry(log, "drive/" + m_location.toString() + "/driving/busVoltage");
+    m_logDrivingOutputCurrent = new DoubleLogEntry(log, "drive/" + m_location.toString() + "/driving/outputCurrent");
+    m_logDrivingVelocity = new DoubleLogEntry(log, "drive/" + m_location.toString() + "/driving/velocity");
+
+    m_logTurningAbsoluteEncoderPosition = new DoubleLogEntry(log, "drive/" + m_location.toString() + "/turning/absoluteEncoderPosition");
+    m_logTurningRelativeEncoderPosition = new DoubleLogEntry(log, "drive/"+ m_location.toString() + "/turning/relativeEncoderPosition");
+    m_logTurningAbsoluteEncoderAverage = new DoubleLogEntry(log, "drive/" + m_location.toString() + "/turning/absoluteEncoderAverage");
+
+    m_logTurningAppliedOutput = new DoubleLogEntry(log, "drive/"+ m_location.toString() + "/turning/appliedOutput");
+    m_logTurningBusVoltage = new DoubleLogEntry(log, "drive/" + m_location.toString() + "/turning/busVoltage");
+    m_logTurningOutputCurrent = new DoubleLogEntry(log, "drive/" + m_location.toString() + "/turning/outputCurrent");
   }
 
   public void sample(){
-    m_logRelativeEncoderPosition.append(m_turningEncoder.getPosition());
+    m_logTurningRelativeEncoderPosition.append(m_turningEncoder.getPosition());
     m_sum -= m_samples[m_index];
     m_samples[m_index] = m_turningAnalogSensor.getPosition();
-    m_logAbsoluteEncoderPosition.append(m_samples[m_index]);
+    m_logTurningAbsoluteEncoderPosition.append(m_samples[m_index]);
     m_sum += m_samples[m_index];
-    m_logAbsoluteEncoderAverage.append(m_sum / 50);
+    m_logTurningAbsoluteEncoderAverage.append(m_sum / 50);
     m_index += 1;
     if (m_index == 50) {
       m_index = 0;
       m_valid = true;
     }
+    m_logDrivingBusVoltage.append(m_drivingSparkMax.getBusVoltage());
+    m_logDrivingOutputCurrent.append(m_drivingSparkMax.getOutputCurrent());
+    m_logDrivingAppliedOutput.append(m_drivingSparkMax.getAppliedOutput());
+    m_logDrivingVelocity.append(m_drivingEncoder.getVelocity());
+
+    m_logTurningBusVoltage.append(m_turningSparkMax.getBusVoltage());
+    m_logTurningOutputCurrent.append(m_turningSparkMax.getOutputCurrent());
+    m_logTurningAppliedOutput.append(m_turningSparkMax.getAppliedOutput());
   }
 
   public void resetTurningEncoder() {

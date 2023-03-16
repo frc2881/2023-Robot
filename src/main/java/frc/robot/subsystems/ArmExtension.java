@@ -24,9 +24,9 @@ public class ArmExtension extends SubsystemBase {
   private final SparkMaxPIDController m_extensionPID;
   private final RelativeEncoder m_extensionMotorEncoder;
   private final DoubleLogEntry m_logExtensionPosition;
-  private final DoubleLogEntry m_logExtensionOutput;
+  private final DoubleLogEntry m_logExtensionAppliedOutput;
   private final DoubleLogEntry m_logExtensionBusVoltage;
-  private final DoubleLogEntry m_logExtensionCurrent;
+  private final DoubleLogEntry m_logExtensionOutputCurrent;
 
   public ArmExtension() {
     m_extensionMotor = new CANSparkMax(Constants.Arm.kExtensionMotorId, MotorType.kBrushless);
@@ -53,9 +53,9 @@ public class ArmExtension extends SubsystemBase {
 
     DataLog log = DataLogManager.getLog();
     m_logExtensionPosition = new DoubleLogEntry(log, "/armExtension/position");
-    m_logExtensionOutput = new DoubleLogEntry(log, "/armExtension/output");
+    m_logExtensionAppliedOutput = new DoubleLogEntry(log, "/armExtension/output");
     m_logExtensionBusVoltage = new DoubleLogEntry(log, "/armExtension/busVoltage");
-    m_logExtensionCurrent = new DoubleLogEntry(log, "/armExtension/current");
+    m_logExtensionOutputCurrent = new DoubleLogEntry(log, "/armExtension/current");
 
   }
 
@@ -139,8 +139,8 @@ public class ArmExtension extends SubsystemBase {
 
   private void logExtension() {
     m_logExtensionPosition.append(m_extensionMotorEncoder.getPosition());
-    m_logExtensionOutput.append(m_extensionMotor.getAppliedOutput());
+    m_logExtensionAppliedOutput.append(m_extensionMotor.getAppliedOutput());
     m_logExtensionBusVoltage.append(m_extensionMotor.getBusVoltage());
-    m_logExtensionCurrent.append(m_extensionMotor.getOutputCurrent());
+    m_logExtensionOutputCurrent.append(m_extensionMotor.getOutputCurrent());
   }
 }
