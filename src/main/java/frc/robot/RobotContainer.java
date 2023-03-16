@@ -188,9 +188,13 @@ public class RobotContainer {
       .whileTrue(new ScoreMedium(m_armExtension, m_armTilt, 1.0, m_suction));
 
     // RUMBLES
-    new Trigger(() -> (RobotState.isTeleop() && m_suction.isVacuumLost()))
-      .onTrue(new RumbleControllers(m_driverController, m_manipulatorController, RumblePattern.GOOD))
-      .onFalse(new RumbleControllers(m_driverController, m_manipulatorController, RumblePattern.BAD));
+    new Trigger(() -> (RobotState.isTeleop() && m_suction.hasVacuum()))
+      .onTrue(new RumbleControllers(m_driverController, m_manipulatorController, RumblePattern.GOOD));
+
+      new Trigger(() -> (RobotState.isTeleop() && m_suction.hasVacuumLost()))
+      .onTrue(new RumbleControllers(m_driverController, m_manipulatorController, RumblePattern.BAD));
+
+    
   }
 
   public void setupAuto() {
@@ -247,8 +251,7 @@ public class RobotContainer {
     m_lights.setPattern(Pattern.Heart, PanelLocation.Both);
 
     new Trigger(() -> (DriverStation.getMatchTime() <= 35))
-      .onTrue(new InstantCommand(() -> { m_lights.setPattern(Pattern.Charge, PanelLocation.Both); }));
-  }
+      .onTrue(new InstantCommand(() -> { m_lights.setPattern(Pattern.Charge, PanelLocation.Both); }));    }
   
   public void resetRobot() {
       m_drive.resetSwerve();
@@ -262,5 +265,4 @@ public class RobotContainer {
   public void resetLights(){
     m_lights.setPattern(Pattern.Heart, PanelLocation.Both);
   }
-
 }

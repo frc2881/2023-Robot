@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Constants;
 import frc.robot.commands.arm.ExtendArmToLength;
 import frc.robot.commands.arm.TiltArmToHeight;
@@ -30,13 +31,14 @@ public class MoveToHigh extends SequentialCommandGroup {
         new WaitCommand(0.001), 
         () -> (armExtension.getEncoderPosition() > Constants.Arm.kExtensionResetPosition)),
 
-      new TiltArmToHeight(armTilt, speed, 10.0)
-        .withTimeout(Constants.Arm.kTiltTimeOut),
       new ParallelCommandGroup(
         new TiltArmToHeight(armTilt, speed, 15.5)
           .withTimeout(Constants.Arm.kTiltTimeOut),
-        new ExtendArmToLength(armExtension, speed, 27.5)
-          .withTimeout(Constants.Arm.kExtensionTimeOut))
+        new SequentialCommandGroup(
+          new WaitUntilCommand(() -> armTilt.getEncoderPosition() >= 10.0),
+          new ExtendArmToLength(armExtension, speed, 27.5)
+            .withTimeout(Constants.Arm.kExtensionTimeOut))
+        )
     );
   }
   

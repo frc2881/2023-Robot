@@ -164,7 +164,13 @@ public class Suction extends SubsystemBase {
     return m_isTargetPressureBottomReached && m_isTargetPressureTopReached;
   }
 
-  public boolean isVacuumLost() {
+  public boolean hasVacuum() {
+    return 
+      m_currentPressureBottom <= Constants.Suction.kMinimumPressureBottom && 
+      m_currentPressureTop <= Constants.Suction.kMinimumPressureTop;
+  }
+
+  public boolean hasVacuumLost() {
     return 
       m_currentPressureBottom > Constants.Suction.kMinimumPressureBottom && 
       m_currentPressureTop > Constants.Suction.kMinimumPressureTop;
