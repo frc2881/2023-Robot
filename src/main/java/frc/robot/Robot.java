@@ -34,6 +34,7 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledInit() {
     Logger.mode(Mode.DISABLED);
+    m_robotContainer.resetLights();
   }
 
   @Override
@@ -49,7 +50,7 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
     }
-    m_robotContainer.resetRobot(); // TODO: this may need to be called before auto scheduling vs. after because of no delay in starting
+    m_robotContainer.resetRobot();
   }
 
   @Override

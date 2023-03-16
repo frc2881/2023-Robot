@@ -39,8 +39,8 @@ public class ArmTilt extends SubsystemBase {
     m_tiltMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
     m_tiltMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse,
                        (float)Constants.Arm.kTiltReverseLimit);
-    m_tiltMotor.setSmartCurrentLimit(20);
-    m_tiltMotor.setSecondaryCurrentLimit(20, 0);
+    m_tiltMotor.setSmartCurrentLimit(60);
+    m_tiltMotor.setSecondaryCurrentLimit(60, 0);
 
     m_tiltMotorEncoder = m_tiltMotor.getEncoder();
     m_tiltMotorEncoder.setPositionConversionFactor(Constants.Arm.kTiltRotationsToInches);

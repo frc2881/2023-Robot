@@ -10,6 +10,7 @@ import com.pathplanner.lib.PathPlannerTrajectory;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.arm.ResetArm;
+import frc.robot.commands.drive.SetX;
 import frc.robot.commands.drive.ZeroHeading;
 import frc.robot.subsystems.ArmExtension;
 import frc.robot.subsystems.ArmTilt;
@@ -34,7 +35,9 @@ public class AutoScoreBalance extends SequentialCommandGroup {
         new FollowTrajectory(moveTrajectory, true, drive)
       ),
       new FollowTrajectory(balanceTrajectory, false, drive),
-      new ZeroHeading(drive)
+      new ZeroHeading(drive),
+      new Balance(drive, false),
+      new SetX(drive)
     );
   }
 }

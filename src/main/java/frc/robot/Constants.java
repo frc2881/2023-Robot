@@ -52,22 +52,22 @@ public class Constants {
         /*
          * The maximum distance (in inches) that the arm can extend.
          */
-        public static final double kExtendForwardLimit = 30; 
+        public static final double kExtendForwardLimit = 29; 
 
          /*
          * The maximum distance (in inches) that the arm can retract.
          */
-        public static final double kExtendReverseLimit = 0.15;
+        public static final double kExtendReverseLimit = 0.3;
 
          /*
          * The maximum distance (in inches) that the arm can elevate.
          */
-        public static final double kTiltForwardLimit = 18; 
+        public static final double kTiltForwardLimit = 16; 
 
          /*
          * The maximum distance (in rotations) that the arm can go down.
          */
-        public static final double kTiltReverseLimit = 0.15;
+        public static final double kTiltReverseLimit = 0.3;
 
         public static final double kMinSafeTilt = 2.6;
 
@@ -158,6 +158,9 @@ public class Constants {
         public static final int kRearRightTurningCanId = 8;
     
         public static final boolean kGyroReversed = false;
+
+        public static final double kMaxRoll = 15.0;
+        public static final double kMinRoll = 13.5;
       }
     
       public static final class SwerveModule {
@@ -216,6 +219,7 @@ public class Constants {
     
         public static final int kDrivingMotorCurrentLimit = 50; // amps
         public static final int kTurningMotorCurrentLimit = 20; // amps
+        
       }
 
       public static final class Intake {
@@ -302,22 +306,22 @@ public class Constants {
         /*
          * The target pressure for bottom vacuum state in PSI
          */
-        public static final double kTargetPressureBottom = 19.5;
+        public static final double kTargetPressureBottom = 19.0;
 
         /*
          * The minimum pressure for bottom vacuum state in PSI
          */
-        public static final double kMinimumPressureBottom = 21.5;
+        public static final double kMinimumPressureBottom = 22.0;
 
         /*
          * The target pressure for top vacuum state in PSI
          */
-        public static final double kTargetPressureTop = 19.5;
+        public static final double kTargetPressureTop = 19.0;
 
         /*
          * The minimum pressure for top vacuum state in PSI
          */
-        public static final double kMinimumPressureTop = 21.5;
+        public static final double kMinimumPressureTop = 22.0;
 
       }
 
