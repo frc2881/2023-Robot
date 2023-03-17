@@ -40,7 +40,7 @@ public class Balance extends CommandBase {
   public void initialize() {
     m_state = State.LookForMax;
 
-    m_drive.drive(m_speed, 0.0, 0.0);
+    m_drive.drive(m_speed * 0.75, 0.0, 0.0);
     
   }
 
@@ -74,12 +74,12 @@ public class Balance extends CommandBase {
         
         if(m_speed > 0.0){
           m_drive.drive(-m_speed/2, 0.0, 0.0);
-          m_repeat = 55;
+          m_repeat = 18;
           m_state = State.WaitToStop;
         }
         if(m_speed < 0.0){
           m_drive.drive(-m_speed/2, 0.0, 0.0);
-          m_repeat = 55;
+          m_repeat = 18;
           m_state = State.WaitToStop;
         }
         break;

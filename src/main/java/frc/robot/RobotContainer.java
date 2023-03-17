@@ -28,7 +28,9 @@ import frc.robot.commands.arm.MoveTo.MoveToMedium;
 import frc.robot.commands.arm.MoveTo.MoveToPickup;
 import frc.robot.commands.arm.Score.ScoreHigh;
 import frc.robot.commands.arm.Score.ScoreMedium;
+import frc.robot.commands.auto.AutoBalance;
 import frc.robot.commands.auto.AutoMiddleScoreMove;
+import frc.robot.commands.auto.AutoMove;
 import frc.robot.commands.auto.AutoScore;
 import frc.robot.commands.auto.AutoScoreBalance;
 import frc.robot.commands.auto.AutoScoreMove;
@@ -211,8 +213,8 @@ public class RobotContainer {
     m_autonomousChooser.addOption("Score", 
       new AutoScore(m_suction, m_armExtension, m_armTilt, m_intake));
 
-    /*m_autonomousChooser.addOption("Middle Balance",
-      new AutoBalance(m_drive, middleBalancePath, balanceMidPath));*/
+    m_autonomousChooser.addOption("Middle Balance",
+      new AutoBalance(m_drive, middleBalancePath, balanceMidPath));
 
     m_autonomousChooser.addOption("Middle Score Move",
       new AutoMiddleScoreMove(m_drive, m_suction, m_armExtension, m_armTilt, m_intake, moveMiddlePath));
@@ -220,8 +222,8 @@ public class RobotContainer {
     m_autonomousChooser.addOption("Middle Score Balance", 
       new AutoScoreBalance(m_drive, m_suction, m_armExtension, m_armTilt, m_intake, middleBalancePath, balanceMidPath));
 
-    /*m_autonomousChooser.addOption("Divider Move", 
-      new AutoMove(m_drive, moveDividerPath));*/
+    m_autonomousChooser.addOption("Divider Move", 
+      new AutoMove(m_drive, moveDividerPath));
     
     m_autonomousChooser.addOption("Divider Score Move", 
       new AutoScoreMove(m_drive, m_suction, m_armExtension, m_armTilt, m_intake, moveDividerPath));
@@ -229,8 +231,8 @@ public class RobotContainer {
     m_autonomousChooser.addOption("Divider Score Balance", 
       new AutoScoreBalance(m_drive, m_suction, m_armExtension, m_armTilt, m_intake, dividerBalancePath, balancePath));
 
-    /*m_autonomousChooser.addOption("Wall Move", 
-      new AutoMove(m_drive, moveWallPath));*/
+    m_autonomousChooser.addOption("Wall Move", 
+      new AutoMove(m_drive, moveWallPath));
 
     m_autonomousChooser.addOption("Wall Score Move", 
       new AutoScoreMove(m_drive, m_suction, m_armExtension, m_armTilt, m_intake, moveWallPath));
@@ -246,7 +248,7 @@ public class RobotContainer {
   }
 
   private void setupLights() {
-    m_lights.setPattern(Pattern.Heart, PanelLocation.Both);
+    m_lights.setPattern(Pattern.Shamrock, PanelLocation.Both); // Pattern.Heart
 
     new Trigger(() -> (DriverStation.getMatchTime() <= 35))
       .onTrue(new InstantCommand(() -> { m_lights.setPattern(Pattern.Charge, PanelLocation.Both); }));    }
@@ -261,6 +263,6 @@ public class RobotContainer {
   }
 
   public void resetLights(){
-    m_lights.setPattern(Pattern.Heart, PanelLocation.Both);
+    m_lights.setPattern(Pattern.Shamrock, PanelLocation.Both); // Pattern.Heart
   }
 }

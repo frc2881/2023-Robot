@@ -28,7 +28,8 @@ public class PrettyLights extends SubsystemBase {
     Heart,
     Cone,
     Cube,
-    Charge
+    Charge,
+    Shamrock
   }
 
   public static enum ColorPreset 
@@ -37,7 +38,8 @@ public class PrettyLights extends SubsystemBase {
     Cube(0x0D001A),
     Charge(0x33001A), 
     Pink(0x33001A),
-    Black(0x000000);
+    Black(0x000000),
+    Shamrock(0x001100);
   
     private int color;
     ColorPreset(int color) { this.color = color; }
@@ -66,14 +68,14 @@ public class PrettyLights extends SubsystemBase {
       double currentTimeStamp = Timer.getFPGATimestamp();
 
       if((currentTimeStamp - m_lastTimeStamp) > 0.1){
-        if(m_currentPattern == Pattern.Heart){
-          int[] shape = m_shapeHeart.clone();
+        if(m_currentPattern == Pattern.Shamrock){ // Pattern.Heart
+          int[] shape = m_shapeShamrock.clone(); //m_shapeHeart
 
           for (int i = 0; i < 5; i += 1){
-            int color = 0x66335A;
+            int color = 0xFFD700; // 0x66335A
             int position = m_random.nextInt(64);
 
-            if(shape[position] != 0x000000){
+            if(shape[position] != 0x000000){ //0x000000
               shape[position] = color;
             }
             
@@ -116,6 +118,9 @@ public class PrettyLights extends SubsystemBase {
         break;
       case Charge:
         shape = m_shapeCharge;
+        break;
+      case Shamrock:
+        shape = m_shapeShamrock;
         break;
       case None:
         shape = m_shapeBlank;
@@ -163,6 +168,7 @@ public class PrettyLights extends SubsystemBase {
   private final int CN = ColorPreset.Cone.getColor();
   private final int CB = ColorPreset.Cube.getColor();
   private final int CH = ColorPreset.Charge.getColor();
+  private final int SR = ColorPreset.Shamrock.getColor();
 
   private final int[] m_shapeBlank = {
     __, __, __, __, __, __, __, __,
@@ -217,6 +223,17 @@ public class PrettyLights extends SubsystemBase {
     __, __, __, __, CH, CH, __, __,
     __, __, __, __, CH, __, __, __,
     __, __, __, CH, __, __, __, __
+  };
+
+  private final int[] m_shapeShamrock = {
+    __, SR, SR, __, SR, SR, __, __,
+    SR, SR, SR, SR, SR, SR, SR, __,
+    SR, SR, SR, SR, SR, SR, SR, __,
+    __, SR, SR, SR, SR, SR, __, __,
+    SR, SR, SR, SR, SR, SR, SR, __,
+    SR, SR, SR, SR, SR, SR, SR, __,
+    SR, SR, SR, SR, SR, SR, SR, __,
+    __, SR, SR, __, SR, SR, __, __
   };
 }
 
