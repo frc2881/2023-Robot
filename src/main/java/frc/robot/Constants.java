@@ -159,8 +159,8 @@ public class Constants {
     
         public static final boolean kGyroReversed = false;
 
-        public static final double kMaxRoll = 15.0;
-        public static final double kMinRoll = 13.5;
+        public static final double kMaxRoll = 14.0;
+        public static final double kMinRoll = 13.0;
       }
     
       public static final class SwerveModule {

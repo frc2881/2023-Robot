@@ -51,6 +51,7 @@ public class Robot extends TimedRobot {
       m_autonomousCommand.schedule();
     }
     m_robotContainer.resetRobot();
+    m_robotContainer.resetLights();
   }
 
   @Override
@@ -68,6 +69,7 @@ public class Robot extends TimedRobot {
     if(!isCompetitionMode()) {
       m_robotContainer.resetRobot();
     }
+    m_robotContainer.resetLights();
   }
 
   @Override

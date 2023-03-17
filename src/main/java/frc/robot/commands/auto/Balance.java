@@ -71,14 +71,15 @@ public class Balance extends CommandBase {
       case LookForOver:
       {
         double roll = m_drive.getRoll();
-        if(m_speed > 0.0 && roll < 0.0){
-          m_drive.drive(-m_speed, 0.0, 0.0);
-          m_repeat = 5;
+        
+        if(m_speed > 0.0){
+          m_drive.drive(-m_speed/2, 0.0, 0.0);
+          m_repeat = 55;
           m_state = State.WaitToStop;
         }
-        if(m_speed < 0.0 && roll > 0.0){
-          m_drive.drive(-m_speed, 0.0, 0.0);
-          m_repeat = 5;
+        if(m_speed < 0.0){
+          m_drive.drive(-m_speed/2, 0.0, 0.0);
+          m_repeat = 55;
           m_state = State.WaitToStop;
         }
         break;

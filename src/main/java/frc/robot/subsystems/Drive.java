@@ -18,10 +18,13 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.util.datalog.DataLog;
+import edu.wpi.first.util.datalog.DoubleLogEntry;
 import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -69,6 +72,14 @@ public class Drive extends SubsystemBase {
 
   private boolean m_hasInitialVisionMeasurement = false;
 
+  public double m_zeroRoll;
+
+  public boolean m_isX = false;
+
+  private final DoubleLogEntry m_logRoll;
+  private final DoubleLogEntry m_logYaw;
+  private final DoubleLogEntry m_logPitch;
+
   private final SwerveDrivePoseEstimator m_poseEstimator = 
     new SwerveDrivePoseEstimator(
       Constants.Drive.kDriveKinematics, 
@@ -80,7 +91,12 @@ public class Drive extends SubsystemBase {
         m_rearRight.getPosition()}, 
       new Pose2d());
 
-  public Drive() {}
+  public Drive() {
+    DataLog log = DataLogManager.getLog();
+    m_logRoll = new DoubleLogEntry(log, "/Drive/roll");
+    m_logYaw = new DoubleLogEntry(log, "/Drive/yaw");
+    m_logPitch = new DoubleLogEntry(log, "/Drive/pitch");
+  }
 
   @Override
   public void periodic() {
@@ -215,18 +231,19 @@ public class Drive extends SubsystemBase {
     // xSpeed *= Constants.Drive.kMaxSpeedMetersPerSecond;
     // ySpeed *= Constants.Drive.kMaxSpeedMetersPerSecond;
     // rot *= Constants.Drive.kMaxAngularSpeed;
+    if(!m_isX){
+      var swerveModuleStates = Constants.Drive.kDriveKinematics.toSwerveModuleStates(
+        (m_swerveDriveMode == SwerveDriveMode.FIELD_CENTRIC)
+          ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, Rotation2d.fromDegrees(m_gyro.getAngle()))
+          : new ChassisSpeeds(xSpeed, ySpeed, rot));
 
-    var swerveModuleStates = Constants.Drive.kDriveKinematics.toSwerveModuleStates(
-      (m_swerveDriveMode == SwerveDriveMode.FIELD_CENTRIC)
-        ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, Rotation2d.fromDegrees(m_gyro.getAngle()))
-        : new ChassisSpeeds(xSpeed, ySpeed, rot));
+      SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.Drive.kMaxSpeedMetersPerSecond);
 
-    SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.Drive.kMaxSpeedMetersPerSecond);
-
-    m_frontLeft.setDesiredState(swerveModuleStates[0]);
-    m_frontRight.setDesiredState(swerveModuleStates[1]);
-    m_rearLeft.setDesiredState(swerveModuleStates[2]);
-    m_rearRight.setDesiredState(swerveModuleStates[3]);
+      m_frontLeft.setDesiredState(swerveModuleStates[0]);
+      m_frontRight.setDesiredState(swerveModuleStates[1]);
+      m_rearLeft.setDesiredState(swerveModuleStates[2]);
+      m_rearRight.setDesiredState(swerveModuleStates[3]);
+    }
   }
 
   public void setDriveMode(SwerveDriveMode driveMode) {
@@ -238,10 +255,25 @@ public class Drive extends SubsystemBase {
    * Sets the wheels into an X formation to prevent movement.
    */
   public void setX() {
-    m_frontLeft.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(45)));
-    m_frontRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(-45)));
-    m_rearLeft.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(-45)));
-    m_rearRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(45)));
+      m_frontLeft.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(45)));
+      m_frontRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(-45)));
+      m_rearLeft.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(-45)));
+      m_rearRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(45)));
+
+    }
+
+  public void toggleX(){
+    // if u push the button, x goes to true and pushed is set to false
+    // if u push the button again, x goes to false, pushed goes to true and setX ends
+    if(m_isX == false){
+      m_frontLeft.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(45)));
+      m_frontRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(-45)));
+      m_rearLeft.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(-45)));
+      m_rearRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(45)));
+      m_isX = true;
+    } else {
+      m_isX = false;
+    }
   }
 
   /**
@@ -250,11 +282,13 @@ public class Drive extends SubsystemBase {
    * @param desiredStates The desired SwerveModule states.
    */
   public void setModuleStates(SwerveModuleState[] desiredStates) {
-    SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, Constants.Drive.kMaxSpeedMetersPerSecond);
-    m_frontLeft.setDesiredState(desiredStates[0]);
-    m_frontRight.setDesiredState(desiredStates[1]);
-    m_rearLeft.setDesiredState(desiredStates[2]);
-    m_rearRight.setDesiredState(desiredStates[3]);
+    if(!m_isX){
+      SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, Constants.Drive.kMaxSpeedMetersPerSecond);
+      m_frontLeft.setDesiredState(desiredStates[0]);
+      m_frontRight.setDesiredState(desiredStates[1]);
+      m_rearLeft.setDesiredState(desiredStates[2]);
+      m_rearRight.setDesiredState(desiredStates[3]);
+    }
   }
 
   /** Resets the drive encoders to currently read a position of 0. */
@@ -287,8 +321,13 @@ public class Drive extends SubsystemBase {
   public double getTurnRate() {
     return m_gyro.getRate() * (Constants.Drive.kGyroReversed ? -1.0 : 1.0);
   }
+
   public double getRoll() {
     return m_gyro.getRoll();
+  }
+
+  public void setZeroRoll(){
+    m_zeroRoll = m_gyro.getRoll();
   }
 
   @Override
@@ -308,5 +347,14 @@ public class Drive extends SubsystemBase {
   private void updateTelemetry() {
     Pose2d pose = m_poseEstimator.getEstimatedPosition();
     SmartDashboard.putNumberArray("Drive/Pose",  new double[] { pose.getX(), pose.getY(), pose.getRotation().getDegrees() });
+    SmartDashboard.putNumber("Drive/Roll", m_gyro.getRoll());
+  }
+
+  public void logDrive() {
+    m_logRoll.append(m_gyro.getRoll());
+    m_logYaw.append(m_gyro.getYaw());
+    m_logPitch.append(m_gyro.getPitch());
+    
+
   }
 }

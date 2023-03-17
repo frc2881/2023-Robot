@@ -28,9 +28,7 @@ import frc.robot.commands.arm.MoveTo.MoveToMedium;
 import frc.robot.commands.arm.MoveTo.MoveToPickup;
 import frc.robot.commands.arm.Score.ScoreHigh;
 import frc.robot.commands.arm.Score.ScoreMedium;
-import frc.robot.commands.auto.AutoBalance;
 import frc.robot.commands.auto.AutoMiddleScoreMove;
-import frc.robot.commands.auto.AutoMove;
 import frc.robot.commands.auto.AutoScore;
 import frc.robot.commands.auto.AutoScoreBalance;
 import frc.robot.commands.auto.AutoScoreMove;
@@ -44,7 +42,7 @@ import frc.robot.commands.controllers.RumbleControllers.RumblePattern;
 import frc.robot.commands.drive.DriveRobotCentric;
 import frc.robot.commands.drive.DriveWithJoysticks;
 import frc.robot.commands.drive.ResetSwerve;
-import frc.robot.commands.drive.SetX;
+import frc.robot.commands.drive.ToggleX;
 import frc.robot.commands.drive.ZeroHeading;
 //import frc.robot.commands.intake.RunRollersInward;
 //import frc.robot.commands.intake.RunRollersOutward;
@@ -56,9 +54,9 @@ import frc.robot.subsystems.Clamps;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.PrettyLights;
-import frc.robot.subsystems.Suction;
 import frc.robot.subsystems.PrettyLights.PanelLocation;
 import frc.robot.subsystems.PrettyLights.Pattern;
+import frc.robot.subsystems.Suction;
 
 public class RobotContainer {
   private final PowerDistribution m_powerDistribution = new PowerDistribution(1, ModuleType.kRev);
@@ -125,7 +123,7 @@ public class RobotContainer {
       .whileTrue(new Balance(m_drive, false));
     
     new Trigger(m_driverController::getXButton)
-      .onTrue(new SetX(m_drive));
+      .onTrue(new ToggleX(m_drive));
 
     // new Trigger(m_driverController::getAButton)
     //   .whileTrue(new RunRollersInward(m_intake));

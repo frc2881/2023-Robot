@@ -5,8 +5,12 @@
 
 package frc.robot.subsystems;
 
+import java.util.Random;
+
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
+import edu.wpi.first.wpilibj.RobotState;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -43,6 +47,9 @@ public class PrettyLights extends SubsystemBase {
   private final AddressableLED m_led;
   private final AddressableLEDBuffer m_ledBuffer;
   private boolean m_isBufferUpdated = false;
+  private Pattern m_currentPattern = Pattern.None;
+  private Random m_random = new Random();
+  private double m_lastTimeStamp = Timer.getFPGATimestamp();
 
   public PrettyLights() {
     m_led = new AddressableLED(6);
@@ -54,6 +61,32 @@ public class PrettyLights extends SubsystemBase {
 
   @Override
   public void periodic() {
+    // Twinkle
+    if(RobotState.isDisabled()){
+      double currentTimeStamp = Timer.getFPGATimestamp();
+
+      if((currentTimeStamp - m_lastTimeStamp) > 0.1){
+        if(m_currentPattern == Pattern.Heart){
+          int[] shape = m_shapeHeart.clone();
+
+          for (int i = 0; i < 5; i += 1){
+            int color = 0x66335A;
+            int position = m_random.nextInt(64);
+
+            if(shape[position] != 0x000000){
+              shape[position] = color;
+            }
+            
+          }
+
+          setShape(shape, PanelLocation.Front);
+          setShape(shape, PanelLocation.Rear);
+
+          
+        }
+        m_lastTimeStamp = currentTimeStamp;
+    }
+  }
     if (m_isBufferUpdated) {
       m_led.setData(m_ledBuffer);
       m_isBufferUpdated = false;
@@ -87,7 +120,9 @@ public class PrettyLights extends SubsystemBase {
       case None:
         shape = m_shapeBlank;
         break;
+
     }
+    
     if (panel == PanelLocation.Both) {
       setShape(shape, PanelLocation.Front);
       setShape(shape, PanelLocation.Rear);
@@ -95,6 +130,8 @@ public class PrettyLights extends SubsystemBase {
     else {
       setShape(shape, panel);
     }
+
+    m_currentPattern = pattern;
 
     SmartDashboard.putString("Lights/Pattern", pattern.toString());
   }
