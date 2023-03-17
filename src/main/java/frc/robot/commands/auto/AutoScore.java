@@ -27,7 +27,7 @@ public class AutoScore extends SequentialCommandGroup {
     addCommands(
       new WaitCommand(0.02),
       new EnableSuction(suction),
-      new WaitUntilCommand(suction::hasVacuumSeal),
+      new WaitUntilCommand(suction::hasVacuumSeal).withTimeout(2.0),
       new ScoreHigh(armExtension, armTilt, 1.0, suction),
       new DisableSuction(suction)
     );
