@@ -248,7 +248,7 @@ public class RobotContainer {
   }
 
   private void setupLights() {
-    m_lights.setPattern(Pattern.Shamrock, PanelLocation.Both); // Pattern.Heart
+    m_lights.setPattern(Pattern.Heart, PanelLocation.Both);
 
     new Trigger(() -> (DriverStation.getMatchTime() <= 35))
       .onTrue(new InstantCommand(() -> { m_lights.setPattern(Pattern.Charge, PanelLocation.Both); }));    }
@@ -263,6 +263,6 @@ public class RobotContainer {
   }
 
   public void resetLights(){
-    m_lights.setPattern(Pattern.Shamrock, PanelLocation.Both); // Pattern.Heart
+    m_lights.setPattern(Pattern.Heart, PanelLocation.Both); 
   }
 }
