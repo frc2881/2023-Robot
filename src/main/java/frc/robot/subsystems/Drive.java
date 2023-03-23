@@ -70,8 +70,6 @@ public class Drive extends SubsystemBase {
   public PhotonCameraWrapper m_leftPhotonCamera;
   public PhotonCameraWrapper m_rightPhotonCamera;
 
-  private boolean m_hasInitialVisionMeasurement = false;
-
   public double m_zeroRoll;
 
   public boolean m_isX = false;
@@ -109,11 +107,11 @@ public class Drive extends SubsystemBase {
   private void updatePhotonCameras() {
     if ( m_leftPhotonCamera != null &&  m_rightPhotonCamera != null) { return; }
 
-    Alliance allience = DriverStation.getAlliance();
+    Alliance alliance = DriverStation.getAlliance();
 
-    if (allience != Alliance.Invalid) {
+    if (alliance != Alliance.Invalid) {
       Constants.Vision.kAprilTagFieldLayout.setOrigin(
-        allience == Alliance.Red 
+        alliance == Alliance.Red 
           ? OriginPosition.kRedAllianceWallRightSide
           : OriginPosition.kBlueAllianceWallRightSide);
 
@@ -142,7 +140,6 @@ public class Drive extends SubsystemBase {
       m_rightPhotonCamera.dispose();
       m_rightPhotonCamera = null;
     }
-    m_hasInitialVisionMeasurement = false;
   }
 
   private void sampleModules(){
@@ -168,10 +165,8 @@ public class Drive extends SubsystemBase {
         m_rearLeft.getPosition(),
         m_rearRight.getPosition()
     });
-    if (!RobotState.isAutonomous()) {
-      updateVisionMeasurement(m_leftPhotonCamera);
-      updateVisionMeasurement(m_rightPhotonCamera);        
-    }
+    updateVisionMeasurement(m_leftPhotonCamera);
+    updateVisionMeasurement(m_rightPhotonCamera);        
   }
 
   private void updateVisionMeasurement(PhotonCameraWrapper photonCamera) {
@@ -182,10 +177,10 @@ public class Drive extends SubsystemBase {
         Pose2d estimatedPose = estimatedRobotPose.estimatedPose.toPose2d();
         Pose2d currentPose = getPose();
         double translationDistance = estimatedPose.getTranslation().getDistance(currentPose.getTranslation());
-        //if (!m_hasInitialVisionMeasurement || translationDistance <= 1.0) {
+        if (RobotState.isDisabled() || translationDistance <= 1.0) {
           m_poseEstimator.addVisionMeasurement(estimatedPose, estimatedRobotPose.timestampSeconds);
-          m_hasInitialVisionMeasurement = true;
-        //}
+        }
+        SmartDashboard.putNumberArray("Drive/Vision/" + photonCamera.getCameraName() + "/EstimatedPose",  new double[] { estimatedPose.getX(), estimatedPose.getY(), estimatedPose.getRotation().getDegrees() });
       }
     }
   }
@@ -214,7 +209,6 @@ public class Drive extends SubsystemBase {
         m_rearRight.getPosition()
       },
       pose);
-      m_hasInitialVisionMeasurement = false;
   }
 
   /**
