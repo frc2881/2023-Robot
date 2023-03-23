@@ -19,13 +19,15 @@ import edu.wpi.first.math.geometry.Transform3d;
 public class PhotonCameraWrapper {
 	private PhotonCamera m_photonCamera;
 	private PhotonPoseEstimator m_photonPoseEstimator;
- 
+  private String m_cameraName;
+	
 	public PhotonCameraWrapper(
 		String cameraName, 
 		Transform3d robotToCamera,
 		PoseStrategy poseStrategy,
 		AprilTagFieldLayout aprilTagFieldLayout
 	) {  
+		m_cameraName = cameraName;
 		m_photonCamera = new PhotonCamera(cameraName);
 		m_photonPoseEstimator = new PhotonPoseEstimator(
 			aprilTagFieldLayout,
@@ -35,7 +37,11 @@ public class PhotonCameraWrapper {
 		); 
 		m_photonPoseEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
 	}
- 
+
+	public String getCameraName(){
+		return m_cameraName;
+	}
+
 	/**
 	* @param estimatedRobotPose The current best guess at robot pose
 	* @return A pair of the fused camera observations to a single Pose2d on the field, and the time
