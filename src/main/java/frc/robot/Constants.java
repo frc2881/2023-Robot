@@ -49,6 +49,11 @@ public class Constants {
          * of elevation of the arm.
          */
         public static final double kTiltRotationsToInches = (1.0 / 2.0) / 3.0; 
+
+        public static final double kExtendVelocityConversion = kExtendRotationsToInches / 60.0;
+        
+        public static final double kTiltVelocityConversion = kTiltRotationsToInches / 60.0;
+
         /*
          * The maximum distance (in inches) that the arm can extend.
          */
@@ -87,11 +92,13 @@ public class Constants {
         /*
          * Extension PID Controller
          */
-        public static final double kExtensionP = 3;
+        public static final double kExtensionP = 0.0003;
         /*
          * Extension PID Controller
          */
-        public static final double kExtensionD = 1.5;
+        public static final double kExtensionD = 0.00015;
+
+        public static final double kExtensionFF = 1 / (16.8);
 
         /*
          * Extension Min Speed

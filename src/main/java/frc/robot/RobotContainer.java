@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.arm.ArmExtendOverride;
 import frc.robot.commands.arm.ArmTiltOverride;
 import frc.robot.commands.arm.ExtendArm;
+import frc.robot.commands.arm.ExtendArmToLength;
 import frc.robot.commands.arm.TiltArm;
 import frc.robot.commands.arm.MoveTo.MoveToHigh;
 import frc.robot.commands.arm.MoveTo.MoveToLow;
@@ -167,7 +168,8 @@ public class RobotContainer {
     
     /* Uses D-Pad to move the arm to position */
     new Trigger(() -> m_manipulatorController.getPOV() == 0)
-      .whileTrue(new MoveToHigh(m_armExtension, m_armTilt, 1.0));
+      .whileTrue(new ExtendArmToLength(m_armExtension, null, 18.0)//new MoveToHigh(m_armExtension, m_armTilt, 1.0)
+      );
 
     new Trigger(() -> m_manipulatorController.getPOV() == 90)
       .whileTrue(new MoveToMedium(m_armExtension, m_armTilt, 1.0));
