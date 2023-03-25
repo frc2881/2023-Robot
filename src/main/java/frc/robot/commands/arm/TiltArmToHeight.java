@@ -12,11 +12,13 @@ public class TiltArmToHeight extends CommandBase {
   private ArmTilt m_armTilt;
   private Double m_speed;
   private Double m_position;
+  private boolean m_isInfinite;
 
-  public TiltArmToHeight(ArmTilt armTilt, Double speed, Double position) {
+  public TiltArmToHeight(ArmTilt armTilt, Double speed, Double position, boolean isInfinite) {
     m_armTilt = armTilt;
     m_speed = speed;
     m_position = position;
+    m_isInfinite = isInfinite;
 
     addRequirements(m_armTilt);
   }
@@ -48,7 +50,12 @@ public class TiltArmToHeight extends CommandBase {
 
   @Override
   public boolean isFinished() {
-    return Math.abs(m_armTilt.getEncoderPosition() - m_position) < 0.1;
+    if(m_isInfinite){
+      return false;
+    } else{
+      return Math.abs(m_armTilt.getEncoderPosition() - m_position) < 0.1;
+    }
+    
   }
 
 }

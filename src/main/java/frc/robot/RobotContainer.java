@@ -148,7 +148,9 @@ public class RobotContainer {
     
     /* Uses D-Pad to move the arm to position */
     new Trigger(() -> m_manipulatorController.getPOV() == 0)
+      //.whileTrue(new NewScoreHigh(m_armTilt, m_armExtension, 1.0));
       .whileTrue(new MoveToHigh(m_armExtension, m_armTilt, 1.0));
+      
 
     new Trigger(() -> m_manipulatorController.getPOV() == 90)
       .whileTrue(new MoveToMedium(m_armExtension, m_armTilt, 1.0));

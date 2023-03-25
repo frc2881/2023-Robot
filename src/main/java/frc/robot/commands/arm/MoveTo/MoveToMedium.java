@@ -29,7 +29,7 @@ public class MoveToMedium extends SequentialCommandGroup {
           .withTimeout(Constants.Arm.kExtensionTimeOut),
           new WaitCommand(0.001), 
         () -> (armExtension.getEncoderPosition() > Constants.Arm.kExtensionResetPosition)),
-      new TiltArmToHeight(armTilt, speed, 13.5)
+      new TiltArmToHeight(armTilt, speed, 13.5, false)
         .withTimeout(Constants.Arm.kTiltTimeOut),
 
         new SequentialCommandGroup(

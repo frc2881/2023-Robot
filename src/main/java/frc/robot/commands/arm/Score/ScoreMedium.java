@@ -23,7 +23,7 @@ public class ScoreMedium extends SequentialCommandGroup {
   ) {
     addCommands(
       new MoveToMedium(armExtension, armTilt, speed),
-      new TiltArmToHeight(armTilt, speed * 0.5, 11.5)
+      new TiltArmToHeight(armTilt, speed * 0.5, 11.5, false)
         .withTimeout(Constants.Arm.kTiltTimeOut)
     );
   }
