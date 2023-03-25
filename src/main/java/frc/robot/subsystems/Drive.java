@@ -10,6 +10,11 @@ import java.util.Optional;
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 
+import com.pathplanner.lib.PathConstraints;
+import com.pathplanner.lib.PathPlanner;
+import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.PathPoint;
+
 import edu.wpi.first.apriltag.AprilTagFieldLayout.OriginPosition;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -178,7 +183,7 @@ public class Drive extends SubsystemBase {
         EstimatedRobotPose estimatedRobotPose = pipelineResult.get();
         Pose2d estimatedPose = estimatedRobotPose.estimatedPose.toPose2d();
         if (RobotState.isEnabled() && RobotState.isTeleop()) {
-          isValid = estimatedPose.getTranslation().getDistance(getPose().getTranslation()) <= 1.0;
+          isValid = estimatedPose.getTranslation().getDistance(getPose().getTranslation()) <= 3.0;
         } else {
           isValid = true;
         }
@@ -217,6 +222,30 @@ public class Drive extends SubsystemBase {
         m_rearRight.getPosition()
       },
       pose);
+  }
+
+  public PathPlannerTrajectory getNearestNodeTrajectory(){
+    Pose2d currentPose = m_poseEstimator.getEstimatedPosition();
+    SmartDashboard.putNumberArray("DynamicTrajectory/", new double[] { currentPose.getX(), currentPose.getY(), currentPose.getRotation().getDegrees() });
+
+    Pose2d targetPose = new Pose2d(1.8, 2.76, Rotation2d.fromDegrees(180)); // HACK: temp fixed target
+
+    PathPlannerTrajectory trajectory = PathPlanner.generatePath(
+        new PathConstraints(0.5, 0.5), 
+        new PathPoint(
+            currentPose.getTranslation(), 
+            Rotation2d.fromDegrees(180),
+            Rotation2d.fromDegrees(180.0)//Math.abs(currentPose.getRotation().getDegrees()))
+        ),
+        new PathPoint(
+            targetPose.getTranslation(), 
+            Rotation2d.fromDegrees(180), 
+            targetPose.getRotation()
+        )
+    );
+
+    return trajectory;
+    //return PathPlannerTrajectory.transformTrajectoryForAlliance(trajectory, DriverStation.getAlliance());
   }
 
   /**
