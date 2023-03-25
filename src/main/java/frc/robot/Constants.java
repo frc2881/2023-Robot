@@ -42,13 +42,13 @@ public class Constants {
          * The gear ratio for the arm that converts motor rotations into inches
          * of extension of the arm.
          */
-        public static final double kExtendRotationsToInches = (1.0 / 2.0) / 3.0;
+        public static final double kExtendRotationsToInches = 1.0 / 3.0;
 
         /*
          * The gear ratio for the arm that converts motor rotations into inches
          * of elevation of the arm.
          */
-        public static final double kTiltRotationsToInches = (1.0 / 2.0) / 3.0; 
+        public static final double kTiltRotationsToInches = 1.0 / 3.0; 
 
         public static final double kExtendVelocityConversion = kExtendRotationsToInches / 60.0;
         
@@ -83,11 +83,11 @@ public class Constants {
         /*
          * Tilt Min Speed
          */
-        public static final double kTiltMinOutput = -1.0;
+        public static final double kTiltMinOutput = -0.75;
         /*
          * Tilit Max Speed
          */
-        public static final double kTiltMaxOutput = 1.0;
+        public static final double kTiltMaxOutput = 0.75;
 
         /*
          * Extension PID Controller
@@ -103,11 +103,11 @@ public class Constants {
         /*
          * Extension Min Speed
          */
-        public static final double kExtensionMinOutput = -1.0;
+        public static final double kExtensionMinOutput = -0.75;
         /*
          * Extension Max Speed
          */
-        public static final double kExtensionMaxOutput = 1.0;
+        public static final double kExtensionMaxOutput = 0.75;
 
         
         public static final double kExtensionTimeOut = 5;
@@ -313,22 +313,22 @@ public class Constants {
         /*
          * The target pressure for bottom vacuum state in PSI
          */
-        public static final double kTargetPressureBottom = 18.0;
+        public static final double kTargetPressureBottom = 18.5;
 
         /*
          * The minimum pressure for bottom vacuum state in PSI
          */
-        public static final double kMinimumPressureBottom = 20.0;
+        public static final double kMinimumPressureBottom = 20.5;
 
         /*
          * The target pressure for top vacuum state in PSI
          */
-        public static final double kTargetPressureTop = 18.0;
+        public static final double kTargetPressureTop = 18.5;
 
         /*
          * The minimum pressure for top vacuum state in PSI
          */
-        public static final double kMinimumPressureTop = 20.0;
+        public static final double kMinimumPressureTop = 20.5;
 
       }
 

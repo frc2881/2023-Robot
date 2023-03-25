@@ -36,6 +36,7 @@ import frc.robot.commands.auto.AutoScore;
 import frc.robot.commands.auto.AutoScoreBalance;
 import frc.robot.commands.auto.AutoScoreMove;
 import frc.robot.commands.auto.Balance;
+import frc.robot.commands.auto.FollowTrajectory;
 import frc.robot.commands.clamps.AttachLeft;
 import frc.robot.commands.clamps.AttachRight;
 import frc.robot.commands.clamps.ReleaseLeft;
@@ -209,7 +210,8 @@ public class RobotContainer {
     PathPlannerTrajectory wallBalancePath = PathPlanner.loadPath("Wall Balance", 2, 3);
     PathPlannerTrajectory dividerBalancePath = PathPlanner.loadPath("Divider Balance", 2, 3);
     PathPlannerTrajectory middleBalancePath = PathPlanner.loadPath("Middle Balance", 2, 3);
-    
+    PathPlannerTrajectory testPath = PathPlanner.loadPath("Test", 0.5, 0.5);
+
     m_autonomousChooser.setDefaultOption("None", null);
 
     m_autonomousChooser.addOption("Score", 
@@ -241,6 +243,9 @@ public class RobotContainer {
 
     m_autonomousChooser.addOption("Wall Score Balance", 
       new AutoScoreBalance(m_drive, m_suction, m_armExtension, m_armTilt, m_intake, wallBalancePath, balancePath));
+
+    m_autonomousChooser.addOption("Test", 
+      new FollowTrajectory(testPath, false, m_drive));
 
     SmartDashboard.putData("Auto/Command", m_autonomousChooser);
   }
