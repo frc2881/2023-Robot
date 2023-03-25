@@ -165,8 +165,10 @@ public class Drive extends SubsystemBase {
         m_rearLeft.getPosition(),
         m_rearRight.getPosition()
     });
-    updateVisionMeasurement(m_leftPhotonCamera);
-    updateVisionMeasurement(m_rightPhotonCamera);        
+    if(!RobotState.isAutonomous()){
+      updateVisionMeasurement(m_leftPhotonCamera);
+      updateVisionMeasurement(m_rightPhotonCamera); 
+    }       
   }
 
   private void updateVisionMeasurement(PhotonCameraWrapper photonCamera) {

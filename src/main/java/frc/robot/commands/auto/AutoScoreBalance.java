@@ -27,7 +27,8 @@ public class AutoScoreBalance extends SequentialCommandGroup {
     Intake intake, 
     PathPlannerTrajectory moveTrajectory, 
     PathPlannerTrajectory balanceTrajectory,
-    boolean isCube
+    boolean isCube,
+    boolean isForward
   ) {
     addCommands(
       new ZeroHeadingToAng(drive, 180),
@@ -37,7 +38,7 @@ public class AutoScoreBalance extends SequentialCommandGroup {
         new FollowTrajectory(moveTrajectory, true, drive)
       ),
       new FollowTrajectory(balanceTrajectory, false, drive),
-      new Balance(drive, false),
+      new Balance(drive, isForward),
       new SetX(drive)
     );
   }

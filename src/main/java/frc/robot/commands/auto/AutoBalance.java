@@ -17,13 +17,14 @@ public class AutoBalance extends SequentialCommandGroup {
   public AutoBalance(
     Drive drive,
     PathPlannerTrajectory moveTrajectory, 
-    PathPlannerTrajectory balanceTrajectory
+    PathPlannerTrajectory balanceTrajectory,
+    boolean isForward
   ) {
     addCommands(
       new ZeroHeadingToAng(drive, 180),
       new FollowTrajectory(moveTrajectory, true, drive),
       new FollowTrajectory(balanceTrajectory, false, drive),
-      new Balance(drive, false),
+      new Balance(drive, isForward),
       new SetX(drive)
     );
   }
