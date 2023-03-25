@@ -26,11 +26,12 @@ public class AutoMiddleScoreMove extends SequentialCommandGroup {
     ArmExtension armExtension, 
     ArmTilt armTilt, 
     Intake intake, 
-    PathPlannerTrajectory trajectory
+    PathPlannerTrajectory trajectory,
+    boolean isCube
   ) {
     addCommands(
       new ZeroHeadingToAng(drive, 180),
-      new AutoScore(suction, armExtension, armTilt, intake),
+      new AutoScore(suction, armExtension, armTilt, intake, isCube),
       new ResetArm(armExtension, armTilt, 1.0),
       new WaitUntilCommand(() -> DriverStation.getMatchTime() < 5),
       new FollowTrajectory(trajectory, true, drive)

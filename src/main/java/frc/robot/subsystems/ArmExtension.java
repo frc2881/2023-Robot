@@ -28,6 +28,8 @@ public class ArmExtension extends SubsystemBase {
   private final DoubleLogEntry m_logExtensionBusVoltage;
   private final DoubleLogEntry m_logExtensionOutputCurrent;
 
+  public boolean m_isCube = false;
+
   public ArmExtension() {
     m_extensionMotor = new CANSparkMax(Constants.Arm.kExtensionMotorId, MotorType.kBrushless);
     m_extensionMotor.restoreFactoryDefaults();
@@ -77,9 +79,15 @@ public class ArmExtension extends SubsystemBase {
    * Sets the Extension position to given value.
    */
   public void setDesiredPosition(double position, double speed) {
+    double s = speed;
+
+    if(m_isCube == true){
+      s = speed * 0.75;
+    }
+
     m_extensionPID.setOutputRange(
-      Constants.Arm.kExtensionMinOutput * speed,
-      Constants.Arm.kExtensionMaxOutput * speed
+      Constants.Arm.kExtensionMinOutput * s,
+      Constants.Arm.kExtensionMaxOutput * s
     );
     m_extensionPID.setReference(position, CANSparkMax.ControlType.kPosition);
   }
@@ -101,6 +109,10 @@ public class ArmExtension extends SubsystemBase {
       m_extensionMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, false);
       m_extensionMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, false);
     }
+  }
+
+  public void setCube(boolean isCube) {
+    m_isCube = isCube;
   }
 
   /*public boolean isSafeToExtend() {

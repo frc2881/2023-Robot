@@ -26,11 +26,12 @@ public class AutoScoreBalance extends SequentialCommandGroup {
     ArmTilt armTilt, 
     Intake intake, 
     PathPlannerTrajectory moveTrajectory, 
-    PathPlannerTrajectory balanceTrajectory
+    PathPlannerTrajectory balanceTrajectory,
+    boolean isCube
   ) {
     addCommands(
       new ZeroHeadingToAng(drive, 180),
-      new AutoScore(suction, armExtension, armTilt, intake),
+      new AutoScore(suction, armExtension, armTilt, intake, isCube),
       new ParallelCommandGroup(
         new ResetArm(armExtension, armTilt, 1.0),
         new FollowTrajectory(moveTrajectory, true, drive)
