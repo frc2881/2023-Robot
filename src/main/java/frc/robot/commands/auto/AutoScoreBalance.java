@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.arm.ResetArm;
 import frc.robot.commands.drive.SetX;
-import frc.robot.commands.drive.ZeroHeading;
+import frc.robot.commands.drive.ZeroHeadingToAng;
 import frc.robot.subsystems.ArmExtension;
 import frc.robot.subsystems.ArmTilt;
 import frc.robot.subsystems.Drive;
@@ -26,17 +26,19 @@ public class AutoScoreBalance extends SequentialCommandGroup {
     ArmTilt armTilt, 
     Intake intake, 
     PathPlannerTrajectory moveTrajectory, 
-    PathPlannerTrajectory balanceTrajectory
+    PathPlannerTrajectory balanceTrajectory,
+    boolean isCube,
+    boolean isForward
   ) {
     addCommands(
-      new AutoScore(suction, armExtension, armTilt, intake),
+      new ZeroHeadingToAng(drive, 180),
+      new AutoScore(suction, armExtension, armTilt, intake, isCube),
       new ParallelCommandGroup(
         new ResetArm(armExtension, armTilt, 1.0),
         new FollowTrajectory(moveTrajectory, true, drive)
       ),
       new FollowTrajectory(balanceTrajectory, false, drive),
-      new ZeroHeading(drive),
-      new Balance(drive, false),
+      new Balance(drive, isForward),
       new SetX(drive)
     );
   }

@@ -17,6 +17,17 @@ public class NavX extends AHRS {
   }
 
   @Override
+  public void reset() {
+    super.reset();
+    setAngleAdjustment(0);
+  }
+
+  public void resetToAng(double angle) {
+    super.reset();
+    setAngleAdjustment(angle);
+  }
+
+  @Override
   public float getYaw() {
     return -super.getYaw();
   }
@@ -56,7 +67,7 @@ public class NavX extends AHRS {
    * @return the rotation matrix.
    */
   public Rotation2d getRotation2d() {
-    return new Rotation2d(Math.toRadians(getYaw()));
+    return new Rotation2d(Math.toRadians(getAngle()));
   }
 
   @Override

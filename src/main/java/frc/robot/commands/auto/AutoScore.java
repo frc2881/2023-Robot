@@ -5,9 +5,11 @@
 
 package frc.robot.commands.auto;
 
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
+import frc.robot.commands.arm.setCube;
 import frc.robot.commands.arm.Score.ScoreHigh;
 import frc.robot.commands.suction.DisableSuction;
 import frc.robot.commands.suction.EnableSuction;
@@ -22,14 +24,17 @@ public class AutoScore extends SequentialCommandGroup {
     Suction suction, 
     ArmExtension armExtension, 
     ArmTilt armTilt, 
-    Intake intake
+    Intake intake,
+    boolean isCube
   ) {
     addCommands(
+      new setCube(armExtension, armTilt, isCube),
       new WaitCommand(0.02),
       new EnableSuction(suction),
       new WaitUntilCommand(suction::hasVacuumSeal).withTimeout(2.0),
       new ScoreHigh(armExtension, armTilt, 1.0, suction),
-      new DisableSuction(suction)
+      new DisableSuction(suction),
+      new setCube(armExtension, armTilt, false)
     );
   }
 

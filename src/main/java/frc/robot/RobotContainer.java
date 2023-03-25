@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants.Clamps;
 import frc.robot.commands.arm.ArmExtendOverride;
 import frc.robot.commands.arm.ArmTiltOverride;
 import frc.robot.commands.arm.ExtendArm;
@@ -61,13 +62,14 @@ public class RobotContainer {
   private ArmExtension m_armExtension = new ArmExtension();
   private ArmTilt m_armTilt = new ArmTilt();
   private Intake m_intake = null; // HACK: disabling intake since not installed
-  // private Clamps m_clamps = new Clamps();
   private PrettyLights m_lights = new PrettyLights();
 
   private final XboxController m_driverController = new XboxController(Constants.Controllers.kDriverControllerPort);
   private final XboxController m_manipulatorController = new XboxController(Constants.Controllers.kManipulatorControllerPort);
 
   private final SendableChooser<Command> m_autonomousChooser = new SendableChooser<Command>();
+
+  public boolean m_isTesting = true;
  
   public RobotContainer() {
     setupDrive(); 
@@ -182,49 +184,77 @@ public class RobotContainer {
   public void setupAuto() {
     
     PathPlannerTrajectory balancePath = PathPlanner.loadPath("Balance", 1.0, 1.0);
-    PathPlannerTrajectory balanceMidPath = PathPlanner.loadPath("Balance Mid", 1.0, 1.0);
-    PathPlannerTrajectory moveWallPath = PathPlanner.loadPath("Move Wall", 1.5, 1.5);
-    PathPlannerTrajectory moveDividerPath = PathPlanner.loadPath("Move Divider", 1.5, 1.5);
-    PathPlannerTrajectory moveMiddlePath = PathPlanner.loadPath("Move Middle", 3, 3);
-    PathPlannerTrajectory wallBalancePath = PathPlanner.loadPath("Wall Balance", 2, 3);
-    PathPlannerTrajectory dividerBalancePath = PathPlanner.loadPath("Divider Balance", 2, 3);
-    PathPlannerTrajectory middleBalancePath = PathPlanner.loadPath("Middle Balance", 2, 3);
+    PathPlannerTrajectory balanceMidPath = PathPlanner.loadPath("Mid Balance", 1.0, 1.0);
+    PathPlannerTrajectory move1Path = PathPlanner.loadPath("Move 1", 1.5, 1.5);
+    PathPlannerTrajectory moveDivider6Path = PathPlanner.loadPath("Move Divider 6", 3, 3);
+    PathPlannerTrajectory move9Path = PathPlanner.loadPath("Move 9", 1.5, 1.5);
+    PathPlannerTrajectory balance1Path = PathPlanner.loadPath("Balance 1", 2, 3);
+    PathPlannerTrajectory balance6Path = PathPlanner.loadPath("Balance 6", 2, 3);
+    PathPlannerTrajectory balance9Path = PathPlanner.loadPath("Balance 9", 2, 3);
+
     PathPlannerTrajectory testPath = PathPlanner.loadPath("Test", 0.5, 0.5);
 
     m_autonomousChooser.setDefaultOption("None", null);
 
-    m_autonomousChooser.addOption("Score", 
-      new AutoScore(m_suction, m_armExtension, m_armTilt, m_intake));
+    if(m_isTesting == true) {
+      m_autonomousChooser.addOption("Score Cone", 
+      new AutoScore(m_suction, m_armExtension, m_armTilt, m_intake, false));
 
-    m_autonomousChooser.addOption("Middle Balance",
-      new AutoBalance(m_drive, middleBalancePath, balanceMidPath));
+      m_autonomousChooser.addOption("Score Cube", 
+        new AutoScore(m_suction, m_armExtension, m_armTilt, m_intake, true));
 
-    m_autonomousChooser.addOption("Middle Score Move",
-      new AutoMiddleScoreMove(m_drive, m_suction, m_armExtension, m_armTilt, m_intake, moveMiddlePath));
+        m_autonomousChooser.addOption("1 - Move", 
+        new AutoMove(m_drive, move1Path));
 
-    m_autonomousChooser.addOption("Middle Score Balance", 
-      new AutoScoreBalance(m_drive, m_suction, m_armExtension, m_armTilt, m_intake, middleBalancePath, balanceMidPath));
+      m_autonomousChooser.addOption("6 - Balance",
+        new AutoBalance(m_drive, balance6Path, balanceMidPath, true));
 
-    m_autonomousChooser.addOption("Divider Move", 
-      new AutoMove(m_drive, moveDividerPath));
+      m_autonomousChooser.addOption("9 - Move", 
+        new AutoMove(m_drive, move9Path));
+
+      m_autonomousChooser.addOption("Test", 
+        new FollowTrajectory(testPath, false, m_drive));
+    }
+
+    // Position 1
+    m_autonomousChooser.addOption("1 - Score Move", 
+      new AutoScoreMove(m_drive, m_suction, m_armExtension, m_armTilt, m_intake, move1Path, false));
+
+    m_autonomousChooser.addOption("1 - Score Balance", 
+      new AutoScoreBalance(m_drive, m_suction, m_armExtension, m_armTilt, m_intake, balance1Path, balancePath, false, false));
+
+    // Position 5
+    // 5 - Score Cube wait Move Divider
+    m_autonomousChooser.addOption("5 - Score Wait Move Divider", // ADD PATHS
+      new AutoMiddleScoreMove(m_drive, m_suction, m_armExtension, m_armTilt, m_intake, moveDivider6Path, true));
+
+    // 5 - Score Cube wait Move Wall
+    m_autonomousChooser.addOption("5 - Score Wait Move Wall", // ADD PATHS
+      new AutoMiddleScoreMove(m_drive, m_suction, m_armExtension, m_armTilt, m_intake, moveDivider6Path, true));
+
+    // 5- Score Cube Balance
+    m_autonomousChooser.addOption("5 - Score Balance", // ADD PATHS
+      new AutoScoreBalance(m_drive, m_suction, m_armExtension, m_armTilt, m_intake, balance6Path, balanceMidPath, true, true));
+
+    // Position 6
+    m_autonomousChooser.addOption("6 - Score Wait Move Divider",
+      new AutoMiddleScoreMove(m_drive, m_suction, m_armExtension, m_armTilt, m_intake, moveDivider6Path, false));
+
+    m_autonomousChooser.addOption("6 - Score Wait Move Wall", // ADD PATHS
+      new AutoMiddleScoreMove(m_drive, m_suction, m_armExtension, m_armTilt, m_intake, moveDivider6Path, false));
     
-    m_autonomousChooser.addOption("Divider Score Move", 
-      new AutoScoreMove(m_drive, m_suction, m_armExtension, m_armTilt, m_intake, moveDividerPath));
+    m_autonomousChooser.addOption("6 - Score Balance", 
+      new AutoScoreBalance(m_drive, m_suction, m_armExtension, m_armTilt, m_intake, balance6Path, balanceMidPath, false, true));
+    
+    // Position 9
+    m_autonomousChooser.addOption("9 - Score Move", 
+      new AutoScoreMove(m_drive, m_suction, m_armExtension, m_armTilt, m_intake, move9Path, false));
 
-    m_autonomousChooser.addOption("Divider Score Balance", 
-      new AutoScoreBalance(m_drive, m_suction, m_armExtension, m_armTilt, m_intake, dividerBalancePath, balancePath));
+    m_autonomousChooser.addOption("9 - Score Balance", 
+      new AutoScoreBalance(m_drive, m_suction, m_armExtension, m_armTilt, m_intake, balance9Path, balancePath, false, false));
 
-    m_autonomousChooser.addOption("Wall Move", 
-      new AutoMove(m_drive, moveWallPath));
-
-    m_autonomousChooser.addOption("Wall Score Move", 
-      new AutoScoreMove(m_drive, m_suction, m_armExtension, m_armTilt, m_intake, moveWallPath));
-
-    m_autonomousChooser.addOption("Wall Score Balance", 
-      new AutoScoreBalance(m_drive, m_suction, m_armExtension, m_armTilt, m_intake, wallBalancePath, balancePath));
-
-    m_autonomousChooser.addOption("Test", 
-      new FollowTrajectory(testPath, false, m_drive));
+    
+    
 
     SmartDashboard.putData("Auto/Command", m_autonomousChooser);
   }

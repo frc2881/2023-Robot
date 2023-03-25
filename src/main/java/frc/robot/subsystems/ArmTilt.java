@@ -28,6 +28,8 @@ public class ArmTilt extends SubsystemBase {
   private final DoubleLogEntry m_logTiltBusVoltage;
   private final DoubleLogEntry m_logTiltOutputCurrent;
 
+  public boolean m_isCube = false;
+
   public ArmTilt() {
 
     m_tiltMotor = new CANSparkMax(Constants.Arm.kTiltMotorId, MotorType.kBrushless);
@@ -76,9 +78,15 @@ public class ArmTilt extends SubsystemBase {
    * Sets the Tilt position to given value
    */
   public void setDesiredPosition(double position, double speed) {
+    double s = speed;
+
+    if(m_isCube == true){
+      s = speed * 0.75;
+    }
+
     m_tiltPID.setOutputRange(
-      Constants.Arm.kTiltMinOutput * speed,
-      Constants.Arm.kTiltMaxOutput * speed
+      Constants.Arm.kTiltMinOutput * s,
+      Constants.Arm.kTiltMaxOutput * s
     );
     m_tiltPID.setReference(position, CANSparkMax.ControlType.kPosition);
   }
@@ -102,6 +110,10 @@ public class ArmTilt extends SubsystemBase {
       m_tiltMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, false);
       m_tiltMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, false);
     }
+  }
+
+  public void setCube(boolean isCube) {
+    m_isCube = isCube;
   }
 
 

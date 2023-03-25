@@ -2,40 +2,42 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.clamps;
+package frc.robot.commands.arm;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Clamps;
+import frc.robot.subsystems.ArmExtension;
+import frc.robot.subsystems.ArmTilt;
 
-public class ReleaseRight extends CommandBase {
-  private Clamps m_clamps;
-  private Double m_speed;
-
-  public ReleaseRight(Clamps clamps) {
-    m_clamps = clamps;
-    m_speed = 0.15;
+public class setCube extends CommandBase {
+  private final ArmExtension m_armExtend;
+  private final ArmTilt m_armTilt;
+  public boolean m_isCube;
+  /** Creates a new setCube. */
+  public setCube(ArmExtension armExtend, ArmTilt armTilt, boolean isCube) {
     // Use addRequirements() here to declare subsystem dependencies.
+    m_armExtend = armExtend;
+    m_armTilt = armTilt;
+    m_isCube = isCube;
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    m_armExtend.setCube(m_isCube);
+    m_armTilt.setCube(m_isCube);
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-    m_clamps.attachRight(-m_speed);
-  }
+  public void execute() {}
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    m_clamps.attachRight(0.0);
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return true;
   }
 }
