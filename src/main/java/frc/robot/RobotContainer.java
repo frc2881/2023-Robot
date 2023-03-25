@@ -44,8 +44,6 @@ import frc.robot.commands.drive.DriveWithJoysticks;
 import frc.robot.commands.drive.ResetSwerve;
 import frc.robot.commands.drive.ToggleX;
 import frc.robot.commands.drive.ZeroHeading;
-//import frc.robot.commands.intake.RunRollersInward;
-//import frc.robot.commands.intake.RunRollersOutward;
 import frc.robot.commands.suction.ToggleSuction;
 import frc.robot.lib.Utils;
 import frc.robot.subsystems.ArmExtension;
@@ -103,7 +101,6 @@ public class RobotContainer {
 
     new Trigger(m_driverController::getStartButton)
       .onTrue(new ResetSwerve(m_drive));
-
 
     new Trigger(m_driverController::getAButton)
       .whileTrue(new Balance(m_drive, true));
