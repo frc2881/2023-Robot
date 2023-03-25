@@ -11,12 +11,10 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.commands.arm.ResetArm;
-import frc.robot.commands.drive.ZeroHeading;
 import frc.robot.commands.drive.ZeroHeadingToAng;
 import frc.robot.subsystems.ArmExtension;
 import frc.robot.subsystems.ArmTilt;
 import frc.robot.subsystems.Drive;
-import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Suction;
 
 public class AutoMiddleScoreMove extends SequentialCommandGroup {
@@ -25,13 +23,12 @@ public class AutoMiddleScoreMove extends SequentialCommandGroup {
     Suction suction, 
     ArmExtension armExtension, 
     ArmTilt armTilt, 
-    Intake intake, 
     PathPlannerTrajectory trajectory,
     boolean isCube
   ) {
     addCommands(
       new ZeroHeadingToAng(drive, 180),
-      new AutoScore(suction, armExtension, armTilt, intake, isCube),
+      new AutoScore(suction, armExtension, armTilt, isCube),
       new ResetArm(armExtension, armTilt, 1.0),
       new WaitUntilCommand(() -> DriverStation.getMatchTime() < 5),
       new FollowTrajectory(trajectory, true, drive)

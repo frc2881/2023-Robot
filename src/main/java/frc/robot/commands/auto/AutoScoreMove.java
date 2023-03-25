@@ -14,7 +14,6 @@ import frc.robot.commands.drive.ZeroHeadingToAng;
 import frc.robot.subsystems.ArmExtension;
 import frc.robot.subsystems.ArmTilt;
 import frc.robot.subsystems.Drive;
-import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Suction;
 
 public class AutoScoreMove extends SequentialCommandGroup {
@@ -23,13 +22,12 @@ public class AutoScoreMove extends SequentialCommandGroup {
     Suction suction, 
     ArmExtension armExtension, 
     ArmTilt armTilt, 
-    Intake intake, 
     PathPlannerTrajectory trajectory,
     boolean isCube
   ) {
     addCommands(
       new ZeroHeadingToAng(drive, 180),
-      new AutoScore(suction, armExtension, armTilt, intake, isCube),
+      new AutoScore(suction, armExtension, armTilt, isCube),
       new ParallelCommandGroup(
         new ResetArm(armExtension, armTilt, 1.0),
         new FollowTrajectory(trajectory, true, drive)

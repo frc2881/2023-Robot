@@ -165,41 +165,32 @@ public class Drive extends SubsystemBase {
         m_rearLeft.getPosition(),
         m_rearRight.getPosition()
     });
-    //if(!RobotState.isAutonomous()){
-      updateVisionMeasurement(m_leftPhotonCamera);
-      updateVisionMeasurement(m_rightPhotonCamera); 
-    //}       
+    if (!updateVisionMeasurement(m_leftPhotonCamera)) {
+      updateVisionMeasurement(m_rightPhotonCamera);
+    }       
   }
 
-  private void updateVisionMeasurement(PhotonCameraWrapper photonCamera) {
+  private boolean updateVisionMeasurement(PhotonCameraWrapper photonCamera) {
+    boolean isValid = false;
     if (photonCamera != null) {
       Optional<EstimatedRobotPose> pipelineResult = photonCamera.getEstimatedGlobalPose(m_poseEstimator.getEstimatedPosition());
       if (pipelineResult.isPresent()) {
         EstimatedRobotPose estimatedRobotPose = pipelineResult.get();
         Pose2d estimatedPose = estimatedRobotPose.estimatedPose.toPose2d();
-
-        // boolean isValid = false;
-        // if (RobotState.isDisabled()) {
-        //   isValid = true;
-        // } else if (RobotState.isAutonomous()) {
-        //   isValid = Math.abs(estimatedPose.getX() - Constants.Vision.kFieldLayoutNodesX) <= 1.0;
-        // } else if (RobotState.isTeleop()) {
-        //   isValid = estimatedPose.getTranslation().getDistance(getPose().getTranslation()) <= 1.0;
-        // }
-
-        //isValid = true; // HACK
-        //if (isValid) {
+        if (RobotState.isEnabled() && RobotState.isTeleop()) {
+          isValid = estimatedPose.getTranslation().getDistance(getPose().getTranslation()) <= 1.0;
+        } else {
+          isValid = true;
+        }
+        if (isValid) {
           m_poseEstimator.addVisionMeasurement(estimatedPose, estimatedRobotPose.timestampSeconds);
-        //} 
-
-        // double[] values = new double[] {};
-        // if (isValid) {
-        //   values = new double[] { estimatedPose.getX(), estimatedPose.getY(), estimatedPose.getRotation().getDegrees() };
-        // }
-        // SmartDashboard.putNumberArray("Drive/Vision/" + photonCamera.getCameraName() + "/EstimatedPose", values);
-        
+          SmartDashboard.putNumberArray("Drive/Vision/" + photonCamera.getCameraName() + "/EstimatedPose", new double[] { estimatedPose.getX(), estimatedPose.getY(), estimatedPose.getRotation().getDegrees() });
+        } else {
+          SmartDashboard.putNumberArray("Drive/Vision/" + photonCamera.getCameraName() + "/EstimatedPose", new double[] { });
+        }
       }
     }
+    return isValid;
   }
 
   /**

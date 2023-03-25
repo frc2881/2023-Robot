@@ -17,7 +17,6 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.util.Color;
 
 public class Constants {
 
@@ -108,18 +107,6 @@ public class Constants {
         public static final double kTiltTimeOut = 4;
 
         public static final double kExtensionResetPosition = 3.0;
-
-    }
-
-    public static final class Clamps {
-        
-        public static final int kLeftClampCANId = 12;
-
-        public static final int kRightClampCANId = 13;
-
-        public static final int kCurrentLimit = 40;
-
-        public static final float kReverseSoftLimit = 0;
 
     }
 
@@ -222,37 +209,6 @@ public class Constants {
         
       }
 
-      public static final class Intake {
-
-        public static final int kIntakeRollersCANId = 19;
-
-        public static final int kIntakeArmCANId = 18;
-
-        public static final double kExtendSpeed = 0.3; 
-        public static final double kRetractSpeed = -0.3; 
-
-        public static final double kRollersInward = 0.5;
-        public static final double kRollersOutward = -0.5;
-
-        public static final int kCurrentLimit = 30;
-
-        /**
-         * The color of the cube, as detected by the REV Color Sensor V3.
-         */
-        public static final Color kCubeColor = new Color(0, 0, 0); // TODO: Update Color values
-
-        /**
-         * The color of the cone, as detected by the REV Color Sensor V3.
-         */
-        public static final Color kConeColor = new Color(0, 0, 0); // TODO: Update Color values
-
-        /**
-         * The minimum distance to the cargo in order to consider it to be present,
-         * as detected by the REV Color Sensor V3.
-         */
-        public static final int kDistance = 200; // TODO: Update 
-      }
-
       public static final class PrettyLights {
 
       }
@@ -306,22 +262,22 @@ public class Constants {
         /*
          * The target pressure for bottom vacuum state in PSI
          */
-        public static final double kTargetPressureBottom = 18.5;
+        public static final double kTargetPressureBottom = 19.0;
 
         /*
          * The minimum pressure for bottom vacuum state in PSI
          */
-        public static final double kMinimumPressureBottom = 20.5;
+        public static final double kMinimumPressureBottom = 21.0;
 
         /*
          * The target pressure for top vacuum state in PSI
          */
-        public static final double kTargetPressureTop = 18.5;
+        public static final double kTargetPressureTop = 19.0;
 
         /*
          * The minimum pressure for top vacuum state in PSI
          */
-        public static final double kMinimumPressureTop = 20.5;
+        public static final double kMinimumPressureTop = 21.0;
 
       }
 

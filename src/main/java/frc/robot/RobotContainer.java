@@ -18,7 +18,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.Constants.Clamps;
 import frc.robot.commands.arm.ArmExtendOverride;
 import frc.robot.commands.arm.ArmTiltOverride;
 import frc.robot.commands.arm.ExtendArm;
@@ -49,7 +48,6 @@ import frc.robot.lib.Utils;
 import frc.robot.subsystems.ArmExtension;
 import frc.robot.subsystems.ArmTilt;
 import frc.robot.subsystems.Drive;
-import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.PrettyLights;
 import frc.robot.subsystems.PrettyLights.PanelLocation;
 import frc.robot.subsystems.PrettyLights.Pattern;
@@ -61,7 +59,6 @@ public class RobotContainer {
   private Suction m_suction = new Suction();
   private ArmExtension m_armExtension = new ArmExtension();
   private ArmTilt m_armTilt = new ArmTilt();
-  private Intake m_intake = null; // HACK: disabling intake since not installed
   private PrettyLights m_lights = new PrettyLights();
 
   private final XboxController m_driverController = new XboxController(Constants.Controllers.kDriverControllerPort);
@@ -186,22 +183,26 @@ public class RobotContainer {
     PathPlannerTrajectory balancePath = PathPlanner.loadPath("Balance", 1.0, 1.0);
     PathPlannerTrajectory balanceMidPath = PathPlanner.loadPath("Mid Balance", 1.0, 1.0);
     PathPlannerTrajectory move1Path = PathPlanner.loadPath("Move 1", 1.5, 1.5);
+    PathPlannerTrajectory moveDivider5Path = PathPlanner.loadPath("Move Divider 5", 3, 3);
+    PathPlannerTrajectory moveWall5Path = PathPlanner.loadPath("Move Wall 5", 3, 3);
     PathPlannerTrajectory moveDivider6Path = PathPlanner.loadPath("Move Divider 6", 3, 3);
+    PathPlannerTrajectory moveWall6Path = PathPlanner.loadPath("Move Wall 6", 3, 3);
     PathPlannerTrajectory move9Path = PathPlanner.loadPath("Move 9", 1.5, 1.5);
     PathPlannerTrajectory balance1Path = PathPlanner.loadPath("Balance 1", 2, 3);
+    PathPlannerTrajectory balance5Path = PathPlanner.loadPath("Balance 5", 2, 3);
     PathPlannerTrajectory balance6Path = PathPlanner.loadPath("Balance 6", 2, 3);
     PathPlannerTrajectory balance9Path = PathPlanner.loadPath("Balance 9", 2, 3);
 
-    PathPlannerTrajectory testPath = PathPlanner.loadPath("Test", 0.5, 0.5);
+    PathPlannerTrajectory testPath = PathPlanner.loadPath("Test", 1.5, 1.5);
 
     m_autonomousChooser.setDefaultOption("None", null);
 
     if(m_isTesting == true) {
       m_autonomousChooser.addOption("Score Cone", 
-      new AutoScore(m_suction, m_armExtension, m_armTilt, m_intake, false));
+      new AutoScore(m_suction, m_armExtension, m_armTilt, false));
 
       m_autonomousChooser.addOption("Score Cube", 
-        new AutoScore(m_suction, m_armExtension, m_armTilt, m_intake, true));
+        new AutoScore(m_suction, m_armExtension, m_armTilt, true));
 
         m_autonomousChooser.addOption("1 - Move", 
         new AutoMove(m_drive, move1Path));
@@ -218,43 +219,38 @@ public class RobotContainer {
 
     // Position 1
     m_autonomousChooser.addOption("1 - Score Move", 
-      new AutoScoreMove(m_drive, m_suction, m_armExtension, m_armTilt, m_intake, move1Path, false));
+      new AutoScoreMove(m_drive, m_suction, m_armExtension, m_armTilt, move1Path, false));
 
     m_autonomousChooser.addOption("1 - Score Balance", 
-      new AutoScoreBalance(m_drive, m_suction, m_armExtension, m_armTilt, m_intake, balance1Path, balancePath, false, false));
+      new AutoScoreBalance(m_drive, m_suction, m_armExtension, m_armTilt, balance1Path, balancePath, false, false));
 
     // Position 5
-    // 5 - Score Cube wait Move Divider
-    m_autonomousChooser.addOption("5 - Score Wait Move Divider", // ADD PATHS
-      new AutoMiddleScoreMove(m_drive, m_suction, m_armExtension, m_armTilt, m_intake, moveDivider6Path, true));
+    m_autonomousChooser.addOption("5 - Score Wait Move Divider",
+      new AutoMiddleScoreMove(m_drive, m_suction, m_armExtension, m_armTilt, moveDivider5Path, true));
 
-    // 5 - Score Cube wait Move Wall
-    m_autonomousChooser.addOption("5 - Score Wait Move Wall", // ADD PATHS
-      new AutoMiddleScoreMove(m_drive, m_suction, m_armExtension, m_armTilt, m_intake, moveDivider6Path, true));
+    m_autonomousChooser.addOption("5 - Score Wait Move Wall",
+      new AutoMiddleScoreMove(m_drive, m_suction, m_armExtension, m_armTilt, moveWall5Path, true));
 
-    // 5- Score Cube Balance
-    m_autonomousChooser.addOption("5 - Score Balance", // ADD PATHS
-      new AutoScoreBalance(m_drive, m_suction, m_armExtension, m_armTilt, m_intake, balance6Path, balanceMidPath, true, true));
+    m_autonomousChooser.addOption("5 - Score Balance",
+      new AutoScoreBalance(m_drive, m_suction, m_armExtension, m_armTilt, balance5Path, balanceMidPath, true, true));
 
     // Position 6
     m_autonomousChooser.addOption("6 - Score Wait Move Divider",
-      new AutoMiddleScoreMove(m_drive, m_suction, m_armExtension, m_armTilt, m_intake, moveDivider6Path, false));
+      new AutoMiddleScoreMove(m_drive, m_suction, m_armExtension, m_armTilt, moveDivider6Path, false));
 
-    m_autonomousChooser.addOption("6 - Score Wait Move Wall", // ADD PATHS
-      new AutoMiddleScoreMove(m_drive, m_suction, m_armExtension, m_armTilt, m_intake, moveDivider6Path, false));
+    m_autonomousChooser.addOption("6 - Score Wait Move Wall",
+      new AutoMiddleScoreMove(m_drive, m_suction, m_armExtension, m_armTilt, moveWall6Path, false));
     
     m_autonomousChooser.addOption("6 - Score Balance", 
-      new AutoScoreBalance(m_drive, m_suction, m_armExtension, m_armTilt, m_intake, balance6Path, balanceMidPath, false, true));
+      new AutoScoreBalance(m_drive, m_suction, m_armExtension, m_armTilt, balance6Path, balanceMidPath, false, true));
     
     // Position 9
     m_autonomousChooser.addOption("9 - Score Move", 
-      new AutoScoreMove(m_drive, m_suction, m_armExtension, m_armTilt, m_intake, move9Path, false));
+      new AutoScoreMove(m_drive, m_suction, m_armExtension, m_armTilt, move9Path, false));
 
     m_autonomousChooser.addOption("9 - Score Balance", 
-      new AutoScoreBalance(m_drive, m_suction, m_armExtension, m_armTilt, m_intake, balance9Path, balancePath, false, false));
+      new AutoScoreBalance(m_drive, m_suction, m_armExtension, m_armTilt, balance9Path, balancePath, false, false));
 
-    
-    
 
     SmartDashboard.putData("Auto/Command", m_autonomousChooser);
   }
