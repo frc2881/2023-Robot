@@ -9,7 +9,7 @@ import com.pathplanner.lib.PathPlannerTrajectory;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.drive.SetX;
-import frc.robot.commands.drive.ZeroHeading;
+import frc.robot.commands.drive.ZeroHeadingToAng;
 import frc.robot.subsystems.Drive;
 
 public class AutoBalance extends SequentialCommandGroup {
@@ -20,9 +20,9 @@ public class AutoBalance extends SequentialCommandGroup {
     PathPlannerTrajectory balanceTrajectory
   ) {
     addCommands(
+      new ZeroHeadingToAng(drive, 180),
       new FollowTrajectory(moveTrajectory, true, drive),
       new FollowTrajectory(balanceTrajectory, false, drive),
-      new ZeroHeading(drive),
       new Balance(drive, false),
       new SetX(drive)
     );

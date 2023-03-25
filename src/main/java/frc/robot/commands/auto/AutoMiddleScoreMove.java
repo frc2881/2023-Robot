@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.commands.arm.ResetArm;
 import frc.robot.commands.drive.ZeroHeading;
+import frc.robot.commands.drive.ZeroHeadingToAng;
 import frc.robot.subsystems.ArmExtension;
 import frc.robot.subsystems.ArmTilt;
 import frc.robot.subsystems.Drive;
@@ -28,11 +29,11 @@ public class AutoMiddleScoreMove extends SequentialCommandGroup {
     PathPlannerTrajectory trajectory
   ) {
     addCommands(
+      new ZeroHeadingToAng(drive, 180),
       new AutoScore(suction, armExtension, armTilt, intake),
       new ResetArm(armExtension, armTilt, 1.0),
       new WaitUntilCommand(() -> DriverStation.getMatchTime() < 5),
-      new FollowTrajectory(trajectory, true, drive),
-      new ZeroHeading(drive)
+      new FollowTrajectory(trajectory, true, drive)
     );
   }
 }
