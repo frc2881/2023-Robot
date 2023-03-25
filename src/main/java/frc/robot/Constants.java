@@ -335,6 +335,8 @@ public class Constants {
             }
         }
 
+        public static final double kFieldLayoutNodesX = 1.75;
+
         public static final String kLeftCameraName = "LEFT";
         public static final Transform3d kLeftRobotToCamera =
             new Transform3d(

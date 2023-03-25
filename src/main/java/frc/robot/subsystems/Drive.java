@@ -165,10 +165,10 @@ public class Drive extends SubsystemBase {
         m_rearLeft.getPosition(),
         m_rearRight.getPosition()
     });
-    if(!RobotState.isAutonomous()){
+    //if(!RobotState.isAutonomous()){
       updateVisionMeasurement(m_leftPhotonCamera);
       updateVisionMeasurement(m_rightPhotonCamera); 
-    }       
+    //}       
   }
 
   private void updateVisionMeasurement(PhotonCameraWrapper photonCamera) {
@@ -177,12 +177,27 @@ public class Drive extends SubsystemBase {
       if (pipelineResult.isPresent()) {
         EstimatedRobotPose estimatedRobotPose = pipelineResult.get();
         Pose2d estimatedPose = estimatedRobotPose.estimatedPose.toPose2d();
-        Pose2d currentPose = getPose();
-        double translationDistance = estimatedPose.getTranslation().getDistance(currentPose.getTranslation());
-        if (RobotState.isDisabled() || translationDistance <= 1.0) {
+
+        // boolean isValid = false;
+        // if (RobotState.isDisabled()) {
+        //   isValid = true;
+        // } else if (RobotState.isAutonomous()) {
+        //   isValid = Math.abs(estimatedPose.getX() - Constants.Vision.kFieldLayoutNodesX) <= 1.0;
+        // } else if (RobotState.isTeleop()) {
+        //   isValid = estimatedPose.getTranslation().getDistance(getPose().getTranslation()) <= 1.0;
+        // }
+
+        //isValid = true; // HACK
+        //if (isValid) {
           m_poseEstimator.addVisionMeasurement(estimatedPose, estimatedRobotPose.timestampSeconds);
-        }
-        SmartDashboard.putNumberArray("Drive/Vision/" + photonCamera.getCameraName() + "/EstimatedPose",  new double[] { estimatedPose.getX(), estimatedPose.getY(), estimatedPose.getRotation().getDegrees() });
+        //} 
+
+        // double[] values = new double[] {};
+        // if (isValid) {
+        //   values = new double[] { estimatedPose.getX(), estimatedPose.getY(), estimatedPose.getRotation().getDegrees() };
+        // }
+        // SmartDashboard.putNumberArray("Drive/Vision/" + photonCamera.getCameraName() + "/EstimatedPose", values);
+        
       }
     }
   }
