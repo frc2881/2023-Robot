@@ -36,10 +36,6 @@ import frc.robot.commands.auto.AutoScoreBalance;
 import frc.robot.commands.auto.AutoScoreMove;
 import frc.robot.commands.auto.Balance;
 import frc.robot.commands.auto.FollowTrajectory;
-import frc.robot.commands.clamps.AttachLeft;
-import frc.robot.commands.clamps.AttachRight;
-import frc.robot.commands.clamps.ReleaseLeft;
-import frc.robot.commands.clamps.ReleaseRight;
 import frc.robot.commands.controllers.RumbleControllers;
 import frc.robot.commands.controllers.RumbleControllers.RumblePattern;
 import frc.robot.commands.drive.DriveRobotCentric;
@@ -47,13 +43,10 @@ import frc.robot.commands.drive.DriveWithJoysticks;
 import frc.robot.commands.drive.ResetSwerve;
 import frc.robot.commands.drive.ToggleX;
 import frc.robot.commands.drive.ZeroHeading;
-//import frc.robot.commands.intake.RunRollersInward;
-//import frc.robot.commands.intake.RunRollersOutward;
 import frc.robot.commands.suction.ToggleSuction;
 import frc.robot.lib.Utils;
 import frc.robot.subsystems.ArmExtension;
 import frc.robot.subsystems.ArmTilt;
-import frc.robot.subsystems.Clamps;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.PrettyLights;
@@ -68,7 +61,7 @@ public class RobotContainer {
   private ArmExtension m_armExtension = new ArmExtension();
   private ArmTilt m_armTilt = new ArmTilt();
   private Intake m_intake = null; // HACK: disabling intake since not installed
-  private Clamps m_clamps = new Clamps();
+  // private Clamps m_clamps = new Clamps();
   private PrettyLights m_lights = new PrettyLights();
 
   private final XboxController m_driverController = new XboxController(Constants.Controllers.kDriverControllerPort);
@@ -106,18 +99,6 @@ public class RobotContainer {
 
     new Trigger(m_driverController::getStartButton)
       .onTrue(new ResetSwerve(m_drive));
-
-    new Trigger(() -> m_driverController.getRightBumper())
-      .whileTrue(new AttachRight(m_clamps));
-
-    new Trigger(() -> m_driverController.getPOV() == 90)
-      .whileTrue(new ReleaseRight(m_clamps));
-
-    new Trigger(() -> m_driverController.getLeftBumper())
-      .whileTrue(new AttachLeft(m_clamps));
-
-    new Trigger(() -> m_driverController.getPOV() == 270)
-      .whileTrue(new ReleaseLeft(m_clamps));
 
     new Trigger(m_driverController::getAButton)
       .whileTrue(new Balance(m_drive, true));
