@@ -37,7 +37,9 @@ public class ExtendArmToLength extends CommandBase {
   }
 
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    m_armExtension.run(0.0);
+  }
 
   @Override
   public boolean isFinished() {

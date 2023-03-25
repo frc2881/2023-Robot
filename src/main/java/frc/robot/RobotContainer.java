@@ -75,6 +75,8 @@ public class RobotContainer {
   private final XboxController m_manipulatorController = new XboxController(Constants.Controllers.kManipulatorControllerPort);
 
   private final SendableChooser<Command> m_autonomousChooser = new SendableChooser<Command>();
+
+  public boolean m_isTesting = false;
  
   public RobotContainer() {
     setupDrive(); 
@@ -212,41 +214,52 @@ public class RobotContainer {
 
     m_autonomousChooser.setDefaultOption("None", null);
 
-    m_autonomousChooser.addOption("Score Cone", 
-      new AutoScore(m_suction, m_armExtension, m_armTilt, m_intake, false));
-
-    m_autonomousChooser.addOption("Score Cube", 
-      new AutoScore(m_suction, m_armExtension, m_armTilt, m_intake, true));
-
-    m_autonomousChooser.addOption("Middle Balance",
-      new AutoBalance(m_drive, middleBalancePath, balanceMidPath));
-
-    m_autonomousChooser.addOption("Middle Score Cone Move",
-      new AutoMiddleScoreMove(m_drive, m_suction, m_armExtension, m_armTilt, m_intake, moveMiddlePath, false));
-
-    m_autonomousChooser.addOption("Middle Score Cone Balance", 
-      new AutoScoreBalance(m_drive, m_suction, m_armExtension, m_armTilt, m_intake, middleBalancePath, balanceMidPath, false));
-
-    m_autonomousChooser.addOption("Divider Move", 
-      new AutoMove(m_drive, moveDividerPath));
-    
-    m_autonomousChooser.addOption("Divider Score Cone Move", 
-      new AutoScoreMove(m_drive, m_suction, m_armExtension, m_armTilt, m_intake, moveDividerPath, false));
-
-    m_autonomousChooser.addOption("Divider Score Cone Balance", 
-      new AutoScoreBalance(m_drive, m_suction, m_armExtension, m_armTilt, m_intake, dividerBalancePath, balancePath, false));
-
-    m_autonomousChooser.addOption("Wall Move", 
-      new AutoMove(m_drive, moveWallPath));
-
-    m_autonomousChooser.addOption("Wall Score Cone Move", 
+    m_autonomousChooser.addOption("1 - Score Cone Move", 
       new AutoScoreMove(m_drive, m_suction, m_armExtension, m_armTilt, m_intake, moveWallPath, false));
 
-    m_autonomousChooser.addOption("Wall Score Cone Balance", 
+    m_autonomousChooser.addOption("1 - Score Cone Balance", 
       new AutoScoreBalance(m_drive, m_suction, m_armExtension, m_armTilt, m_intake, wallBalancePath, balancePath, false));
 
-    m_autonomousChooser.addOption("Test", 
-      new FollowTrajectory(testPath, false, m_drive));
+    // 5 - Score Cube wait Move Divider
+
+    // 5 - Score Cube wait Move Wall
+
+    // 5- Score Cube Balance
+
+    m_autonomousChooser.addOption("6 - Score Cone Move", // Wait move divider
+      new AutoMiddleScoreMove(m_drive, m_suction, m_armExtension, m_armTilt, m_intake, moveMiddlePath, false));
+
+    // wait move wall
+    
+    m_autonomousChooser.addOption("6 - Score Cone Balance", 
+      new AutoScoreBalance(m_drive, m_suction, m_armExtension, m_armTilt, m_intake, middleBalancePath, balanceMidPath, false));
+    
+    m_autonomousChooser.addOption("9 - Score Cone Move", 
+      new AutoScoreMove(m_drive, m_suction, m_armExtension, m_armTilt, m_intake, moveDividerPath, false));
+
+    m_autonomousChooser.addOption("9 - Score Cone Balance", 
+      new AutoScoreBalance(m_drive, m_suction, m_armExtension, m_armTilt, m_intake, dividerBalancePath, balancePath, false));
+
+    if(m_isTesting == true) {
+      m_autonomousChooser.addOption("Score Cone", 
+      new AutoScore(m_suction, m_armExtension, m_armTilt, m_intake, false));
+
+      m_autonomousChooser.addOption("Score Cube", 
+        new AutoScore(m_suction, m_armExtension, m_armTilt, m_intake, true));
+
+      m_autonomousChooser.addOption("6 - Balance",
+        new AutoBalance(m_drive, middleBalancePath, balanceMidPath));
+
+      m_autonomousChooser.addOption("9 - Move", 
+        new AutoMove(m_drive, moveDividerPath));
+
+      m_autonomousChooser.addOption("1 - Move", 
+        new AutoMove(m_drive, moveWallPath));
+
+      m_autonomousChooser.addOption("Test", 
+        new FollowTrajectory(testPath, false, m_drive));
+    }
+    
 
     SmartDashboard.putData("Auto/Command", m_autonomousChooser);
   }

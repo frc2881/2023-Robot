@@ -42,7 +42,9 @@ public class TiltArmToHeight extends CommandBase {
   }
     
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    m_armTilt.run(0.0);
+  }
 
   @Override
   public boolean isFinished() {
