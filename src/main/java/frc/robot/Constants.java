@@ -225,6 +225,16 @@ public class Constants {
         public static final int kMotorTopId = 11;
 
         /**
+         * The CAN ID of the third suction motor.
+         */
+        public static final int kMotorLeftId = 12;
+
+        /**
+         * The CAN ID of the fourth suction motor.
+         */
+        public static final int kMotorRightId = 13;
+
+        /**
          * The pneumatic hub channel ID of the first suction solenoid.
          */
         public static final int kSolenoidBottomId = 0;
@@ -233,6 +243,16 @@ public class Constants {
          * The pneumatic hub channel ID of the second suction solenoid.
          */
         public static final int kSolenoidTopId = 1;
+
+        /**
+         * The pneumatic hub channel ID of the third suction solenoid.
+         */
+        public static final int kSolenoidLeftId = 14;
+
+        /**
+         * The pneumatic hub channel ID of the fourth suction solenoid.
+         */
+        public static final int kSolenoidRightId = 15;
 
         /**
          * The maximum current to send to the suction motor.
@@ -259,25 +279,27 @@ public class Constants {
          */
         public static final int kPressureSensorTopId = 1;
 
+        /**
+         * The pneumatic hub channel ID of the left pressure sensor.
+         */
+        public static final int kPressureSensorLeftId = 3; 
+
+        /**
+         * The pneumatic hub channel ID of the right pressure sensor.
+         */
+        public static final int kPressureSensorRightId = 2;
+
         /*
          * The target pressure for bottom vacuum state in PSI
          */
-        public static final double kTargetPressureBottom = 19.0;
+        public static final double kMaximumPressure = 19.0;
 
         /*
          * The minimum pressure for bottom vacuum state in PSI
          */
-        public static final double kMinimumPressureBottom = 21.0;
+        public static final double kTargetPressure = 21.0;
 
-        /*
-         * The target pressure for top vacuum state in PSI
-         */
-        public static final double kTargetPressureTop = 19.0;
-
-        /*
-         * The minimum pressure for top vacuum state in PSI
-         */
-        public static final double kMinimumPressureTop = 21.0;
+        public static final double kMinimumPressure = 25.0;
 
       }
 

@@ -29,19 +29,7 @@ public class TiltArmToHeight extends CommandBase {
   }
 
   @Override
-  public void execute() {
-    /* 
-    boolean intakeIsOut = m_intake.isOut;
-    boolean isSafe = m_arm.isSafeToTilt();
-    
-    if(m_speed < 0){
-      if(intakeIsOut || isSafe == false){
-        m_arm.tilt(0.0);
-      } else {
-        m_arm.tilt(m_speed);
-      }
-    }*/
-  }
+  public void execute(){}
     
   @Override
   public void end(boolean interrupted) {

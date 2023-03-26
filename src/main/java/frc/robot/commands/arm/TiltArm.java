@@ -29,11 +29,6 @@ public class TiltArm extends CommandBase {
   @Override
   public void execute() {
     m_armTilt.run(-m_speed.getAsDouble());
-    /*if(m_arm.isSafeToTilt()){
-      m_arm.runTilt(-m_speed.getAsDouble());
-    } else {
-      m_arm.runTilt(0.0);
-    }*/
   }
 
   @Override

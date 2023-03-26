@@ -16,9 +16,9 @@ import frc.robot.subsystems.ArmExtension;
 import frc.robot.subsystems.ArmTilt;
 import frc.robot.subsystems.Suction;
 
-public class AutoScore extends SequentialCommandGroup {
+public class Score extends SequentialCommandGroup {
 
-  public AutoScore(
+  public Score(
     Suction suction, 
     ArmExtension armExtension, 
     ArmTilt armTilt,
@@ -28,7 +28,7 @@ public class AutoScore extends SequentialCommandGroup {
       new setCube(armExtension, armTilt, isCube),
       new WaitCommand(0.02),
       new EnableSuction(suction),
-      new WaitUntilCommand(suction::hasVacuumSeal).withTimeout(2.0),
+      new WaitUntilCommand(suction::isVacuumEnabled).withTimeout(2.0),
       new ScoreHigh(armExtension, armTilt, 1.0, suction),
       new DisableSuction(suction),
       new setCube(armExtension, armTilt, false)

@@ -116,24 +116,6 @@ public class ArmTilt extends SubsystemBase {
     m_isCube = isCube;
   }
 
-
-  /*public boolean isSafeToExtend() {
-    double tilt = m_tiltMotorEncoder.getPosition();
-    m_isExtendSafe = tilt < Constants.Arm.kMinSafeTilt;
-    return m_isExtendSafe;
-  }
-
-  public boolean isSafeToTilt() {
-    double extensionPosition = m_extensionMotorEncoder.getPosition();
-    double tiltPosition = m_tiltMotorEncoder.getPosition();
-    if (tiltPosition > Constants.Arm.kMinSafeTilt) {
-      m_isTiltSafe = true;
-    } else {
-      m_isTiltSafe = extensionPosition > 0;
-    }
-    return m_isTiltSafe;
-  }*/
-
   public void reset() {
     m_tiltMotor.set(0);
   }
@@ -144,7 +126,6 @@ public class ArmTilt extends SubsystemBase {
 
     builder.addDoubleProperty("Tilt/Position", m_tiltMotorEncoder::getPosition, null);
     builder.addDoubleProperty("Tilt/Motor/Speed", m_tiltMotor::get, null);
-    //builder.addBooleanProperty("Tilt/IsSafe", this::isSafeToTilt, null);
 
   }
 

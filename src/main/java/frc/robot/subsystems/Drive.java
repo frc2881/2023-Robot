@@ -294,9 +294,7 @@ public class Drive extends SubsystemBase {
     }
 
   public void toggleX(){
-    // if u push the button, x goes to true and pushed is set to false
-    // if u push the button again, x goes to false, pushed goes to true and setX ends
-    if(m_isX == false){
+    if(!m_isX){
       m_frontLeft.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(45)));
       m_frontRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(-45)));
       m_rearLeft.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(-45)));
