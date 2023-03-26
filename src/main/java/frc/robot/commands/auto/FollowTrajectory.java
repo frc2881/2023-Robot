@@ -14,28 +14,28 @@ import frc.robot.Constants;
 import frc.robot.subsystems.Drive;
 
 public class FollowTrajectory extends SequentialCommandGroup {
-    public FollowTrajectory(PathPlannerTrajectory trajectory, boolean isFirstPath, Drive drive) {
-        PIDController xPidController = new PIDController(0.01, 0, 0);
-        PIDController yPidController = new PIDController(0.01, 0, 0);
-        PIDController tPidController = new PIDController(5, 0, 0);
-        addCommands(
-            /*new InstantCommand(() -> {
-                // Reset odometry for the first path you run during auto
-                if (isFirstPath) {
-                    drive.resetPose(trajectory.getInitialHolonomicPose());
-                }
-            }),*/
-            new PPSwerveControllerCommand(
-                trajectory,
-                drive::getPose,
-                Constants.Drive.kDriveKinematics,
-                // The PID controllers set to 0 work best since the swerve modules are already
-                // being tuned in the Drive PID Controllers.
-                xPidController,
-                yPidController,
-                tPidController,
-                drive::setModuleStates,
-                true,
-                drive));
-    }
+	public FollowTrajectory(PathPlannerTrajectory trajectory, boolean isFirstPath, Drive drive) {
+		PIDController xPidController = new PIDController(0.01, 0, 0);
+		PIDController yPidController = new PIDController(0.01, 0, 0);
+		PIDController tPidController = new PIDController(5, 0, 0);
+		addCommands(
+			/*new InstantCommand(() -> {
+				// Reset odometry for the first path you run during auto
+				if (isFirstPath) {
+					drive.resetPose(trajectory.getInitialHolonomicPose());
+				}
+			}),*/
+			new PPSwerveControllerCommand(
+				trajectory,
+				drive::getPose,
+				Constants.Drive.kDriveKinematics,
+				// The PID controllers set to 0 work best since the swerve modules are already
+				// being tuned in the Drive PID Controllers.
+				xPidController,
+				yPidController,
+				tPidController,
+				drive::setModuleStates,
+				true,
+				drive));
+	}
 }

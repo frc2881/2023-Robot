@@ -42,7 +42,7 @@ import frc.robot.commands.drive.AlignToNearestNode;
 import frc.robot.commands.drive.DriveRobotCentric;
 import frc.robot.commands.drive.DriveWithJoysticks;
 import frc.robot.commands.drive.ResetSwerve;
-import frc.robot.commands.drive.ToggleX;
+import frc.robot.commands.drive.ToggleXConfiguration;
 import frc.robot.commands.drive.ZeroHeading;
 import frc.robot.commands.suction.ToggleSuction;
 import frc.robot.lib.Utils;
@@ -101,14 +101,14 @@ public class RobotContainer {
     new Trigger(m_driverController::getStartButton)
       .onTrue(new ResetSwerve(m_drive));
 
-    // new Trigger(m_driverController::getAButton)
-      // .onTrue(new AlignToNearestNode(m_drive, m_drive.getNearestNodeTrajectory()));
+    new Trigger(m_driverController::getAButton)
+      .onTrue(new AlignToNearestNode(m_drive, m_drive::getTrajectoryForNearestNode));
 
     new Trigger(m_driverController::getBButton)
       .whileTrue(new AutoBalance(m_drive, false));
     
     new Trigger(m_driverController::getXButton)
-      .onTrue(new ToggleX(m_drive));
+      .onTrue(new ToggleXConfiguration(m_drive));
 
     // MANIPULATOR CONTROLLER =========================
 
@@ -165,14 +165,14 @@ public class RobotContainer {
       .and(m_manipulatorController::getYButton)
       .whileTrue(new ScoreMedium(m_armExtension, m_armTilt, 1.0, m_suction));
 
-    // RUMBLES
+    // RUMBLES ============================================
+
     new Trigger(() -> (RobotState.isTeleop() && m_suction.isVacuumEnabled()))
       .onTrue(new RumbleControllers(m_driverController, m_manipulatorController, RumblePattern.GOOD));
 
-      new Trigger(() -> (RobotState.isTeleop() && m_suction.isVacuumDisabled()))
+    new Trigger(() -> (RobotState.isTeleop() && m_suction.isVacuumDisabled()))
       .onTrue(new RumbleControllers(m_driverController, m_manipulatorController, RumblePattern.BAD));
 
-    
   }
 
   public void setupAuto() {

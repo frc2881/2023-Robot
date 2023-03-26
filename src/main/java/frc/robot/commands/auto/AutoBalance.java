@@ -70,8 +70,6 @@ public class AutoBalance extends CommandBase {
       }
       case LookForOver:
       {
-        double roll = m_drive.getRoll();
-        
         if(m_speed > 0.0){
           m_drive.drive(-m_speed/2, 0.0, 0.0);
           m_repeat = 18;

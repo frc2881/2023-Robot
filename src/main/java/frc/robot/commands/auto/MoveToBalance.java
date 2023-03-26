@@ -8,7 +8,7 @@ package frc.robot.commands.auto;
 import com.pathplanner.lib.PathPlannerTrajectory;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.commands.drive.SetX;
+import frc.robot.commands.drive.SetXConfiguration;
 import frc.robot.commands.drive.ZeroHeadingToAng;
 import frc.robot.subsystems.Drive;
 
@@ -25,7 +25,7 @@ public class MoveToBalance extends SequentialCommandGroup {
       new FollowTrajectory(moveTrajectory, true, drive),
       new FollowTrajectory(balanceTrajectory, false, drive),
       new AutoBalance(drive, isForward),
-      new SetX(drive)
+      new SetXConfiguration(drive)
     );
   }
 
