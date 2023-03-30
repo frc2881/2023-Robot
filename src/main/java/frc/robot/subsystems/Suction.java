@@ -240,10 +240,14 @@ public class Suction extends SubsystemBase {
     }
   }
 
-  public boolean isVacuumEnabled() {
+  public boolean isVacuumEnabledForCone() {
     return 
       m_currentPressureBottom <= Constants.Suction.kMinimumPressure && 
-      m_currentPressureTop <= Constants.Suction.kMinimumPressure && 
+      m_currentPressureTop <= Constants.Suction.kMinimumPressure;
+  }
+
+  public boolean isVacuumEnabledForCube() {
+    return 
       m_currentPressureLeft <= Constants.Suction.kMinimumPressure && 
       m_currentPressureRight <= Constants.Suction.kMinimumPressure;
   }
@@ -281,10 +285,10 @@ public class Suction extends SubsystemBase {
   }
 
   private void updateTelemetry() {
-    SmartDashboard.putNumber("Suction/Bottom/Pressure/Current", m_currentPressureBottom);
-    SmartDashboard.putNumber("Suction/Top/Pressure/Current", m_currentPressureTop);
-    SmartDashboard.putNumber("Suction/Left/Pressure/Current", m_currentPressureLeft);
-    SmartDashboard.putNumber("Suction/Right/Pressure/Current", m_currentPressureRight);
+    SmartDashboard.putNumber("Suction/Pressure/Current/Bottom", m_currentPressureBottom);
+    SmartDashboard.putNumber("Suction/Pressure/Current/Top", m_currentPressureTop);
+    SmartDashboard.putNumber("Suction/Pressure/Current/Left", m_currentPressureLeft);
+    SmartDashboard.putNumber("Suction/Pressure/Current/Right", m_currentPressureRight);
   }
 
   private void logSuction() {
