@@ -29,18 +29,18 @@ public class AlignToNearestNode extends SequentialCommandGroup {
 				() -> {
 					SmartDashboard.putString("Drive/DynamicTrajectory", trajectory.get().toString());
 				}
+			),
+			new PPSwerveControllerCommand(
+				trajectory.get(),
+				drive::getPose,
+				Constants.Drive.kDriveKinematics,
+				xPidController,
+				yPidController,
+				tPidController,
+				drive::setModuleStates,
+				false,
+				drive
 			)
-			// new PPSwerveControllerCommand(
-			// 	trajectory.get(),
-			// 	drive::getPose,
-			// 	Constants.Drive.kDriveKinematics,
-			// 	xPidController,
-			// 	yPidController,
-			// 	tPidController,
-			// 	drive::setModuleStates,
-			// 	false,
-			// 	drive
-			// )
 		);
 	}
 }

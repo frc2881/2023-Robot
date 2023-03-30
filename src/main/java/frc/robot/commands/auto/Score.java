@@ -28,7 +28,7 @@ public class Score extends SequentialCommandGroup {
       new setCube(armExtension, armTilt, isCube),
       new WaitCommand(0.02),
       new EnableSuction(suction),
-      new WaitUntilCommand(suction::isVacuumEnabled).withTimeout(2.0),
+      new WaitUntilCommand(suction::isVacuumEnabledForCone).withTimeout(2.0),
       new ScoreHigh(armExtension, armTilt, 1.0, suction),
       new DisableSuction(suction),
       new setCube(armExtension, armTilt, false)

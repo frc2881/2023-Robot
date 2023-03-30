@@ -167,7 +167,7 @@ public class RobotContainer {
 
     // RUMBLES ============================================
 
-    new Trigger(() -> (RobotState.isTeleop() && m_suction.isVacuumEnabled()))
+    new Trigger(() -> (RobotState.isTeleop() && (m_suction.isVacuumEnabledForCone() || m_suction.isVacuumEnabledForCube())))
       .onTrue(new RumbleControllers(m_driverController, m_manipulatorController, RumblePattern.GOOD));
 
     new Trigger(() -> (RobotState.isTeleop() && m_suction.isVacuumDisabled()))

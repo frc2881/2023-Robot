@@ -14,16 +14,16 @@ import frc.robot.subsystems.Suction;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class PickUpGamePiece extends SequentialCommandGroup {
+public class PickUpCone extends SequentialCommandGroup {
   /** Creates a new PickUpGamePiece. */
-  public PickUpGamePiece(ArmTilt armTilt, ArmExtension armExtension, Suction suction) {
+  public PickUpCone(ArmTilt armTilt, ArmExtension armExtension, Suction suction) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new TiltArmToHeight(armTilt, 0.5, null, false), // Bring arm out of robot
       new ExtendArmToLength(armExtension, 0.5, null),
       new EnableSuction(suction), // Grab game piece
-      new WaitUntilCommand(suction::isVacuumEnabled).withTimeout(2.0),
+      new WaitUntilCommand(suction::isVacuumEnabledForCone).withTimeout(2.0),
       new TiltArmToHeight(armTilt, 0.5, null, false), // Bring gamepiece up and into the robot
       new ExtendArmToLength(armExtension, 0.5, 0.0)
     );

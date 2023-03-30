@@ -231,7 +231,7 @@ public class Drive extends SubsystemBase {
       new PathConstraints(0.5, 0.5), 
       new PathPoint(
         currentPose.getTranslation(), 
-        Rotation2d.fromDegrees(180),
+        Rotation2d.fromDegrees(180), 
         currentPose.getRotation()
       ),
       new PathPoint(
