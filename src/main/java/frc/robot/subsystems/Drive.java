@@ -77,8 +77,6 @@ public class Drive extends SubsystemBase {
   public PhotonCameraWrapper m_leftPhotonCamera;
   public PhotonCameraWrapper m_rightPhotonCamera;
 
-  private boolean m_hasInitialVisionMeasurement = false;
-
   private final DoubleLogEntry m_logRoll;
   private final DoubleLogEntry m_logYaw;
   private final DoubleLogEntry m_logPitch;
@@ -145,7 +143,6 @@ public class Drive extends SubsystemBase {
       m_rightPhotonCamera.dispose();
       m_rightPhotonCamera = null;
     }
-    m_hasInitialVisionMeasurement = false;
   }
 
   public void updatePose() {
@@ -163,33 +160,21 @@ public class Drive extends SubsystemBase {
   }
 
   private boolean updateVisionMeasurement(PhotonCameraWrapper photonCamera) {
-    boolean isValid = false;
     Pose2d estimatedPose = new Pose2d();
-    
     if (photonCamera != null) {
       Optional<EstimatedRobotPose> pipelineResult = photonCamera.getEstimatedGlobalPose(m_poseEstimator.getEstimatedPosition());
       if (pipelineResult.isPresent()) {
-        isValid = true;
         EstimatedRobotPose estimatedRobotPose = pipelineResult.get();
         estimatedPose = estimatedRobotPose.estimatedPose.toPose2d();
-        if (m_hasInitialVisionMeasurement) {
-          if (RobotState.isEnabled() && RobotState.isTeleop()) {
-            isValid = estimatedPose.getTranslation().getDistance(getPose().getTranslation()) <= 1.0;
-          }
-        }
-        if (isValid) {
-          m_poseEstimator.addVisionMeasurement(estimatedPose, estimatedRobotPose.timestampSeconds);
-          m_hasInitialVisionMeasurement = true;
-        } 
+        m_poseEstimator.addVisionMeasurement(estimatedPose, estimatedRobotPose.timestampSeconds);
+        SmartDashboard.putNumberArray(
+          "Drive/Vision/Camera/" + photonCamera.getCameraName() + "/LastEstimatedPose", 
+          new double[] { estimatedPose.getX(), estimatedPose.getY(), estimatedPose.getRotation().getDegrees() }
+        );
+        return true;
       }
     }
-
-    SmartDashboard.putNumberArray(
-      "Drive/Vision/" + photonCamera.getCameraName() + "/EstimatedPose", 
-      new double[] { estimatedPose.getX(), estimatedPose.getY(), estimatedPose.getRotation().getDegrees() }
-    );
-
-    return isValid;
+    return false;
   }
 
   /**
@@ -232,7 +217,7 @@ public class Drive extends SubsystemBase {
       new PathPoint(
         currentPose.getTranslation(), 
         Rotation2d.fromDegrees(180), 
-        currentPose.getRotation()
+        m_gyro.getRotation2d()
       ),
       new PathPoint(
         nearestNodePose.getTranslation(), 
@@ -240,7 +225,6 @@ public class Drive extends SubsystemBase {
         nearestNodePose.getRotation()
       )
     );
-
     return trajectory;
     //return PathPlannerTrajectory.transformTrajectoryForAlliance(trajectory, DriverStation.getAlliance());
   }
