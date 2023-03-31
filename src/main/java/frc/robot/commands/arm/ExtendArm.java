@@ -28,12 +28,6 @@ public class ExtendArm extends CommandBase {
   @Override
   public void execute() {
     m_armExtension.run(-m_speed.getAsDouble());
-    /* 
-    if (m_arm.isSafeToExtend() == true) {
-      m_arm.runExtension(-m_speed.getAsDouble());
-    } else{
-      m_arm.runExtension(0.0);
-    } */
   }
 
   // Called once the command ends or is interrupted.

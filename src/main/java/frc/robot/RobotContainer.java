@@ -29,34 +29,27 @@ import frc.robot.commands.arm.MoveTo.MoveToMedium;
 import frc.robot.commands.arm.MoveTo.MoveToPickup;
 import frc.robot.commands.arm.Score.ScoreHigh;
 import frc.robot.commands.arm.Score.ScoreMedium;
+import frc.robot.commands.auto.MoveToBalance;
+import frc.robot.commands.auto.ScoreWaitMove;
+import frc.robot.commands.auto.Move;
+import frc.robot.commands.auto.Score;
+import frc.robot.commands.auto.ScoreMoveToBalance;
+import frc.robot.commands.auto.ScoreMove;
 import frc.robot.commands.auto.AutoBalance;
-import frc.robot.commands.auto.AutoMiddleScoreMove;
-import frc.robot.commands.auto.AutoMove;
-import frc.robot.commands.auto.AutoScore;
-import frc.robot.commands.auto.AutoScoreBalance;
-import frc.robot.commands.auto.AutoScoreMove;
-import frc.robot.commands.auto.Balance;
 import frc.robot.commands.auto.FollowTrajectory;
-import frc.robot.commands.clamps.AttachLeft;
-import frc.robot.commands.clamps.AttachRight;
-import frc.robot.commands.clamps.ReleaseLeft;
-import frc.robot.commands.clamps.ReleaseRight;
 import frc.robot.commands.controllers.RumbleControllers;
 import frc.robot.commands.controllers.RumbleControllers.RumblePattern;
+import frc.robot.commands.drive.AlignToNearestNode;
 import frc.robot.commands.drive.DriveRobotCentric;
 import frc.robot.commands.drive.DriveWithJoysticks;
 import frc.robot.commands.drive.ResetSwerve;
-import frc.robot.commands.drive.ToggleX;
+import frc.robot.commands.drive.ToggleXConfiguration;
 import frc.robot.commands.drive.ZeroHeading;
-//import frc.robot.commands.intake.RunRollersInward;
-//import frc.robot.commands.intake.RunRollersOutward;
 import frc.robot.commands.suction.ToggleSuction;
 import frc.robot.lib.Utils;
 import frc.robot.subsystems.ArmExtension;
 import frc.robot.subsystems.ArmTilt;
-import frc.robot.subsystems.Clamps;
 import frc.robot.subsystems.Drive;
-import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.PrettyLights;
 import frc.robot.subsystems.PrettyLights.PanelLocation;
 import frc.robot.subsystems.PrettyLights.Pattern;
@@ -68,14 +61,14 @@ public class RobotContainer {
   private Suction m_suction = new Suction();
   private ArmExtension m_armExtension = new ArmExtension();
   private ArmTilt m_armTilt = new ArmTilt();
-  private Intake m_intake = null; // HACK: disabling intake since not installed
-  private Clamps m_clamps = new Clamps();
   private PrettyLights m_lights = new PrettyLights();
 
   private final XboxController m_driverController = new XboxController(Constants.Controllers.kDriverControllerPort);
   private final XboxController m_manipulatorController = new XboxController(Constants.Controllers.kManipulatorControllerPort);
 
   private final SendableChooser<Command> m_autonomousChooser = new SendableChooser<Command>();
+
+  public boolean m_isTesting = true;
  
   public RobotContainer() {
     setupDrive(); 
@@ -98,7 +91,8 @@ public class RobotContainer {
 
   private void setupControllers() {
     
-    // DRIVER
+    // DRIVER CONTROLLER =========================
+
     new Trigger(() -> Math.abs(m_driverController.getRightTriggerAxis()) > 0.9)
       .whileTrue(new DriveRobotCentric(m_drive));
 
@@ -108,39 +102,22 @@ public class RobotContainer {
     new Trigger(m_driverController::getStartButton)
       .onTrue(new ResetSwerve(m_drive));
 
-    new Trigger(() -> m_driverController.getRightBumper())
-      .whileTrue(new AttachRight(m_clamps));
-
-    new Trigger(() -> m_driverController.getPOV() == 90)
-      .whileTrue(new ReleaseRight(m_clamps));
-
-    new Trigger(() -> m_driverController.getLeftBumper())
-      .whileTrue(new AttachLeft(m_clamps));
-
-    new Trigger(() -> m_driverController.getPOV() == 270)
-      .whileTrue(new ReleaseLeft(m_clamps));
-
-    new Trigger(m_driverController::getAButton)
-      .whileTrue(new Balance(m_drive, true));
+    // new Trigger(m_driverController::getAButton)
+    //   .onTrue(new AlignToNearestNode(m_drive, m_drive::getTrajectoryForNearestNode));
 
     new Trigger(m_driverController::getBButton)
-      .whileTrue(new Balance(m_drive, false));
+      .whileTrue(new AutoBalance(m_drive, false));
     
     new Trigger(m_driverController::getXButton)
-      .onTrue(new ToggleX(m_drive));
+      .onTrue(new ToggleXConfiguration(m_drive));
 
-    // new Trigger(m_driverController::getAButton)
-    //   .whileTrue(new RunRollersInward(m_intake));
-
-    // new Trigger(m_driverController::getBButton)
-    //   .whileTrue(new RunRollersOutward(m_intake));
-
-    // MANIPULATOR
+    // MANIPULATOR CONTROLLER =========================
 
     /* Toggles Suction on or off */
     new Trigger(m_manipulatorController::getAButton)
       .onTrue(new ToggleSuction(m_suction));
 
+    /* Changes lights to different patterns */
     new Trigger(m_manipulatorController::getXButton)
       .onTrue(new InstantCommand(() -> {m_lights.setPattern(Pattern.Heart, PanelLocation.Both);}));
 
@@ -169,9 +146,8 @@ public class RobotContainer {
     
     /* Uses D-Pad to move the arm to position */
     new Trigger(() -> m_manipulatorController.getPOV() == 0)
-      .whileTrue(new ExtendArmToLength(m_armExtension, null, 18.0)//new MoveToHigh(m_armExtension, m_armTilt, 1.0)
-      );
-
+      .whileTrue(new MoveToHigh(m_armExtension, m_armTilt, 1.0));
+      
     new Trigger(() -> m_manipulatorController.getPOV() == 90)
       .whileTrue(new MoveToMedium(m_armExtension, m_armTilt, 1.0));
 
@@ -190,62 +166,91 @@ public class RobotContainer {
       .and(m_manipulatorController::getYButton)
       .whileTrue(new ScoreMedium(m_armExtension, m_armTilt, 1.0, m_suction));
 
-    // RUMBLES
-    new Trigger(() -> (RobotState.isTeleop() && m_suction.hasVacuum()))
+    // RUMBLES ============================================
+
+    new Trigger(() -> (RobotState.isTeleop() && (m_suction.isVacuumEnabledForCone() || m_suction.isVacuumEnabledForCube())))
       .onTrue(new RumbleControllers(m_driverController, m_manipulatorController, RumblePattern.GOOD));
 
-      new Trigger(() -> (RobotState.isTeleop() && m_suction.hasVacuumLost()))
+    new Trigger(() -> (RobotState.isTeleop() && m_suction.isVacuumDisabled()))
       .onTrue(new RumbleControllers(m_driverController, m_manipulatorController, RumblePattern.BAD));
 
-    
   }
 
   public void setupAuto() {
     
+    PathPlannerTrajectory move1Path = PathPlanner.loadPath("Move 1", 1.5, 1.5);
+    PathPlannerTrajectory moveDivider5Path = PathPlanner.loadPath("Move Divider 5", 3, 3);
+    PathPlannerTrajectory moveWall5Path = PathPlanner.loadPath("Move Wall 5", 3, 3);
+    PathPlannerTrajectory moveDivider6Path = PathPlanner.loadPath("Move Divider 6", 3, 3);
+    PathPlannerTrajectory moveWall6Path = PathPlanner.loadPath("Move Wall 6", 3, 3);
+    PathPlannerTrajectory move9Path = PathPlanner.loadPath("Move 9", 1.5, 1.5);
+
+    PathPlannerTrajectory balance1Path = PathPlanner.loadPath("Balance 1", 2, 3);
+    PathPlannerTrajectory balance5Path = PathPlanner.loadPath("Balance 5", 2, 3);
+    PathPlannerTrajectory balance6Path = PathPlanner.loadPath("Balance 6", 2, 3);
+    PathPlannerTrajectory balance9Path = PathPlanner.loadPath("Balance 9", 2, 3);
+
     PathPlannerTrajectory balancePath = PathPlanner.loadPath("Balance", 1.0, 1.0);
-    PathPlannerTrajectory balanceMidPath = PathPlanner.loadPath("Balance Mid", 1.0, 1.0);
-    PathPlannerTrajectory moveWallPath = PathPlanner.loadPath("Move Wall", 1.5, 1.5);
-    PathPlannerTrajectory moveDividerPath = PathPlanner.loadPath("Move Divider", 1.5, 1.5);
-    PathPlannerTrajectory moveMiddlePath = PathPlanner.loadPath("Move Middle", 3, 3);
-    PathPlannerTrajectory wallBalancePath = PathPlanner.loadPath("Wall Balance", 2, 3);
-    PathPlannerTrajectory dividerBalancePath = PathPlanner.loadPath("Divider Balance", 2, 3);
-    PathPlannerTrajectory middleBalancePath = PathPlanner.loadPath("Middle Balance", 2, 3);
-    PathPlannerTrajectory testPath = PathPlanner.loadPath("Test", 0.5, 0.5);
+    PathPlannerTrajectory balanceMidPath = PathPlanner.loadPath("Mid Balance", 1.0, 1.0);
+
+    PathPlannerTrajectory testPath = PathPlanner.loadPath("Test", 1.5, 1.5);
 
     m_autonomousChooser.setDefaultOption("None", null);
 
-    m_autonomousChooser.addOption("Score", 
-      new AutoScore(m_suction, m_armExtension, m_armTilt, m_intake));
+    if(m_isTesting) {
+      m_autonomousChooser.addOption("Score Cone", 
+      new Score(m_suction, m_armExtension, m_armTilt, false));
 
-    m_autonomousChooser.addOption("Middle Balance",
-      new AutoBalance(m_drive, middleBalancePath, balanceMidPath));
+      m_autonomousChooser.addOption("Score Cube", 
+        new Score(m_suction, m_armExtension, m_armTilt, true));
 
-    m_autonomousChooser.addOption("Middle Score Move",
-      new AutoMiddleScoreMove(m_drive, m_suction, m_armExtension, m_armTilt, m_intake, moveMiddlePath));
+        m_autonomousChooser.addOption("1 - Move", 
+        new Move(m_drive, move1Path));
 
-    m_autonomousChooser.addOption("Middle Score Balance", 
-      new AutoScoreBalance(m_drive, m_suction, m_armExtension, m_armTilt, m_intake, middleBalancePath, balanceMidPath));
+      m_autonomousChooser.addOption("6 - Balance",
+        new MoveToBalance(m_drive, balance6Path, balanceMidPath, true));
 
-    m_autonomousChooser.addOption("Divider Move", 
-      new AutoMove(m_drive, moveDividerPath));
+      m_autonomousChooser.addOption("9 - Move", 
+        new Move(m_drive, move9Path));
+
+      m_autonomousChooser.addOption("Test", 
+        new FollowTrajectory(testPath, false, m_drive));
+    }
+
+    // Position 1
+    m_autonomousChooser.addOption("1 - Score Move", 
+      new ScoreMove(m_drive, m_suction, m_armExtension, m_armTilt, move1Path, false));
+
+    m_autonomousChooser.addOption("1 - Score Balance", 
+      new ScoreMoveToBalance(m_drive, m_suction, m_armExtension, m_armTilt, balance1Path, balancePath, false, false));
+
+    // Position 5
+    m_autonomousChooser.addOption("5 - Score Wait Move Divider",
+      new ScoreWaitMove(m_drive, m_suction, m_armExtension, m_armTilt, moveDivider5Path, true));
+
+    m_autonomousChooser.addOption("5 - Score Wait Move Wall",
+      new ScoreWaitMove(m_drive, m_suction, m_armExtension, m_armTilt, moveWall5Path, true));
+
+    m_autonomousChooser.addOption("5 - Score Balance",
+      new ScoreMoveToBalance(m_drive, m_suction, m_armExtension, m_armTilt, balance5Path, balanceMidPath, true, true));
+
+    // Position 6
+    m_autonomousChooser.addOption("6 - Score Wait Move Divider",
+      new ScoreWaitMove(m_drive, m_suction, m_armExtension, m_armTilt, moveDivider6Path, false));
+
+    m_autonomousChooser.addOption("6 - Score Wait Move Wall",
+      new ScoreWaitMove(m_drive, m_suction, m_armExtension, m_armTilt, moveWall6Path, false));
     
-    m_autonomousChooser.addOption("Divider Score Move", 
-      new AutoScoreMove(m_drive, m_suction, m_armExtension, m_armTilt, m_intake, moveDividerPath));
+    m_autonomousChooser.addOption("6 - Score Balance", 
+      new ScoreMoveToBalance(m_drive, m_suction, m_armExtension, m_armTilt, balance6Path, balanceMidPath, false, true));
+    
+    // Position 9
+    m_autonomousChooser.addOption("9 - Score Move", 
+      new ScoreMove(m_drive, m_suction, m_armExtension, m_armTilt, move9Path, false));
 
-    m_autonomousChooser.addOption("Divider Score Balance", 
-      new AutoScoreBalance(m_drive, m_suction, m_armExtension, m_armTilt, m_intake, dividerBalancePath, balancePath));
+    m_autonomousChooser.addOption("9 - Score Balance", 
+      new ScoreMoveToBalance(m_drive, m_suction, m_armExtension, m_armTilt, balance9Path, balancePath, false, false));
 
-    m_autonomousChooser.addOption("Wall Move", 
-      new AutoMove(m_drive, moveWallPath));
-
-    m_autonomousChooser.addOption("Wall Score Move", 
-      new AutoScoreMove(m_drive, m_suction, m_armExtension, m_armTilt, m_intake, moveWallPath));
-
-    m_autonomousChooser.addOption("Wall Score Balance", 
-      new AutoScoreBalance(m_drive, m_suction, m_armExtension, m_armTilt, m_intake, wallBalancePath, balancePath));
-
-    m_autonomousChooser.addOption("Test", 
-      new FollowTrajectory(testPath, false, m_drive));
 
     SmartDashboard.putData("Auto/Command", m_autonomousChooser);
   }
@@ -266,7 +271,6 @@ public class RobotContainer {
       m_suction.reset();
       m_armTilt.reset();
       m_armExtension.reset();
-      
   }
 
   public void resetLights(){

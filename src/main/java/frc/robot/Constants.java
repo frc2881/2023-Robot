@@ -6,18 +6,21 @@
 package frc.robot;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.revrobotics.CANSparkMax.IdleMode;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.util.Color;
 
 public class Constants {
 
@@ -67,7 +70,7 @@ public class Constants {
          /*
          * The maximum distance (in inches) that the arm can elevate.
          */
-        public static final double kTiltForwardLimit = 16; 
+        public static final double kTiltForwardLimit = 17; 
 
          /*
          * The maximum distance (in rotations) that the arm can go down.
@@ -118,18 +121,6 @@ public class Constants {
 
     }
 
-    public static final class Clamps {
-        
-        public static final int kLeftClampCANId = 12;
-
-        public static final int kRightClampCANId = 13;
-
-        public static final int kCurrentLimit = 40;
-
-        public static final float kReverseSoftLimit = 0;
-
-    }
-
     public static final class Drive {
         // Driving Parameters - Note that these are not the maximum capable speeds of
         // the robot, rather the allowed maximum speeds
@@ -148,10 +139,10 @@ public class Constants {
             new Translation2d(-kWheelBase / 2, -kTrackWidth / 2));
     
         // Angular offsets of the modules relative to the chassis in radians
-        public static final double kFrontLeftChassisAngularOffset = 5.9241; 
-        public static final double kFrontRightChassisAngularOffset = 2.8438; 
-        public static final double kRearLeftChassisAngularOffset =  1.5975; 
-        public static final double kRearRightChassisAngularOffset = 4.4625; 
+        public static final double kFrontLeftChassisAngularOffset = 5.9394; 
+        public static final double kFrontRightChassisAngularOffset = 2.8290; 
+        public static final double kRearLeftChassisAngularOffset =  1.5855; 
+        public static final double kRearRightChassisAngularOffset = 4.4465; 
     
         // SPARK MAX CAN IDs
         public static final int kFrontLeftDrivingCanId = 15;
@@ -229,37 +220,6 @@ public class Constants {
         
       }
 
-      public static final class Intake {
-
-        public static final int kIntakeRollersCANId = 19;
-
-        public static final int kIntakeArmCANId = 18;
-
-        public static final double kExtendSpeed = 0.3; 
-        public static final double kRetractSpeed = -0.3; 
-
-        public static final double kRollersInward = 0.5;
-        public static final double kRollersOutward = -0.5;
-
-        public static final int kCurrentLimit = 30;
-
-        /**
-         * The color of the cube, as detected by the REV Color Sensor V3.
-         */
-        public static final Color kCubeColor = new Color(0, 0, 0); // TODO: Update Color values
-
-        /**
-         * The color of the cone, as detected by the REV Color Sensor V3.
-         */
-        public static final Color kConeColor = new Color(0, 0, 0); // TODO: Update Color values
-
-        /**
-         * The minimum distance to the cargo in order to consider it to be present,
-         * as detected by the REV Color Sensor V3.
-         */
-        public static final int kDistance = 200; // TODO: Update 
-      }
-
       public static final class PrettyLights {
 
       }
@@ -276,6 +236,16 @@ public class Constants {
         public static final int kMotorTopId = 11;
 
         /**
+         * The CAN ID of the third suction motor.
+         */
+        public static final int kMotorLeftId = 12;
+
+        /**
+         * The CAN ID of the fourth suction motor.
+         */
+        public static final int kMotorRightId = 13;
+
+        /**
          * The pneumatic hub channel ID of the first suction solenoid.
          */
         public static final int kSolenoidBottomId = 0;
@@ -284,6 +254,16 @@ public class Constants {
          * The pneumatic hub channel ID of the second suction solenoid.
          */
         public static final int kSolenoidTopId = 1;
+
+        /**
+         * The pneumatic hub channel ID of the third suction solenoid.
+         */
+        public static final int kSolenoidLeftId = 14;
+
+        /**
+         * The pneumatic hub channel ID of the fourth suction solenoid.
+         */
+        public static final int kSolenoidRightId = 15;
 
         /**
          * The maximum current to send to the suction motor.
@@ -310,49 +290,80 @@ public class Constants {
          */
         public static final int kPressureSensorTopId = 1;
 
+        /**
+         * The pneumatic hub channel ID of the left pressure sensor.
+         */
+        public static final int kPressureSensorLeftId = 3; 
+
+        /**
+         * The pneumatic hub channel ID of the right pressure sensor.
+         */
+        public static final int kPressureSensorRightId = 2;
+
         /*
          * The target pressure for bottom vacuum state in PSI
          */
-        public static final double kTargetPressureBottom = 18.5;
+        public static final double kMaximumPressure = 19.0;
 
         /*
          * The minimum pressure for bottom vacuum state in PSI
          */
-        public static final double kMinimumPressureBottom = 20.5;
+        public static final double kTargetPressure = 21.0;
 
-        /*
-         * The target pressure for top vacuum state in PSI
-         */
-        public static final double kTargetPressureTop = 18.5;
-
-        /*
-         * The minimum pressure for top vacuum state in PSI
-         */
-        public static final double kMinimumPressureTop = 20.5;
+        public static final double kMinimumPressure = 25.0;
 
       }
 
       public static final class Vision {
-        public static AprilTagFieldLayout kAprilTagFieldLayout = null;
-        static {
-            try {
-                kAprilTagFieldLayout = AprilTagFieldLayout.loadFromResource(AprilTagFields.k2023ChargedUp.m_resourceFile);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
         public static final String kLeftCameraName = "LEFT";
         public static final Transform3d kLeftRobotToCamera =
-            new Transform3d(
-                new Translation3d(-0.16390, 0.18440, 0.59055),
-                new Rotation3d(0, 0, Units.degreesToRadians(10))); 
+					new Transform3d(
+						new Translation3d(-0.16390, 0.18440, 0.59055),
+						new Rotation3d(0, 0, Units.degreesToRadians(10))); 
 
         public static final String kRightCameraName = "RIGHT";
         public static final Transform3d kRightRobotToCamera =
-            new Transform3d(
-                new Translation3d(-0.16390, -0.18298, 0.59055),
-                new Rotation3d(0, 0, Units.degreesToRadians(-10))); 
+					new Transform3d(
+						new Translation3d(-0.16390, -0.18298, 0.59055),
+						new Rotation3d(0, 0, Units.degreesToRadians(-10))); 
+
+				public static AprilTagFieldLayout kAprilTagFieldLayout = null;
+				static {
+					try {
+						kAprilTagFieldLayout = AprilTagFieldLayout.loadFromResource(AprilTagFields.k2023ChargedUp.m_resourceFile);
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+
+				// TODO: calibration of node poses below for each field is required for practice and competition
+
+				private static final double kGridNodePoseXPosition = 1.75;
+				private static final Rotation2d kGridNodeRotation = Rotation2d.fromDegrees(180);
+
+				public static final List<Pose2d> kNodesRedAlliance = new ArrayList<Pose2d>(){{
+					add( new Pose2d(kGridNodePoseXPosition, 7.421, kGridNodeRotation) ); // 1 - Cone
+					add( new Pose2d(kGridNodePoseXPosition, 6.875, kGridNodeRotation) ); // 2 - Cube
+					add( new Pose2d(kGridNodePoseXPosition, 6.329, kGridNodeRotation) ); // 3 - Cone
+					add( new Pose2d(kGridNodePoseXPosition, 5.783, kGridNodeRotation) ); // 4 - Cone
+					add( new Pose2d(kGridNodePoseXPosition, 5.237, kGridNodeRotation) ); // 5 - Cube
+					add( new Pose2d(kGridNodePoseXPosition, 4.691, kGridNodeRotation) ); // 6 - Cone
+					add( new Pose2d(kGridNodePoseXPosition, 4.145, kGridNodeRotation) ); // 7 - Cone
+					add( new Pose2d(kGridNodePoseXPosition, 3.599, kGridNodeRotation) ); // 8 - Cube
+					add( new Pose2d(kGridNodePoseXPosition, 3.053, kGridNodeRotation) ); // 9 - Cone
+				}};
+
+				public static final List<Pose2d> kNodesBlueAlliance = new ArrayList<Pose2d>(){{
+					add( new Pose2d(kGridNodePoseXPosition, 0.594, kGridNodeRotation) ); // 1 - Cone
+					add( new Pose2d(kGridNodePoseXPosition, 1.140, kGridNodeRotation) ); // 2 - Cube
+					add( new Pose2d(kGridNodePoseXPosition, 1.686, kGridNodeRotation) ); // 3 - Cone
+					add( new Pose2d(kGridNodePoseXPosition, 2.232, kGridNodeRotation) ); // 4 - Cone
+					add( new Pose2d(kGridNodePoseXPosition, 2.778, kGridNodeRotation) ); // 5 - Cube
+					add( new Pose2d(kGridNodePoseXPosition, 3.324, kGridNodeRotation) ); // 6 - Cone
+					add( new Pose2d(kGridNodePoseXPosition, 3.870, kGridNodeRotation) ); // 7 - Cone
+					add( new Pose2d(kGridNodePoseXPosition, 4.416, kGridNodeRotation) ); // 8 - Cube
+					add( new Pose2d(kGridNodePoseXPosition, 4.962, kGridNodeRotation) ); // 9 - Cone
+				}};
 
       }
 

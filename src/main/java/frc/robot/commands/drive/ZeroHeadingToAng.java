@@ -7,20 +7,19 @@ package frc.robot.commands.drive;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drive;
 
-public class ToggleX extends CommandBase {
+public class ZeroHeadingToAng extends CommandBase {
   private final Drive m_drive;
-  /** Creates a new ToggleX. */
-  public ToggleX(Drive drive) {
-    // Use addRequirements() here to declare subsystem dependencies.
+  private double m_angle;
+  /** Creates a new ZeroHeadingToAng. */
+  public ZeroHeadingToAng(Drive drive, double angle) {
     m_drive = drive;
-
-    addRequirements(m_drive);
+    m_angle = angle;
+    addRequirements(drive);
   }
 
-  // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_drive.toggleX();
+    m_drive.zeroHeadingToAng(m_angle);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

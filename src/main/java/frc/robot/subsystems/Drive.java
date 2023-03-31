@@ -10,6 +10,11 @@ import java.util.Optional;
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 
+import com.pathplanner.lib.PathConstraints;
+import com.pathplanner.lib.PathPlanner;
+import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.PathPoint;
+
 import edu.wpi.first.apriltag.AprilTagFieldLayout.OriginPosition;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -67,12 +72,10 @@ public class Drive extends SubsystemBase {
   
   private SwerveDriveMode m_swerveDriveMode = SwerveDriveMode.FIELD_CENTRIC;
 
+  private boolean m_isXConfiguration = false;
+
   public PhotonCameraWrapper m_leftPhotonCamera;
   public PhotonCameraWrapper m_rightPhotonCamera;
-
-  public double m_zeroRoll;
-
-  public boolean m_isX = false;
 
   private final DoubleLogEntry m_logRoll;
   private final DoubleLogEntry m_logYaw;
@@ -142,20 +145,6 @@ public class Drive extends SubsystemBase {
     }
   }
 
-  private void sampleModules(){
-    m_frontLeft.sample();
-    m_frontRight.sample();
-    m_rearLeft.sample();
-    m_rearRight.sample();
-  }
-   
-  public void resetSwerve() {
-    m_frontLeft.resetTurningEncoder();
-    m_frontRight.resetTurningEncoder();
-    m_rearLeft.resetTurningEncoder();
-    m_rearRight.resetTurningEncoder();
-  }
-
   public void updatePose() {
     m_poseEstimator.update(
       m_gyro.getRotation2d(), 
@@ -165,24 +154,27 @@ public class Drive extends SubsystemBase {
         m_rearLeft.getPosition(),
         m_rearRight.getPosition()
     });
-    updateVisionMeasurement(m_leftPhotonCamera);
-    updateVisionMeasurement(m_rightPhotonCamera);        
+    if (!updateVisionMeasurement(m_leftPhotonCamera)) {
+      updateVisionMeasurement(m_rightPhotonCamera);
+    }       
   }
 
-  private void updateVisionMeasurement(PhotonCameraWrapper photonCamera) {
+  private boolean updateVisionMeasurement(PhotonCameraWrapper photonCamera) {
+    Pose2d estimatedPose = new Pose2d();
     if (photonCamera != null) {
       Optional<EstimatedRobotPose> pipelineResult = photonCamera.getEstimatedGlobalPose(m_poseEstimator.getEstimatedPosition());
       if (pipelineResult.isPresent()) {
         EstimatedRobotPose estimatedRobotPose = pipelineResult.get();
-        Pose2d estimatedPose = estimatedRobotPose.estimatedPose.toPose2d();
-        Pose2d currentPose = getPose();
-        double translationDistance = estimatedPose.getTranslation().getDistance(currentPose.getTranslation());
-        if (RobotState.isDisabled() || translationDistance <= 1.0) {
-          m_poseEstimator.addVisionMeasurement(estimatedPose, estimatedRobotPose.timestampSeconds);
-        }
-        SmartDashboard.putNumberArray("Drive/Vision/" + photonCamera.getCameraName() + "/EstimatedPose",  new double[] { estimatedPose.getX(), estimatedPose.getY(), estimatedPose.getRotation().getDegrees() });
+        estimatedPose = estimatedRobotPose.estimatedPose.toPose2d();
+        m_poseEstimator.addVisionMeasurement(estimatedPose, estimatedRobotPose.timestampSeconds);
+        SmartDashboard.putNumberArray(
+          "Drive/Vision/Camera/" + photonCamera.getCameraName() + "/LastEstimatedPose", 
+          new double[] { estimatedPose.getX(), estimatedPose.getY(), estimatedPose.getRotation().getDegrees() }
+        );
+        return true;
       }
     }
+    return false;
   }
 
   /**
@@ -211,6 +203,32 @@ public class Drive extends SubsystemBase {
       pose);
   }
 
+  public PathPlannerTrajectory getTrajectoryForNearestNode() {
+    Pose2d currentPose = m_poseEstimator.getEstimatedPosition();
+
+    Pose2d nearestNodePose = currentPose.nearest(
+      DriverStation.getAlliance() == Alliance.Red ? 
+        Constants.Vision.kNodesRedAlliance :
+        Constants.Vision.kNodesBlueAlliance
+    );
+
+    PathPlannerTrajectory trajectory = PathPlanner.generatePath(
+      new PathConstraints(0.5, 0.5), 
+      new PathPoint(
+        currentPose.getTranslation(), 
+        Rotation2d.fromDegrees(180), 
+        m_gyro.getRotation2d()
+      ),
+      new PathPoint(
+        nearestNodePose.getTranslation(), 
+        Rotation2d.fromDegrees(180), 
+        nearestNodePose.getRotation()
+      )
+    );
+    return trajectory;
+    //return PathPlannerTrajectory.transformTrajectoryForAlliance(trajectory, DriverStation.getAlliance());
+  }
+
   /**
    * Method to drive the robot using joystick info.
    *
@@ -225,7 +243,7 @@ public class Drive extends SubsystemBase {
     // xSpeed *= Constants.Drive.kMaxSpeedMetersPerSecond;
     // ySpeed *= Constants.Drive.kMaxSpeedMetersPerSecond;
     // rot *= Constants.Drive.kMaxAngularSpeed;
-    if(!m_isX){
+    if(!m_isXConfiguration){
       var swerveModuleStates = Constants.Drive.kDriveKinematics.toSwerveModuleStates(
         (m_swerveDriveMode == SwerveDriveMode.FIELD_CENTRIC)
           ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, Rotation2d.fromDegrees(m_gyro.getAngle()))
@@ -248,26 +266,21 @@ public class Drive extends SubsystemBase {
   /**
    * Sets the wheels into an X formation to prevent movement.
    */
-  public void setX() {
-      m_frontLeft.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(45)));
-      m_frontRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(-45)));
-      m_rearLeft.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(-45)));
-      m_rearRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(45)));
+  public void setXConfiguration() {
+    m_frontLeft.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(45)));
+    m_frontRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(-45)));
+    m_rearLeft.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(-45)));
+    m_rearRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(45)));
+  }
 
-    }
-
-  public void toggleX(){
+  public void toggleX() {
     // if u push the button, x goes to true and pushed is set to false
     // if u push the button again, x goes to false, pushed goes to true and setX ends
-    if(m_isX == false){
-      m_frontLeft.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(45)));
-      m_frontRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(-45)));
-      m_rearLeft.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(-45)));
-      m_rearRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(45)));
-      m_isX = true;
-    } else {
-      m_isX = false;
+    if (!m_isXConfiguration) {
+      setXConfiguration();
     }
+    m_isXConfiguration = !m_isXConfiguration;
+    SmartDashboard.putBoolean("Drive/Swerve/IsXConfiguration", m_isXConfiguration);
   }
 
   /**
@@ -276,13 +289,27 @@ public class Drive extends SubsystemBase {
    * @param desiredStates The desired SwerveModule states.
    */
   public void setModuleStates(SwerveModuleState[] desiredStates) {
-    if(!m_isX){
+    if (!m_isXConfiguration) {
       SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, Constants.Drive.kMaxSpeedMetersPerSecond);
       m_frontLeft.setDesiredState(desiredStates[0]);
       m_frontRight.setDesiredState(desiredStates[1]);
       m_rearLeft.setDesiredState(desiredStates[2]);
       m_rearRight.setDesiredState(desiredStates[3]);
     }
+  }
+
+  private void sampleModules(){
+    m_frontLeft.sample();
+    m_frontRight.sample();
+    m_rearLeft.sample();
+    m_rearRight.sample();
+  }
+   
+  public void resetSwerve() {
+    m_frontLeft.resetTurningEncoder();
+    m_frontRight.resetTurningEncoder();
+    m_rearLeft.resetTurningEncoder();
+    m_rearRight.resetTurningEncoder();
   }
 
   /** Resets the drive encoders to currently read a position of 0. */
@@ -296,6 +323,10 @@ public class Drive extends SubsystemBase {
   /** Zeroes the heading of the robot. */
   public void zeroHeading() {
     m_gyro.reset();
+  }
+
+  public void zeroHeadingToAng(double angle) {
+    m_gyro.resetToAng(angle);
   }
 
   /**
@@ -318,10 +349,6 @@ public class Drive extends SubsystemBase {
 
   public double getRoll() {
     return m_gyro.getRoll();
-  }
-
-  public void setZeroRoll(){
-    m_zeroRoll = m_gyro.getRoll();
   }
 
   @Override
@@ -348,7 +375,5 @@ public class Drive extends SubsystemBase {
     m_logRoll.append(m_gyro.getRoll());
     m_logYaw.append(m_gyro.getYaw());
     m_logPitch.append(m_gyro.getPitch());
-    
-
   }
 }

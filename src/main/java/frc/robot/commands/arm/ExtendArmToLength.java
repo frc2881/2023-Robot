@@ -28,16 +28,12 @@ public class ExtendArmToLength extends CommandBase {
   }
 
   @Override
-  public void execute() {
-    /* if (m_arm.isSafeToExtend() == true) {
-      m_arm.setDesiredExtensionPosition(m_position);
-    } else{
-      m_arm.setDesiredExtensionPosition(m_arm.getExtensionEncoderPosition());
-    } */
-  }
+  public void execute() {}
 
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    m_armExtension.run(0.0);
+  }
 
   @Override
   public boolean isFinished() {

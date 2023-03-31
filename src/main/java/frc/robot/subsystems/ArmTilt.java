@@ -31,6 +31,8 @@ public class ArmTilt extends SubsystemBase {
   private double m_v = (33.0 / Constants.Arm.kTiltRotationsToInches) * 60;
   private double m_a = (100.0 / Constants.Arm.kTiltVelocityConversion);
 
+  public boolean m_isCube = false;
+
   public ArmTilt() {
 
     m_tiltMotor = new CANSparkMax(Constants.Arm.kTiltMotorId, MotorType.kBrushless);
@@ -116,23 +118,9 @@ public class ArmTilt extends SubsystemBase {
     }
   }
 
-
-  /*public boolean isSafeToExtend() {
-    double tilt = m_tiltMotorEncoder.getPosition();
-    m_isExtendSafe = tilt < Constants.Arm.kMinSafeTilt;
-    return m_isExtendSafe;
+  public void setCube(boolean isCube) {
+    m_isCube = isCube;
   }
-
-  public boolean isSafeToTilt() {
-    double extensionPosition = m_extensionMotorEncoder.getPosition();
-    double tiltPosition = m_tiltMotorEncoder.getPosition();
-    if (tiltPosition > Constants.Arm.kMinSafeTilt) {
-      m_isTiltSafe = true;
-    } else {
-      m_isTiltSafe = extensionPosition > 0;
-    }
-    return m_isTiltSafe;
-  }*/
 
   public void reset() {
     m_tiltMotor.set(0);
@@ -144,7 +132,6 @@ public class ArmTilt extends SubsystemBase {
 
     builder.addDoubleProperty("Tilt/Position", m_tiltMotorEncoder::getPosition, null);
     builder.addDoubleProperty("Tilt/Motor/Speed", m_tiltMotor::get, null);
-    //builder.addBooleanProperty("Tilt/IsSafe", this::isSafeToTilt, null);
 
   }
 

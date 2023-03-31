@@ -28,7 +28,8 @@ public class MoveToLow extends SequentialCommandGroup {
           .withTimeout(Constants.Arm.kExtensionTimeOut),
           new WaitCommand(0.001), 
         () -> (armExtension.getEncoderPosition() > Constants.Arm.kExtensionResetPosition)),
-      new TiltArmToHeight(armTilt, speed, 6.0)
+        
+      new TiltArmToHeight(armTilt, speed, 6.0, false)
         .withTimeout(Constants.Arm.kTiltTimeOut),
       new ExtendArmToLength(armExtension, speed, 10.5)
         .withTimeout(Constants.Arm.kExtensionTimeOut)

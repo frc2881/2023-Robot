@@ -12,11 +12,13 @@ public class TiltArmToHeight extends CommandBase {
   private ArmTilt m_armTilt;
   private Double m_speed;
   private Double m_position;
+  private boolean m_isInfinite;
 
-  public TiltArmToHeight(ArmTilt armTilt, Double speed, Double position) {
+  public TiltArmToHeight(ArmTilt armTilt, Double speed, Double position, boolean isInfinite) {
     m_armTilt = armTilt;
     m_speed = speed;
     m_position = position;
+    m_isInfinite = isInfinite;
 
     addRequirements(m_armTilt);
   }
@@ -27,26 +29,21 @@ public class TiltArmToHeight extends CommandBase {
   }
 
   @Override
-  public void execute() {
-    /* 
-    boolean intakeIsOut = m_intake.isOut;
-    boolean isSafe = m_arm.isSafeToTilt();
-    
-    if(m_speed < 0){
-      if(intakeIsOut || isSafe == false){
-        m_arm.tilt(0.0);
-      } else {
-        m_arm.tilt(m_speed);
-      }
-    }*/
-  }
+  public void execute(){}
     
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    m_armTilt.run(0.0);
+  }
 
   @Override
   public boolean isFinished() {
-    return Math.abs(m_armTilt.getEncoderPosition() - m_position) < 0.1;
+    if(m_isInfinite){
+      return false;
+    } else{
+      return Math.abs(m_armTilt.getEncoderPosition() - m_position) < 0.1;
+    }
+    
   }
 
 }

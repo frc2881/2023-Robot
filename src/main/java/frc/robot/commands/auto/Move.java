@@ -8,17 +8,17 @@ package frc.robot.commands.auto;
 import com.pathplanner.lib.PathPlannerTrajectory;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.commands.drive.ZeroHeading;
+import frc.robot.commands.drive.ZeroHeadingToAng;
 import frc.robot.subsystems.Drive;
 
-public class AutoMove extends SequentialCommandGroup {
+public class Move extends SequentialCommandGroup {
 
-  public AutoMove(
+  public Move(
     Drive drive,
     PathPlannerTrajectory trajectory) {
       addCommands(
-      new FollowTrajectory(trajectory, true, drive),
-      new ZeroHeading(drive)
+      new ZeroHeadingToAng(drive, 180),
+      new FollowTrajectory(trajectory, true, drive)
     );
   }
 }

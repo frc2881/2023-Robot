@@ -22,7 +22,7 @@ public class MoveToPickup extends SequentialCommandGroup {
     Suction suction
   ) {
     addCommands(
-      new TiltArmToHeight(armTilt, speed, 12.6)
+      new TiltArmToHeight(armTilt, speed, 12.6, false)
         .withTimeout(Constants.Arm.kTiltTimeOut),
       new EnableSuction(suction)
     );

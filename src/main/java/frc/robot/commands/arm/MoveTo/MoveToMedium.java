@@ -6,6 +6,7 @@
 package frc.robot.commands.arm.MoveTo;
 
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
@@ -29,13 +30,13 @@ public class MoveToMedium extends SequentialCommandGroup {
           .withTimeout(Constants.Arm.kExtensionTimeOut),
           new WaitCommand(0.001), 
         () -> (armExtension.getEncoderPosition() > Constants.Arm.kExtensionResetPosition)),
-      new TiltArmToHeight(armTilt, speed, 13.5)
-        .withTimeout(Constants.Arm.kTiltTimeOut),
-
+    
+      new ParallelRaceGroup(
+        new TiltArmToHeight(armTilt, speed, 13.5, true),
         new SequentialCommandGroup(
           new WaitUntilCommand(() -> armTilt.getEncoderPosition() >= 9.0),
-          new ExtendArmToLength(armExtension, speed, 13.0)
-            .withTimeout(Constants.Arm.kExtensionTimeOut))
+          new ExtendArmToLength(armExtension, speed, 12.0)
+            .withTimeout(Constants.Arm.kExtensionTimeOut)))
         
     );
   }

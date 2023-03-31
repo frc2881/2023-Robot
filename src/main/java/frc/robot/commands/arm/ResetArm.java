@@ -14,11 +14,11 @@ public class ResetArm extends SequentialCommandGroup {
   
   public ResetArm(ArmExtension armExtension, ArmTilt armTilt, Double speed) {
     addCommands(
-      new TiltArmToHeight(armTilt, speed, 14.0)
+      new TiltArmToHeight(armTilt, speed, 14.0, false)
         .withTimeout(1.0),
       new ExtendArmToLength(armExtension, speed, Constants.Arm.kExtendReverseLimit)
         .withTimeout(2.5), 
-      new TiltArmToHeight(armTilt, speed, Constants.Arm.kTiltReverseLimit)
+      new TiltArmToHeight(armTilt, speed, Constants.Arm.kTiltReverseLimit, false)
         .withTimeout(2.5)
     );
   }

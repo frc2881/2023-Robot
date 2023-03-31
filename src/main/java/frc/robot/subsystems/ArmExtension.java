@@ -28,6 +28,8 @@ public class ArmExtension extends SubsystemBase {
   private final DoubleLogEntry m_logExtensionBusVoltage;
   private final DoubleLogEntry m_logExtensionOutputCurrent;
 
+  public boolean m_isCube = false;
+
   private double m_v = (33.0 / Constants.Arm.kExtendRotationsToInches) * 60;
   private double m_a = (100.0 / Constants.Arm.kExtendVelocityConversion);
 
@@ -117,22 +119,9 @@ public class ArmExtension extends SubsystemBase {
     }
   }
 
-  /*public boolean isSafeToExtend() {
-    double tilt = m_tiltMotorEncoder.getPosition();
-    m_isExtendSafe = tilt < Constants.Arm.kMinSafeTilt;
-    return m_isExtendSafe;
+  public void setCube(boolean isCube) {
+    m_isCube = isCube;
   }
-
-  public boolean isSafeToTilt() {
-    double extensionPosition = m_extensionMotorEncoder.getPosition();
-    double tiltPosition = m_tiltMotorEncoder.getPosition();
-    if (tiltPosition > Constants.Arm.kMinSafeTilt) {
-      m_isTiltSafe = true;
-    } else {
-      m_isTiltSafe = extensionPosition > 0;
-    }
-    return m_isTiltSafe;
-  }*/
 
   public void reset() {
     m_extensionMotor.set(0);
@@ -144,7 +133,6 @@ public class ArmExtension extends SubsystemBase {
 
     builder.addDoubleProperty("Extend/Position", m_extensionMotorEncoder::getPosition, null);
     builder.addDoubleProperty("Extend/Motor/Speed", m_extensionMotor::get, null);
-    //builder.addBooleanProperty("Extend/IsSafe", this::isSafeToExtend, null);
   }
 
   private void updateTelemetry() {
