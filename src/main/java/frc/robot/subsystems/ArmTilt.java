@@ -28,6 +28,9 @@ public class ArmTilt extends SubsystemBase {
   private final DoubleLogEntry m_logTiltBusVoltage;
   private final DoubleLogEntry m_logTiltOutputCurrent;
 
+  private double m_v = (33.0 / Constants.Arm.kTiltRotationsToInches) * 60;
+  private double m_a = (100.0 / Constants.Arm.kTiltVelocityConversion);
+
   public ArmTilt() {
 
     m_tiltMotor = new CANSparkMax(Constants.Arm.kTiltMotorId, MotorType.kBrushless);
@@ -47,7 +50,7 @@ public class ArmTilt extends SubsystemBase {
     m_tiltMotorEncoder.setVelocityConversionFactor(Constants.Arm.kTiltVelocityConversion);
 
     m_tiltPID = m_tiltMotor.getPIDController();
-    m_tiltPID.setSmartMotionMaxAccel(0.5, 0);
+    m_tiltPID.setSmartMotionMaxAccel(m_a, 0);
     m_tiltPID.setP(Constants.Arm.kTiltP);
     m_tiltPID.setOutputRange(Constants.Arm.kTiltMinOutput,
                              Constants.Arm.kTiltMaxOutput);
@@ -80,7 +83,7 @@ public class ArmTilt extends SubsystemBase {
    * @param speed
    */
   public void setDesiredPosition(double position, double speed) {
-    m_tiltPID.setSmartMotionMaxVelocity(speed * Constants.Arm.kTiltMaxOutput, 0);
+    m_tiltPID.setSmartMotionMaxVelocity(speed, 0);
     m_tiltPID.setReference(position, CANSparkMax.ControlType.kSmartMotion);
   }
 
@@ -88,7 +91,7 @@ public class ArmTilt extends SubsystemBase {
    * Sets the Tilt position to given value
    */
   public void setDesiredPosition(double position) {
-    m_tiltPID.setSmartMotionMaxVelocity(1.0, 0);
+    m_tiltPID.setSmartMotionMaxVelocity(m_v, 0);
     m_tiltPID.setReference(position, CANSparkMax.ControlType.kSmartMotion);
   }
 

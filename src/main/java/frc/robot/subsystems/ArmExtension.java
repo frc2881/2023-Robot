@@ -28,8 +28,8 @@ public class ArmExtension extends SubsystemBase {
   private final DoubleLogEntry m_logExtensionBusVoltage;
   private final DoubleLogEntry m_logExtensionOutputCurrent;
 
-  private double m_v = (16.5 / Constants.Arm.kExtendRotationsToInches) * 60;
-  private double m_a = (80.0 / Constants.Arm.kExtendVelocityConversion);
+  private double m_v = (33.0 / Constants.Arm.kExtendRotationsToInches) * 60;
+  private double m_a = (100.0 / Constants.Arm.kExtendVelocityConversion);
 
   public ArmExtension() {
     m_extensionMotor = new CANSparkMax(Constants.Arm.kExtensionMotorId, MotorType.kBrushless);
