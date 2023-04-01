@@ -24,10 +24,10 @@ public class MoveToLow extends SequentialCommandGroup {
 
     addCommands(
       new ConditionalCommand(
-        new ExtendArmToLength(armExtension, speed, Constants.Arm.kExtensionResetPosition)
+        new ExtendArmToLength(armExtension, speed, Constants.Arm.kExtendReverseLimit)
           .withTimeout(Constants.Arm.kExtensionTimeOut),
           new WaitCommand(0.001), 
-        () -> (armExtension.getEncoderPosition() > Constants.Arm.kExtensionResetPosition)),
+        () -> (armExtension.getEncoderPosition() > Constants.Arm.kExtendReverseLimit)),
         
       new TiltArmToHeight(armTilt, speed, 6.0, false)
         .withTimeout(Constants.Arm.kTiltTimeOut),

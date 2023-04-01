@@ -30,6 +30,9 @@ public class ArmExtension extends SubsystemBase {
 
   public boolean m_isCube = false;
 
+  private double m_v = (33.0 / Constants.Arm.kExtendRotationsToInches) * 60;
+  private double m_a = (100.0 / Constants.Arm.kExtendVelocityConversion);
+
   public ArmExtension() {
     m_extensionMotor = new CANSparkMax(Constants.Arm.kExtensionMotorId, MotorType.kBrushless);
     m_extensionMotor.restoreFactoryDefaults();
@@ -45,8 +48,11 @@ public class ArmExtension extends SubsystemBase {
 
     m_extensionMotorEncoder = m_extensionMotor.getEncoder();
     m_extensionMotorEncoder.setPositionConversionFactor(Constants.Arm.kExtendRotationsToInches);
+    m_extensionMotorEncoder.setVelocityConversionFactor(Constants.Arm.kExtendVelocityConversion);
+    
     
     m_extensionPID = m_extensionMotor.getPIDController();
+    m_extensionPID.setSmartMotionMaxAccel(m_a, 0);
     m_extensionPID.setFeedbackDevice(m_extensionMotorEncoder);
     m_extensionPID.setP(Constants.Arm.kExtensionP);
     m_extensionPID.setD(Constants.Arm.kExtensionD);
@@ -75,21 +81,24 @@ public class ArmExtension extends SubsystemBase {
     m_extensionMotor.set(speed);
   }
 
-  /*
-   * Sets the Extension position to given value.
+  /**
+   * Sets the arm extension to a position with a speed.
+   * @param position
+   * @param speed percentage
    */
   public void setDesiredPosition(double position, double speed) {
-    double s = speed;
+    speed *= m_v;
+    m_extensionPID.setSmartMotionMaxVelocity(speed, 0);
+    m_extensionPID.setReference(position, CANSparkMax.ControlType.kSmartMotion);
+  }
 
-    if(m_isCube == true){
-      s = speed * 0.75;
-    }
-
-    m_extensionPID.setOutputRange(
-      Constants.Arm.kExtensionMinOutput * s,
-      Constants.Arm.kExtensionMaxOutput * s
-    );
-    m_extensionPID.setReference(position, CANSparkMax.ControlType.kPosition);
+  /**
+   * Sets the arm extension to a position with a set speed.
+   * @param position
+   */
+  public void setDesiredPosition(double position) {
+    m_extensionPID.setSmartMotionMaxVelocity(m_v, 0);
+    m_extensionPID.setReference(position, CANSparkMax.ControlType.kSmartMotion);
   }
 
   // In inches
@@ -129,6 +138,7 @@ public class ArmExtension extends SubsystemBase {
 
   private void updateTelemetry() {
     SmartDashboard.putNumber("Arm/Extend/Position", m_extensionMotorEncoder.getPosition());
+    SmartDashboard.putNumber("Arm/Extend/Velocity", m_extensionMotorEncoder.getVelocity());
   }
 
   private void logExtension() {

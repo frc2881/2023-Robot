@@ -52,6 +52,11 @@ public class Constants {
          * of elevation of the arm.
          */
         public static final double kTiltRotationsToInches = 1.0 / 3.0; 
+
+        public static final double kExtendVelocityConversion = kExtendRotationsToInches / 60.0;
+        
+        public static final double kTiltVelocityConversion = kTiltRotationsToInches / 60.0;
+
         /*
          * The maximum distance (in inches) that the arm can extend.
          */
@@ -77,40 +82,42 @@ public class Constants {
         /*
          * Tilt PID Controller
          */
-        public static final double kTiltP = 3;
+        public static final double kTiltP = 0.0003;
         /*
          * Tilt Min Speed
          */
-        public static final double kTiltMinOutput = -0.75;
+        public static final double kTiltMinOutput = -1.0;
         /*
          * Tilit Max Speed
          */
-        public static final double kTiltMaxOutput = 0.75;
+        public static final double kTiltMaxOutput = 1.0;
 
         /*
          * Extension PID Controller
          */
-        public static final double kExtensionP = 3;
+        public static final double kExtensionP = 0.0003;
         /*
          * Extension PID Controller
          */
-        public static final double kExtensionD = 1.5;
+        public static final double kExtensionD = 0.00015;
+
+        public static final double kExtensionFF = 1 / (16.8);
 
         /*
          * Extension Min Speed
          */
-        public static final double kExtensionMinOutput = -0.75;
+        public static final double kExtensionMinOutput = -1.0;
         /*
          * Extension Max Speed
          */
-        public static final double kExtensionMaxOutput = 0.75;
+        public static final double kExtensionMaxOutput = 1.0;
 
         
         public static final double kExtensionTimeOut = 5;
 
         public static final double kTiltTimeOut = 4;
 
-        public static final double kExtensionResetPosition = 3.0;
+        public static final double kExtensionResetPosition = 1.0;
 
     }
 
@@ -357,6 +364,23 @@ public class Constants {
 					add( new Pose2d(kGridNodePoseXPosition, 4.416, kGridNodeRotation) ); // 8 - Cube
 					add( new Pose2d(kGridNodePoseXPosition, 4.962, kGridNodeRotation) ); // 9 - Cone
 				}};
+
+                
+
+      }
+
+      public static final class Autonomous {
+        public static final double kMoveMaxVelocity = 1.0; // 3
+
+        public static final double kMoveMaxAccel = 1.0; // 3
+
+        public static final double kMoveToBalanceMaxVelocity = 1.0; // 2
+
+        public static final double kMoveToBalanceMaxAccel = 1.0; // 3
+
+        public static final double kBalanceMaxVelocity = 1.0;
+
+        public static final double kBalanceMaxAccel = 1.0;
 
       }
 

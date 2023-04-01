@@ -11,10 +11,10 @@ import frc.robot.subsystems.ArmExtension;
 /** Extends the scoring arm to a specified length. */
 public class ExtendArmToLength extends CommandBase {
   private ArmExtension m_armExtension;
-  private Double m_speed;
-  private Double m_position;
+  private double m_speed;
+  private double m_position;
 
-  public ExtendArmToLength(ArmExtension armExtension, Double speed, Double position) {
+  public ExtendArmToLength(ArmExtension armExtension, double speed, double position) {
     m_armExtension = armExtension;
     m_speed = speed;
     m_position = position;
@@ -24,7 +24,7 @@ public class ExtendArmToLength extends CommandBase {
 
   @Override
   public void initialize() {
-    m_armExtension.setDesiredPosition(m_position, m_speed);
+    m_armExtension.setDesiredPosition(m_position);
   }
 
   @Override
