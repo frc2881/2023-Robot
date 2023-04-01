@@ -5,7 +5,9 @@
 
 package frc.robot.commands.arm.Score;
 
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 import frc.robot.commands.arm.TiltArmToHeight;
 import frc.robot.commands.arm.MoveTo.MoveToHigh;
@@ -18,13 +20,16 @@ public class ScoreHigh extends SequentialCommandGroup {
   public ScoreHigh(
     ArmExtension armExtension, 
     ArmTilt armTilt, 
-    Double speed, 
-    Suction suction
+    double speed, 
+    Suction suction,
+    boolean isCube
   ) {
     addCommands(
       new MoveToHigh(armExtension, armTilt, speed),
       new TiltArmToHeight(armTilt, speed * 0.5, 14.5, false)
-        .withTimeout(Constants.Arm.kTiltTimeOut)
+      .withTimeout(Constants.Arm.kTiltTimeOut)
+
+      
     );
   }
   

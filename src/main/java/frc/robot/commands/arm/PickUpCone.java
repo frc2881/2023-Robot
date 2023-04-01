@@ -20,11 +20,11 @@ public class PickUpCone extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new TiltArmToHeight(armTilt, 0.5, null, false), // Bring arm out of robot
-      new ExtendArmToLength(armExtension, 0.5, null),
+      new TiltArmToHeight(armTilt, 0.5, 0.0, false), // Bring arm out of robot
+      new ExtendArmToLength(armExtension, 0.5, 0.0),
       new EnableSuction(suction), // Grab game piece
       new WaitUntilCommand(suction::isVacuumEnabledForCone).withTimeout(2.0),
-      new TiltArmToHeight(armTilt, 0.5, null, false), // Bring gamepiece up and into the robot
+      new TiltArmToHeight(armTilt, 0.5, 0.0, false), // Bring gamepiece up and into the robot
       new ExtendArmToLength(armExtension, 0.5, 0.0)
     );
   }

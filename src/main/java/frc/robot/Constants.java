@@ -117,7 +117,7 @@ public class Constants {
 
         public static final double kTiltTimeOut = 4;
 
-        public static final double kExtensionResetPosition = 3.0;
+        public static final double kExtensionResetPosition = 1.0;
 
     }
 
@@ -364,6 +364,23 @@ public class Constants {
 					add( new Pose2d(kGridNodePoseXPosition, 4.416, kGridNodeRotation) ); // 8 - Cube
 					add( new Pose2d(kGridNodePoseXPosition, 4.962, kGridNodeRotation) ); // 9 - Cone
 				}};
+
+                
+
+      }
+
+      public static final class Autonomous {
+        public static final double kMoveMaxVelocity = 1.0; // 3
+
+        public static final double kMoveMaxAccel = 1.0; // 3
+
+        public static final double kMoveToBalanceMaxVelocity = 1.0; // 2
+
+        public static final double kMoveToBalanceMaxAccel = 1.0; // 3
+
+        public static final double kBalanceMaxVelocity = 1.0;
+
+        public static final double kBalanceMaxAccel = 1.0;
 
       }
 

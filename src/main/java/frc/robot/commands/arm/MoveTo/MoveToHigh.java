@@ -25,11 +25,11 @@ public class MoveToHigh extends SequentialCommandGroup {
   ) {
 
     addCommands(
-      /*new ConditionalCommand(
-        new ExtendArmToLength(armExtension, speed, Constants.Arm.kExtensionResetPosition)
+      new ConditionalCommand(
+        new ExtendArmToLength(armExtension, speed, Constants.Arm.kExtendReverseLimit)
           .withTimeout(Constants.Arm.kExtensionTimeOut),
         new WaitCommand(0.001), 
-        () -> (armExtension.getEncoderPosition() > Constants.Arm.kExtensionResetPosition)),*/
+        () -> (armExtension.getEncoderPosition() > Constants.Arm.kExtendReverseLimit)),
 
       new ParallelRaceGroup(
         new TiltArmToHeight(armTilt, speed, 16.0, true),
