@@ -85,6 +85,7 @@ public class ArmTilt extends SubsystemBase {
    * @param speed
    */
   public void setDesiredPosition(double position, double speed) {
+    speed *= m_v;
     m_tiltPID.setSmartMotionMaxVelocity(speed, 0);
     m_tiltPID.setReference(position, CANSparkMax.ControlType.kSmartMotion);
   }

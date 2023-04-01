@@ -84,9 +84,10 @@ public class ArmExtension extends SubsystemBase {
   /**
    * Sets the arm extension to a position with a speed.
    * @param position
-   * @param speed
+   * @param speed percentage
    */
   public void setDesiredPosition(double position, double speed) {
+    speed *= m_v;
     m_extensionPID.setSmartMotionMaxVelocity(speed, 0);
     m_extensionPID.setReference(position, CANSparkMax.ControlType.kSmartMotion);
   }
