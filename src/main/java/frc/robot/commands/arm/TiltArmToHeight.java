@@ -14,7 +14,7 @@ public class TiltArmToHeight extends CommandBase {
   private Double m_position;
   private boolean m_isInfinite;
 
-  public TiltArmToHeight(ArmTilt armTilt, Double speed, Double position, boolean isInfinite) {
+  public TiltArmToHeight(ArmTilt armTilt, double speed, double position, boolean isInfinite) {
     m_armTilt = armTilt;
     m_speed = speed;
     m_position = position;

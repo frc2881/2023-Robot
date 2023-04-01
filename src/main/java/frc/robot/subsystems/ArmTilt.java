@@ -28,6 +28,9 @@ public class ArmTilt extends SubsystemBase {
   private final DoubleLogEntry m_logTiltBusVoltage;
   private final DoubleLogEntry m_logTiltOutputCurrent;
 
+  private double m_v = (33.0 / Constants.Arm.kTiltRotationsToInches) * 60;
+  private double m_a = (100.0 / Constants.Arm.kTiltVelocityConversion);
+
   public boolean m_isCube = false;
 
   public ArmTilt() {
@@ -46,8 +49,10 @@ public class ArmTilt extends SubsystemBase {
 
     m_tiltMotorEncoder = m_tiltMotor.getEncoder();
     m_tiltMotorEncoder.setPositionConversionFactor(Constants.Arm.kTiltRotationsToInches);
+    m_tiltMotorEncoder.setVelocityConversionFactor(Constants.Arm.kTiltVelocityConversion);
 
     m_tiltPID = m_tiltMotor.getPIDController();
+    m_tiltPID.setSmartMotionMaxAccel(m_a, 0);
     m_tiltPID.setP(Constants.Arm.kTiltP);
     m_tiltPID.setOutputRange(Constants.Arm.kTiltMinOutput,
                              Constants.Arm.kTiltMaxOutput);
@@ -74,21 +79,23 @@ public class ArmTilt extends SubsystemBase {
     m_tiltMotor.set(speed);
   }
 
+  /**
+   * 
+   * @param position
+   * @param speed
+   */
+  public void setDesiredPosition(double position, double speed) {
+    speed *= m_v;
+    m_tiltPID.setSmartMotionMaxVelocity(speed, 0);
+    m_tiltPID.setReference(position, CANSparkMax.ControlType.kSmartMotion);
+  }
+
   /*
    * Sets the Tilt position to given value
    */
-  public void setDesiredPosition(double position, double speed) {
-    double s = speed;
-
-    if(m_isCube == true){
-      s = speed * 0.75;
-    }
-
-    m_tiltPID.setOutputRange(
-      Constants.Arm.kTiltMinOutput * s,
-      Constants.Arm.kTiltMaxOutput * s
-    );
-    m_tiltPID.setReference(position, CANSparkMax.ControlType.kPosition);
+  public void setDesiredPosition(double position) {
+    m_tiltPID.setSmartMotionMaxVelocity(m_v, 0);
+    m_tiltPID.setReference(position, CANSparkMax.ControlType.kSmartMotion);
   }
 
 
