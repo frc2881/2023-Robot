@@ -358,6 +358,8 @@ public class Constants {
 					add( new Pose2d(kGridNodePoseXPosition, 4.962, kGridNodeRotation) ); // 9 - Cone
 				}};
 
+                public static final Pose2d kFieldMinPose = new Pose2d(1.50, 0.0, Rotation2d.fromDegrees(0));
+                public static final Pose2d kFieldMaxPose = new Pose2d(16.50, 8.0, Rotation2d.fromDegrees(0));
       }
 
 }

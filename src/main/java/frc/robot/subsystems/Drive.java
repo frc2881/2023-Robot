@@ -36,6 +36,7 @@ import frc.robot.Constants;
 import frc.robot.lib.NavX;
 import frc.robot.lib.PhotonCameraWrapper;
 import frc.robot.lib.SwerveModule;
+import frc.robot.lib.Utils;
 
 public class Drive extends SubsystemBase {
 
@@ -166,12 +167,14 @@ public class Drive extends SubsystemBase {
       if (pipelineResult.isPresent()) {
         EstimatedRobotPose estimatedRobotPose = pipelineResult.get();
         estimatedPose = estimatedRobotPose.estimatedPose.toPose2d();
-        m_poseEstimator.addVisionMeasurement(estimatedPose, estimatedRobotPose.timestampSeconds);
-        SmartDashboard.putNumberArray(
-          "Drive/Vision/Camera/" + photonCamera.getCameraName() + "/LastEstimatedPose", 
-          new double[] { estimatedPose.getX(), estimatedPose.getY(), estimatedPose.getRotation().getDegrees() }
-        );
-        return true;
+        if (Utils.isPoseInBounds(estimatedPose, Constants.Vision.kFieldMinPose, Constants.Vision.kFieldMaxPose)) {
+          m_poseEstimator.addVisionMeasurement(estimatedPose, estimatedRobotPose.timestampSeconds);
+          SmartDashboard.putNumberArray(
+            "Drive/Vision/Camera/" + photonCamera.getCameraName() + "/LastEstimatedPose", 
+            new double[] { estimatedPose.getX(), estimatedPose.getY(), estimatedPose.getRotation().getDegrees() }
+          );
+          return true;
+        } 
       }
     }
     return false;
