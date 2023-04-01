@@ -16,15 +16,15 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.arm.ArmExtendOverride;
 import frc.robot.commands.arm.ArmTiltOverride;
 import frc.robot.commands.arm.ExtendArm;
+import frc.robot.commands.arm.PickUpCone;
 import frc.robot.commands.arm.TiltArm;
-import frc.robot.commands.arm.MoveTo.MoveToHigh;
 import frc.robot.commands.arm.MoveTo.MoveToLow;
-import frc.robot.commands.arm.MoveTo.MoveToMedium;
 import frc.robot.commands.arm.MoveTo.MoveToPickup;
 import frc.robot.commands.arm.Score.ScoreHigh;
 import frc.robot.commands.arm.Score.ScoreMedium;
@@ -32,10 +32,13 @@ import frc.robot.commands.auto.AutoBalance;
 import frc.robot.commands.auto.FollowTrajectory;
 import frc.robot.commands.auto.Move;
 import frc.robot.commands.auto.MoveToBalance;
-import frc.robot.commands.auto.Score;
-import frc.robot.commands.auto.ScoreMove;
-import frc.robot.commands.auto.ScoreMoveToBalance;
-import frc.robot.commands.auto.ScoreWaitMove;
+import frc.robot.commands.auto.ScoreCone;
+import frc.robot.commands.auto.ScoreConeMove;
+import frc.robot.commands.auto.ScoreConeMoveToBalance;
+import frc.robot.commands.auto.ScoreConeWaitMove;
+import frc.robot.commands.auto.ScoreCube;
+import frc.robot.commands.auto.ScoreCubeMoveToBalance;
+import frc.robot.commands.auto.ScoreCubeWaitMove;
 import frc.robot.commands.controllers.RumbleControllers;
 import frc.robot.commands.controllers.RumbleControllers.RumblePattern;
 import frc.robot.commands.drive.DriveRobotCentric;
@@ -115,6 +118,9 @@ public class RobotContainer {
     new Trigger(m_manipulatorController::getAButton)
       .onTrue(new ToggleSuction(m_suction));
 
+    new Trigger(m_manipulatorController::getYButton)
+      .onTrue(new PickUpCone(m_armTilt, m_armExtension, m_suction));
+
     /* Changes lights to different patterns */
     new Trigger(m_manipulatorController::getXButton)
       .onTrue(new InstantCommand(() -> {m_lights.setPattern(Pattern.Heart, PanelLocation.Both);}));
@@ -144,25 +150,16 @@ public class RobotContainer {
     
     /* Uses D-Pad to move the arm to position */
     new Trigger(() -> m_manipulatorController.getPOV() == 0)
-      .whileTrue(new MoveToHigh(m_armExtension, m_armTilt, 1.0));
+      .whileTrue(new ScoreHigh(m_armExtension, m_armTilt, m_drive, 1.0));
 
     new Trigger(() -> m_manipulatorController.getPOV() == 90)
-      .whileTrue(new MoveToMedium(m_armExtension, m_armTilt, 1.0));
+      .whileTrue(new ScoreMedium(m_armExtension, m_armTilt, m_drive, 1.0));
 
     new Trigger(() -> m_manipulatorController.getPOV() == 180)
       .whileTrue(new MoveToLow(m_armExtension, m_armTilt, 1.0));
 
     new Trigger(() -> m_manipulatorController.getPOV() == 270)
       .whileTrue(new MoveToPickup(m_armExtension, m_armTilt, 1.0, m_suction));
-
-    /* Uses D-Pad + Y button to score */
-    new Trigger(() -> m_manipulatorController.getPOV() == 0)
-      .and(m_manipulatorController::getYButton)
-      .whileTrue(new ScoreHigh(m_armExtension, m_armTilt, 1.0, m_suction, false));
-
-    new Trigger(() -> m_manipulatorController.getPOV() == 90)
-      .and(m_manipulatorController::getYButton)
-      .whileTrue(new ScoreMedium(m_armExtension, m_armTilt, 1.0, m_suction));
 
     // RUMBLES ============================================
 
@@ -171,6 +168,15 @@ public class RobotContainer {
 
     new Trigger(() -> (RobotState.isTeleop() && m_suction.isVacuumDisabled()))
       .onTrue(new RumbleControllers(m_driverController, m_manipulatorController, RumblePattern.BAD));
+
+    // STARTING CONFIGURATION LIGHTS
+    new Trigger(() -> (RobotState.isDisabled() && Utils.isValueBetween(m_armExtension.getEncoderPosition(), 3.35, 4.0)))
+      .whileTrue(Commands.run(() -> { m_lights.setPattern(Pattern.Cube, PanelLocation.Both); }).ignoringDisable(true))
+      .onFalse(Commands.run(() -> { m_lights.setPattern(Pattern.Heart, PanelLocation.Both); }).ignoringDisable(true));
+
+    new Trigger(() -> (RobotState.isDisabled() && Utils.isValueBetween(m_armExtension.getEncoderPosition(), 5.75, 5.85)))
+      .whileTrue(Commands.run(() -> { m_lights.setPattern(Pattern.Cone, PanelLocation.Both); }).ignoringDisable(true))
+      .onFalse(Commands.run(() -> { m_lights.setPattern(Pattern.Heart, PanelLocation.Both); }).ignoringDisable(true));
 
   }
 
@@ -197,10 +203,10 @@ public class RobotContainer {
 
     if(m_isTesting) {
       m_autonomousChooser.addOption("Score Cone", 
-      new Score(m_suction, m_armExtension, m_armTilt, false));
+      new ScoreCone(m_suction, m_armExtension, m_armTilt));
 
       m_autonomousChooser.addOption("Score Cube", 
-        new Score(m_suction, m_armExtension, m_armTilt, true));
+        new ScoreCube(m_suction, m_armExtension, m_armTilt));
 
         m_autonomousChooser.addOption("1 - Move", 
         new Move(m_drive, move1Path));
@@ -215,39 +221,39 @@ public class RobotContainer {
         new FollowTrajectory(testPath, false, m_drive));
     }
 
-    // Position 1
+    // Position 1 - Cone
     m_autonomousChooser.addOption("1 - Score Move", 
-      new ScoreMove(m_drive, m_suction, m_armExtension, m_armTilt, move1Path, false));
+      new ScoreConeMove(m_drive, m_suction, m_armExtension, m_armTilt, move1Path));
 
     m_autonomousChooser.addOption("1 - Score Balance", 
-      new ScoreMoveToBalance(m_drive, m_suction, m_armExtension, m_armTilt, moveToBalance1Path, balancePath, false, false));
+      new ScoreConeMoveToBalance(m_drive, m_suction, m_armExtension, m_armTilt, moveToBalance1Path, balancePath, false));
 
-    // Position 5
+    // Position 5 - Cube
     m_autonomousChooser.addOption("5 - Score Wait Move Divider",
-      new ScoreWaitMove(m_drive, m_suction, m_armExtension, m_armTilt, moveDivider5Path, true));
+      new ScoreCubeWaitMove(m_drive, m_suction, m_armExtension, m_armTilt, moveDivider5Path));
 
     m_autonomousChooser.addOption("5 - Score Wait Move Wall",
-      new ScoreWaitMove(m_drive, m_suction, m_armExtension, m_armTilt, moveWall5Path, true));
+      new ScoreCubeWaitMove(m_drive, m_suction, m_armExtension, m_armTilt, moveWall5Path));
 
     m_autonomousChooser.addOption("5 - Score Balance",
-      new ScoreMoveToBalance(m_drive, m_suction, m_armExtension, m_armTilt, moveToBalance5Path, balanceMidPath, true, true));
+      new ScoreCubeMoveToBalance(m_drive, m_suction, m_armExtension, m_armTilt, moveToBalance5Path, balanceMidPath, true));
 
-    // Position 6
+    // Position 6 - Cone
     m_autonomousChooser.addOption("6 - Score Wait Move Divider",
-      new ScoreWaitMove(m_drive, m_suction, m_armExtension, m_armTilt, moveDivider6Path, false));
+      new ScoreConeWaitMove(m_drive, m_suction, m_armExtension, m_armTilt, moveDivider6Path));
 
     m_autonomousChooser.addOption("6 - Score Wait Move Wall",
-      new ScoreWaitMove(m_drive, m_suction, m_armExtension, m_armTilt, moveWall6Path, false));
+      new ScoreConeWaitMove(m_drive, m_suction, m_armExtension, m_armTilt, moveWall6Path));
     
     m_autonomousChooser.addOption("6 - Score Balance", 
-      new ScoreMoveToBalance(m_drive, m_suction, m_armExtension, m_armTilt, moveToBalance6Path, balanceMidPath, false, true));
+      new ScoreConeMoveToBalance(m_drive, m_suction, m_armExtension, m_armTilt, moveToBalance6Path, balanceMidPath, true));
     
-    // Position 9
+    // Position 9 - Cone
     m_autonomousChooser.addOption("9 - Score Move", 
-      new ScoreMove(m_drive, m_suction, m_armExtension, m_armTilt, move9Path, false));
+      new ScoreConeMove(m_drive, m_suction, m_armExtension, m_armTilt, move9Path));
 
     m_autonomousChooser.addOption("9 - Score Balance", 
-      new ScoreMoveToBalance(m_drive, m_suction, m_armExtension, m_armTilt, moveToBalance9Path, balancePath, false, false));
+      new ScoreConeMoveToBalance(m_drive, m_suction, m_armExtension, m_armTilt, moveToBalance9Path, balancePath, false));
 
 
     SmartDashboard.putData("Auto/Command", m_autonomousChooser);

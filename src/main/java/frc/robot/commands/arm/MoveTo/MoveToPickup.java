@@ -5,15 +5,14 @@
 
 package frc.robot.commands.arm.MoveTo;
 
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.Constants;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.commands.arm.TiltArmToHeight;
 import frc.robot.commands.suction.EnableSuction;
 import frc.robot.subsystems.ArmExtension;
 import frc.robot.subsystems.ArmTilt;
 import frc.robot.subsystems.Suction;
 
-public class MoveToPickup extends SequentialCommandGroup {
+public class MoveToPickup extends ParallelCommandGroup {
 
   public MoveToPickup(
     ArmExtension armExtension, 
@@ -22,9 +21,9 @@ public class MoveToPickup extends SequentialCommandGroup {
     Suction suction
   ) {
     addCommands(
-      new TiltArmToHeight(armTilt, speed, 12.6, false)
-        .withTimeout(Constants.Arm.kTiltTimeOut),
-      new EnableSuction(suction)
+      new EnableSuction(suction),
+      new TiltArmToHeight(armTilt, speed, 12.6, true)
+      
     );
   }
 }

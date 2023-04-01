@@ -5,26 +5,27 @@
 
 package frc.robot.commands.arm.Score;
 
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.Constants;
-import frc.robot.commands.arm.TiltArmToHeight;
-import frc.robot.commands.arm.MoveTo.MoveToMedium;
+import frc.robot.lib.Node.NodeType;
 import frc.robot.subsystems.ArmExtension;
 import frc.robot.subsystems.ArmTilt;
-import frc.robot.subsystems.Suction;
+import frc.robot.subsystems.Drive;
 
 public class ScoreMedium extends SequentialCommandGroup {
   
   public ScoreMedium(
     ArmExtension armExtension, 
     ArmTilt armTilt, 
-    Double speed, 
-    Suction suction
+    Drive drive,
+    Double speed
   ) {
     addCommands(
-      new MoveToMedium(armExtension, armTilt, speed),
-      new TiltArmToHeight(armTilt, speed * 0.5, 11.5, false)
-        .withTimeout(Constants.Arm.kTiltTimeOut)
+      new ConditionalCommand(
+        new ScoreMediumCone(armExtension, armTilt, speed), 
+        new ScoreMediumCube(armExtension, armTilt, speed), 
+        () -> drive.getNearesNodeType() == NodeType.CONE)
+      
     );
   }
   

@@ -5,6 +5,8 @@
 
 package frc.robot.subsystems;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.photonvision.EstimatedRobotPose;
@@ -34,9 +36,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.lib.NavX;
+import frc.robot.lib.Node;
 import frc.robot.lib.PhotonCameraWrapper;
 import frc.robot.lib.SwerveModule;
 import frc.robot.lib.Utils;
+import frc.robot.lib.Node.NodeType;
 
 public class Drive extends SubsystemBase {
 
@@ -93,6 +97,10 @@ public class Drive extends SubsystemBase {
         m_rearRight.getPosition()}, 
       new Pose2d());
 
+  private final Node m_zeroNode = new Node(new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0)), NodeType.CONE, 0);
+  private List<Node> m_nodes = null;
+  List<Pose2d> m_poses = null;
+
   public Drive() {
     DataLog log = DataLogManager.getLog();
     m_logRoll = new DoubleLogEntry(log, "/Drive/roll");
@@ -102,6 +110,7 @@ public class Drive extends SubsystemBase {
 
   @Override
   public void periodic() {
+    updateNodes();
     updatePhotonCameras();
     updatePose();
     updateTelemetry();
@@ -155,9 +164,11 @@ public class Drive extends SubsystemBase {
         m_rearLeft.getPosition(),
         m_rearRight.getPosition()
     });
-    if (!updateVisionMeasurement(m_leftPhotonCamera)) {
-      updateVisionMeasurement(m_rightPhotonCamera);
-    }       
+    if(!RobotState.isAutonomous()){
+      if (!updateVisionMeasurement(m_leftPhotonCamera)) {
+        updateVisionMeasurement(m_rightPhotonCamera);
+      }  
+    }     
   }
 
   private boolean updateVisionMeasurement(PhotonCameraWrapper photonCamera) {
@@ -206,14 +217,38 @@ public class Drive extends SubsystemBase {
       pose);
   }
 
+  public Node getNearestNode() {
+    Pose2d currentPose = m_poseEstimator.getEstimatedPosition();
+    Pose2d nearestNodePose = currentPose.nearest(m_poses);
+
+    return m_nodes.stream().filter(node -> nearestNodePose.equals(node.pose)).findFirst().orElse(m_zeroNode);
+    
+  }
+
+  public NodeType getNearesNodeType() {
+    return getNearestNode().nodeType;
+  }
+
+  private void updateNodes() {
+    if(m_nodes != null) { return; }
+
+    Alliance alliance = DriverStation.getAlliance();
+
+    if(alliance != Alliance.Invalid){
+      m_nodes = alliance == Alliance.Red ? 
+        Constants.Vision.kNodesRedAlliance :
+        Constants.Vision.kNodesBlueAlliance;
+
+      m_poses = new ArrayList<Pose2d>();
+      m_nodes.forEach((node) -> m_poses.add(node.pose));
+
+    }
+  }
+
   public PathPlannerTrajectory getTrajectoryForNearestNode() {
     Pose2d currentPose = m_poseEstimator.getEstimatedPosition();
 
-    Pose2d nearestNodePose = currentPose.nearest(
-      DriverStation.getAlliance() == Alliance.Red ? 
-        Constants.Vision.kNodesRedAlliance :
-        Constants.Vision.kNodesBlueAlliance
-    );
+    Pose2d nearestNodePose = getNearestNode().pose;
 
     PathPlannerTrajectory trajectory = PathPlanner.generatePath(
       new PathConstraints(0.5, 0.5), 

@@ -7,8 +7,9 @@ package frc.robot.commands.auto;
 
 import com.pathplanner.lib.PathPlannerTrajectory;
 
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.commands.arm.ResetArm;
 import frc.robot.commands.drive.ZeroHeadingToAng;
 import frc.robot.subsystems.ArmExtension;
@@ -16,22 +17,20 @@ import frc.robot.subsystems.ArmTilt;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Suction;
 
-public class ScoreMove extends SequentialCommandGroup {
-  public ScoreMove(
+public class ScoreCubeWaitMove extends SequentialCommandGroup {
+  public ScoreCubeWaitMove(
     Drive drive, 
     Suction suction, 
     ArmExtension armExtension, 
     ArmTilt armTilt, 
-    PathPlannerTrajectory trajectory,
-    boolean isCube
+    PathPlannerTrajectory trajectory
   ) {
     addCommands(
       new ZeroHeadingToAng(drive, 180),
-      new Score(suction, armExtension, armTilt, isCube),
-      new ParallelCommandGroup(
-        new ResetArm(armExtension, armTilt, 1.0),
-        new FollowTrajectory(trajectory, true, drive)
-      )
+      new ScoreCube(suction, armExtension, armTilt),
+      new ResetArm(armExtension, armTilt, 1.0),
+      new WaitUntilCommand(() -> DriverStation.getMatchTime() < 6),
+      new FollowTrajectory(trajectory, true, drive)
     );
   }
 }

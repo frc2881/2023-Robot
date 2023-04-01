@@ -21,6 +21,8 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
+import frc.robot.lib.Node;
+import frc.robot.lib.Node.NodeType;
 
 public class Constants {
 
@@ -119,6 +121,10 @@ public class Constants {
 
         public static final double kExtensionResetPosition = 1.0;
 
+        // STARTING CONFIG EXTENSION
+        // Cone: 5.75 - 5.85
+        // Cube: 3.35 - 4.0
+
     }
 
     public static final class Drive {
@@ -139,10 +145,10 @@ public class Constants {
             new Translation2d(-kWheelBase / 2, -kTrackWidth / 2));
     
         // Angular offsets of the modules relative to the chassis in radians
-        public static final double kFrontLeftChassisAngularOffset = 5.9394; 
-        public static final double kFrontRightChassisAngularOffset = 2.8290; 
-        public static final double kRearLeftChassisAngularOffset =  1.5855; 
-        public static final double kRearRightChassisAngularOffset = 4.4465; 
+        public static final double kFrontLeftChassisAngularOffset = 5.9027; 
+        public static final double kFrontRightChassisAngularOffset = 2.8254; 
+        public static final double kRearLeftChassisAngularOffset =  1.5851; 
+        public static final double kRearRightChassisAngularOffset = 4.4612; 
     
         // SPARK MAX CAN IDs
         public static final int kFrontLeftDrivingCanId = 15;
@@ -310,7 +316,7 @@ public class Constants {
          */
         public static final double kTargetPressure = 21.0;
 
-        public static final double kMinimumPressure = 25.0;
+        public static final double kMinimumPressure = 23.0;
 
       }
 
@@ -341,28 +347,28 @@ public class Constants {
 				private static final double kGridNodePoseXPosition = 1.75;
 				private static final Rotation2d kGridNodeRotation = Rotation2d.fromDegrees(180);
 
-				public static final List<Pose2d> kNodesRedAlliance = new ArrayList<Pose2d>(){{
-					add( new Pose2d(kGridNodePoseXPosition, 7.421, kGridNodeRotation) ); // 1 - Cone
-					add( new Pose2d(kGridNodePoseXPosition, 6.875, kGridNodeRotation) ); // 2 - Cube
-					add( new Pose2d(kGridNodePoseXPosition, 6.329, kGridNodeRotation) ); // 3 - Cone
-					add( new Pose2d(kGridNodePoseXPosition, 5.783, kGridNodeRotation) ); // 4 - Cone
-					add( new Pose2d(kGridNodePoseXPosition, 5.237, kGridNodeRotation) ); // 5 - Cube
-					add( new Pose2d(kGridNodePoseXPosition, 4.691, kGridNodeRotation) ); // 6 - Cone
-					add( new Pose2d(kGridNodePoseXPosition, 4.145, kGridNodeRotation) ); // 7 - Cone
-					add( new Pose2d(kGridNodePoseXPosition, 3.599, kGridNodeRotation) ); // 8 - Cube
-					add( new Pose2d(kGridNodePoseXPosition, 3.053, kGridNodeRotation) ); // 9 - Cone
+				public static final List<Node> kNodesRedAlliance = new ArrayList<Node>(){{
+					add( new Node(new Pose2d(kGridNodePoseXPosition, 7.421, kGridNodeRotation), NodeType.CONE, 1)); // 1 - Cone
+					add( new Node(new Pose2d(kGridNodePoseXPosition, 6.875, kGridNodeRotation), NodeType.CUBE, 2) ); // 2 - Cube
+					add( new Node(new Pose2d(kGridNodePoseXPosition, 6.329, kGridNodeRotation), NodeType.CONE, 3) ); // 3 - Cone
+					add( new Node(new Pose2d(kGridNodePoseXPosition, 5.783, kGridNodeRotation), NodeType.CONE, 4) ); // 4 - Cone
+					add( new Node(new Pose2d(kGridNodePoseXPosition, 5.237, kGridNodeRotation), NodeType.CUBE, 5) ); // 5 - Cube
+					add( new Node(new Pose2d(kGridNodePoseXPosition, 4.691, kGridNodeRotation), NodeType.CONE, 6) ); // 6 - Cone
+					add( new Node(new Pose2d(kGridNodePoseXPosition, 4.145, kGridNodeRotation), NodeType.CONE, 7) ); // 7 - Cone
+					add( new Node(new Pose2d(kGridNodePoseXPosition, 3.599, kGridNodeRotation), NodeType.CUBE, 8) ); // 8 - Cube
+					add( new Node(new Pose2d(kGridNodePoseXPosition, 3.053, kGridNodeRotation), NodeType.CONE, 9) ); // 9 - Cone
 				}};
 
-				public static final List<Pose2d> kNodesBlueAlliance = new ArrayList<Pose2d>(){{
-					add( new Pose2d(kGridNodePoseXPosition, 0.594, kGridNodeRotation) ); // 1 - Cone
-					add( new Pose2d(kGridNodePoseXPosition, 1.140, kGridNodeRotation) ); // 2 - Cube
-					add( new Pose2d(kGridNodePoseXPosition, 1.686, kGridNodeRotation) ); // 3 - Cone
-					add( new Pose2d(kGridNodePoseXPosition, 2.232, kGridNodeRotation) ); // 4 - Cone
-					add( new Pose2d(kGridNodePoseXPosition, 2.778, kGridNodeRotation) ); // 5 - Cube
-					add( new Pose2d(kGridNodePoseXPosition, 3.324, kGridNodeRotation) ); // 6 - Cone
-					add( new Pose2d(kGridNodePoseXPosition, 3.870, kGridNodeRotation) ); // 7 - Cone
-					add( new Pose2d(kGridNodePoseXPosition, 4.416, kGridNodeRotation) ); // 8 - Cube
-					add( new Pose2d(kGridNodePoseXPosition, 4.962, kGridNodeRotation) ); // 9 - Cone
+				public static final List<Node> kNodesBlueAlliance = new ArrayList<Node>(){{
+					add( new Node(new Pose2d(kGridNodePoseXPosition, 0.594, kGridNodeRotation), NodeType.CONE, 1) ); // 1 - Cone
+					add( new Node(new Pose2d(kGridNodePoseXPosition, 1.140, kGridNodeRotation), NodeType.CUBE, 2) ); // 2 - Cube
+					add( new Node(new Pose2d(kGridNodePoseXPosition, 1.686, kGridNodeRotation), NodeType.CONE, 3) ); // 3 - Cone
+					add( new Node(new Pose2d(kGridNodePoseXPosition, 2.232, kGridNodeRotation), NodeType.CONE, 4) ); // 4 - Cone
+					add( new Node(new Pose2d(kGridNodePoseXPosition, 2.778, kGridNodeRotation), NodeType.CUBE, 5) ); // 5 - Cube
+					add( new Node(new Pose2d(kGridNodePoseXPosition, 3.324, kGridNodeRotation), NodeType.CONE, 6) ); // 6 - Cone
+					add( new Node(new Pose2d(kGridNodePoseXPosition, 3.870, kGridNodeRotation), NodeType.CONE, 7) ); // 7 - Cone
+					add( new Node(new Pose2d(kGridNodePoseXPosition, 4.416, kGridNodeRotation), NodeType.CUBE, 8) ); // 8 - Cube
+					add( new Node(new Pose2d(kGridNodePoseXPosition, 4.962, kGridNodeRotation), NodeType.CONE, 9) ); // 9 - Cone
 				}};
 
                 public static final Pose2d kFieldMinPose = new Pose2d(1.50, 0.0, Rotation2d.fromDegrees(0));
@@ -372,13 +378,13 @@ public class Constants {
       }
 
       public static final class Autonomous {
-        public static final double kMoveMaxVelocity = 1.0; // 3
+        public static final double kMoveMaxVelocity = 3.0; // 3.0
 
-        public static final double kMoveMaxAccel = 1.0; // 3
+        public static final double kMoveMaxAccel = 3.0; // 3.0
 
-        public static final double kMoveToBalanceMaxVelocity = 1.0; // 2
+        public static final double kMoveToBalanceMaxVelocity = 2.0; // 2.0
 
-        public static final double kMoveToBalanceMaxAccel = 1.0; // 3
+        public static final double kMoveToBalanceMaxAccel = 3.0; // 3.0
 
         public static final double kBalanceMaxVelocity = 1.0;
 

@@ -9,6 +9,7 @@ import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
 import frc.robot.subsystems.Drive;
@@ -19,12 +20,12 @@ public class FollowTrajectory extends SequentialCommandGroup {
 		PIDController yPidController = new PIDController(0.01, 0, 0);
 		PIDController tPidController = new PIDController(5, 0, 0);
 		addCommands(
-			/*new InstantCommand(() -> {
+			new InstantCommand(() -> {
 				// Reset odometry for the first path you run during auto
 				if (isFirstPath) {
 					drive.resetPose(trajectory.getInitialHolonomicPose());
 				}
-			}),*/
+			}),
 			new PPSwerveControllerCommand(
 				trajectory,
 				drive::getPose,

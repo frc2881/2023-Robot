@@ -102,7 +102,7 @@ public class ArmExtension extends SubsystemBase {
   }
 
   // In inches
-  public Double getEncoderPosition() {
+  public double getEncoderPosition() {
     return m_extensionMotorEncoder.getPosition();
   }
 

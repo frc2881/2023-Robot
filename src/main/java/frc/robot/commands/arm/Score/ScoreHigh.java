@@ -7,30 +7,24 @@ package frc.robot.commands.arm.Score;
 
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.robot.Constants;
-import frc.robot.commands.arm.TiltArmToHeight;
-import frc.robot.commands.arm.MoveTo.MoveToHigh;
+import frc.robot.lib.Node.NodeType;
 import frc.robot.subsystems.ArmExtension;
 import frc.robot.subsystems.ArmTilt;
-import frc.robot.subsystems.Suction;
+import frc.robot.subsystems.Drive;
 
 public class ScoreHigh extends SequentialCommandGroup {
 
   public ScoreHigh(
     ArmExtension armExtension, 
     ArmTilt armTilt, 
-    double speed, 
-    Suction suction,
-    boolean isCube
+    Drive drive,
+    double speed
   ) {
     addCommands(
-      new MoveToHigh(armExtension, armTilt, speed),
       new ConditionalCommand(
-        new WaitCommand(0.001), 
-        new TiltArmToHeight(armTilt, speed * 0.5, 14.5, false).withTimeout(Constants.Arm.kTiltTimeOut), 
-        () -> isCube)
-      
+        new ScoreHighCone(armExtension, armTilt, speed), 
+        new ScoreHighCube(armExtension, armTilt, speed), 
+        () -> drive.getNearesNodeType() == NodeType.CONE)
       
     );
   }
