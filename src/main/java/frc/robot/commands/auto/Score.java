@@ -5,10 +5,10 @@
 
 package frc.robot.commands.auto;
 
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
-import frc.robot.commands.arm.setCube;
 import frc.robot.commands.arm.Score.ScoreHigh;
 import frc.robot.commands.suction.DisableSuction;
 import frc.robot.commands.suction.EnableSuction;
@@ -25,13 +25,14 @@ public class Score extends SequentialCommandGroup {
     boolean isCube
   ) {
     addCommands(
-      new setCube(armExtension, armTilt, isCube),
       new WaitCommand(0.02),
       new EnableSuction(suction),
-      new WaitUntilCommand(suction::isVacuumEnabledForCone).withTimeout(2.0),
+      new ConditionalCommand(
+        new WaitUntilCommand(suction::isVacuumEnabledForCube).withTimeout(2.0),
+        new WaitUntilCommand(suction::isVacuumEnabledForCone).withTimeout(2.0),
+        () -> isCube),
       new ScoreHigh(armExtension, armTilt, 1.0, suction, isCube),
-      new DisableSuction(suction),
-      new setCube(armExtension, armTilt, false)
+      new DisableSuction(suction)
     );
   }
 

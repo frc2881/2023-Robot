@@ -26,9 +26,11 @@ public class ScoreHigh extends SequentialCommandGroup {
   ) {
     addCommands(
       new MoveToHigh(armExtension, armTilt, speed),
-      new TiltArmToHeight(armTilt, speed * 0.5, 14.5, false)
-      .withTimeout(Constants.Arm.kTiltTimeOut)
-
+      new ConditionalCommand(
+        new WaitCommand(0.001), 
+        new TiltArmToHeight(armTilt, speed * 0.5, 14.5, false).withTimeout(Constants.Arm.kTiltTimeOut), 
+        () -> isCube)
+      
       
     );
   }

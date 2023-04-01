@@ -21,7 +21,7 @@ public class MoveToHigh extends SequentialCommandGroup {
   public MoveToHigh(
     ArmExtension armExtension, 
     ArmTilt armTilt, 
-    Double speed
+    double speed
   ) {
 
     addCommands(
