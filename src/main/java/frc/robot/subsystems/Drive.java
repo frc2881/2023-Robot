@@ -34,6 +34,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
 import frc.robot.Constants;
 import frc.robot.lib.NavX;
 import frc.robot.lib.Node;
@@ -97,9 +98,8 @@ public class Drive extends SubsystemBase {
         m_rearRight.getPosition()}, 
       new Pose2d());
 
-  private final Node m_zeroNode = new Node(new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0)), NodeType.CONE, 0);
   private List<Node> m_nodes = null;
-  List<Pose2d> m_poses = null;
+  List<Pose2d> m_nodePoses = null;
 
   public Drive() {
     DataLog log = DataLogManager.getLog();
@@ -164,7 +164,7 @@ public class Drive extends SubsystemBase {
         m_rearLeft.getPosition(),
         m_rearRight.getPosition()
     });
-    if(!RobotState.isAutonomous()){
+    if (!RobotState.isAutonomous()) {
       if (!updateVisionMeasurement(m_leftPhotonCamera)) {
         updateVisionMeasurement(m_rightPhotonCamera);
       }  
@@ -180,10 +180,6 @@ public class Drive extends SubsystemBase {
         estimatedPose = estimatedRobotPose.estimatedPose.toPose2d();
         if (Utils.isPoseInBounds(estimatedPose, Constants.Vision.kFieldMinPose, Constants.Vision.kFieldMaxPose)) {
           m_poseEstimator.addVisionMeasurement(estimatedPose, estimatedRobotPose.timestampSeconds);
-          SmartDashboard.putNumberArray(
-            "Drive/Vision/Camera/" + photonCamera.getCameraName() + "/LastEstimatedPose", 
-            new double[] { estimatedPose.getX(), estimatedPose.getY(), estimatedPose.getRotation().getDegrees() }
-          );
           return true;
         } 
       }
@@ -192,7 +188,7 @@ public class Drive extends SubsystemBase {
   }
 
   /**
-   * Returns the currently-estimated pose of the robot.
+   * Returns the current estimated pose of the robot.
    *
    * @return The pose.
    */
@@ -219,10 +215,13 @@ public class Drive extends SubsystemBase {
 
   public Node getNearestNode() {
     Pose2d currentPose = m_poseEstimator.getEstimatedPosition();
-    Pose2d nearestNodePose = currentPose.nearest(m_poses);
+    Pose2d nearestNodePose = currentPose.nearest(m_nodePoses);
 
-    return m_nodes.stream().filter(node -> nearestNodePose.equals(node.pose)).findFirst().orElse(m_zeroNode);
-    
+    return m_nodes
+      .stream()
+      .filter(node -> nearestNodePose.equals(node.pose))
+      .findFirst()
+      .orElse(Constants.Vision.kDefaultNode);
   }
 
   public NodeType getNearesNodeType() {
@@ -230,24 +229,21 @@ public class Drive extends SubsystemBase {
   }
 
   private void updateNodes() {
-    if(m_nodes != null) { return; }
+    if (m_nodes != null) { return; }
 
     Alliance alliance = DriverStation.getAlliance();
 
-    if(alliance != Alliance.Invalid){
+    if (alliance != Alliance.Invalid) {
       m_nodes = alliance == Alliance.Red ? 
         Constants.Vision.kNodesRedAlliance :
         Constants.Vision.kNodesBlueAlliance;
-
-      m_poses = new ArrayList<Pose2d>();
-      m_nodes.forEach((node) -> m_poses.add(node.pose));
-
+      m_nodePoses = new ArrayList<Pose2d>();
+      m_nodes.forEach((node) -> m_nodePoses.add(node.pose));
     }
   }
 
   public PathPlannerTrajectory getTrajectoryForNearestNode() {
     Pose2d currentPose = m_poseEstimator.getEstimatedPosition();
-
     Pose2d nearestNodePose = getNearestNode().pose;
 
     PathPlannerTrajectory trajectory = PathPlanner.generatePath(
@@ -263,8 +259,8 @@ public class Drive extends SubsystemBase {
         nearestNodePose.getRotation()
       )
     );
-    return trajectory;
-    //return PathPlannerTrajectory.transformTrajectoryForAlliance(trajectory, DriverStation.getAlliance());
+
+    return PathPlannerTrajectory.transformTrajectoryForAlliance(trajectory, DriverStation.getAlliance());
   }
 
   /**

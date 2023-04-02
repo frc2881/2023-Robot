@@ -104,6 +104,8 @@ public class PrettyLights extends SubsystemBase {
   }
 
   public void setPattern(Pattern pattern, PanelLocation panel) {
+    if (pattern == m_currentPattern) { return; }
+
     int[] shape = m_shapeBlank;
     switch (pattern) {
       case Heart:
@@ -121,7 +123,6 @@ public class PrettyLights extends SubsystemBase {
       case None:
         shape = m_shapeBlank;
         break;
-
     }
     
     if (panel == PanelLocation.Both) {

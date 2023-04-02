@@ -1,6 +1,7 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
+// Copyright (c) 2023 FRC Team 2881 - The Lady Cans
+//
+// Open Source Software; you can modify and/or share it under the terms of BSD
+// license file in the root directory of this project.
 
 package frc.robot.commands.auto;
 
@@ -24,7 +25,6 @@ public class AutoBalance extends CommandBase {
   private State m_state;
   
   public AutoBalance(Drive drive, Boolean isForward) {
-    // Use addRequirements() here to declare subsystem dependencies.
     m_drive = drive;
     if(isForward == true) {
       m_speed = 1.0;
@@ -35,7 +35,6 @@ public class AutoBalance extends CommandBase {
     addRequirements(m_drive);
   }
 
-  // Called when the command is initially scheduled.
   @Override
   public void initialize() {
     m_state = State.LookForMax;
@@ -44,7 +43,6 @@ public class AutoBalance extends CommandBase {
     
   }
 
-  // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
    
@@ -101,13 +99,11 @@ public class AutoBalance extends CommandBase {
 
   }
 
-  // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     m_drive.drive(0.0, 0.0, 0.0);
   }
 
-  // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     if(m_state == State.Done){

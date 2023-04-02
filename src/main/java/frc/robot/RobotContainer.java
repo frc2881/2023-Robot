@@ -168,16 +168,6 @@ public class RobotContainer {
 
     new Trigger(() -> (RobotState.isTeleop() && m_suction.isVacuumDisabled()))
       .onTrue(new RumbleControllers(m_driverController, m_manipulatorController, RumblePattern.BAD));
-
-    // STARTING CONFIGURATION LIGHTS
-    new Trigger(() -> (RobotState.isDisabled() && Utils.isValueBetween(m_armExtension.getEncoderPosition(), 3.35, 4.0)))
-      .whileTrue(Commands.run(() -> { m_lights.setPattern(Pattern.Cube, PanelLocation.Both); }).ignoringDisable(true))
-      .onFalse(Commands.run(() -> { m_lights.setPattern(Pattern.Heart, PanelLocation.Both); }).ignoringDisable(true));
-
-    new Trigger(() -> (RobotState.isDisabled() && Utils.isValueBetween(m_armExtension.getEncoderPosition(), 5.75, 5.85)))
-      .whileTrue(Commands.run(() -> { m_lights.setPattern(Pattern.Cone, PanelLocation.Both); }).ignoringDisable(true))
-      .onFalse(Commands.run(() -> { m_lights.setPattern(Pattern.Heart, PanelLocation.Both); }).ignoringDisable(true));
-
   }
 
   public void setupAuto() {
@@ -201,14 +191,14 @@ public class RobotContainer {
 
     m_autonomousChooser.setDefaultOption("None", null);
 
-    if(m_isTesting) {
+    if (m_isTesting) {
       m_autonomousChooser.addOption("Score Cone", 
-      new ScoreCone(m_suction, m_armExtension, m_armTilt));
+        new ScoreCone(m_suction, m_armExtension, m_armTilt));
 
       m_autonomousChooser.addOption("Score Cube", 
         new ScoreCube(m_suction, m_armExtension, m_armTilt));
 
-        m_autonomousChooser.addOption("1 - Move", 
+      m_autonomousChooser.addOption("1 - Move", 
         new Move(m_drive, move1Path));
 
       m_autonomousChooser.addOption("6 - Balance",
@@ -267,7 +257,18 @@ public class RobotContainer {
     m_lights.setPattern(Pattern.Heart, PanelLocation.Both);
 
     new Trigger(() -> (DriverStation.getMatchTime() <= 35))
-      .onTrue(new InstantCommand(() -> { m_lights.setPattern(Pattern.Charge, PanelLocation.Both); }));    }
+      .onTrue(new InstantCommand(() -> { m_lights.setPattern(Pattern.Charge, PanelLocation.Both); }));  
+
+    // STARTING CONFIGURATION ============================================
+
+    new Trigger(() -> (RobotState.isDisabled() && Utils.isValueBetween(m_armExtension.getEncoderPosition(), 3.35, 4.0)))
+      .whileTrue(Commands.run(() -> { m_lights.setPattern(Pattern.Cube, PanelLocation.Both); }).ignoringDisable(true))
+      .onFalse(Commands.run(() -> { m_lights.setPattern(Pattern.Heart, PanelLocation.Both); }).ignoringDisable(true));
+
+    new Trigger(() -> (RobotState.isDisabled() && Utils.isValueBetween(m_armExtension.getEncoderPosition(), 5.75, 5.85)))
+      .whileTrue(Commands.run(() -> { m_lights.setPattern(Pattern.Cone, PanelLocation.Both); }).ignoringDisable(true))
+      .onFalse(Commands.run(() -> { m_lights.setPattern(Pattern.Heart, PanelLocation.Both); }).ignoringDisable(true));
+   }
   
   public void resetRobot() {
       m_drive.resetSwerve();
@@ -277,7 +278,7 @@ public class RobotContainer {
       m_armExtension.reset();
   }
 
-  public void resetLights(){
+  public void resetLights() {
     m_lights.setPattern(Pattern.Heart, PanelLocation.Both); 
   }
 }
