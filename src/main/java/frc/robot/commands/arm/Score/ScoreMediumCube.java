@@ -34,7 +34,7 @@ public class ScoreMediumCube extends SequentialCommandGroup {
         new TiltArmToHeight(armTilt, speed, 10.5, true),
         new SequentialCommandGroup(
           new WaitUntilCommand(() -> armTilt.getEncoderPosition() >= 9.0),
-          new ExtendArmToLength(armExtension, speed, 12.0)
+          new ExtendArmToLength(armExtension, speed, 3.0)
             .withTimeout(Constants.Arm.kExtensionTimeOut)))
     );
   }

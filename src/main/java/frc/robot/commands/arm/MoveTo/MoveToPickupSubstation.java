@@ -12,9 +12,9 @@ import frc.robot.subsystems.ArmExtension;
 import frc.robot.subsystems.ArmTilt;
 import frc.robot.subsystems.Suction;
 
-public class MoveToPickup extends ParallelCommandGroup {
+public class MoveToPickupSubstation extends ParallelCommandGroup {
 
-  public MoveToPickup(
+  public MoveToPickupSubstation(
     ArmExtension armExtension, 
     ArmTilt armTilt, 
     Double speed,

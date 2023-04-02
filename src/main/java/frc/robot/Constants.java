@@ -340,7 +340,7 @@ public class Constants {
 
     // TODO: calibration of node poses below for each field is required for practice and competition
 
-    private static final double kGridNodePoseXPosition = 1.75;
+    private static final double kGridNodePoseXPosition = 1.747;
     private static final Rotation2d kGridNodeRotation = Rotation2d.fromDegrees(180);
 
     public static final List<Node> kNodesRedAlliance = new ArrayList<Node>(){{
@@ -356,23 +356,33 @@ public class Constants {
     }};
 
     public static final List<Node> kNodesBlueAlliance = new ArrayList<Node>(){{
-      add( new Node(new Pose2d(kGridNodePoseXPosition, 0.594, kGridNodeRotation), NodeType.CONE, 1) );
-      add( new Node(new Pose2d(kGridNodePoseXPosition, 1.140, kGridNodeRotation), NodeType.CUBE, 2) );
-      add( new Node(new Pose2d(kGridNodePoseXPosition, 1.686, kGridNodeRotation), NodeType.CONE, 3) );
-      add( new Node(new Pose2d(kGridNodePoseXPosition, 2.232, kGridNodeRotation), NodeType.CONE, 4) );
-      add( new Node(new Pose2d(kGridNodePoseXPosition, 2.778, kGridNodeRotation), NodeType.CUBE, 5) );
-      add( new Node(new Pose2d(kGridNodePoseXPosition, 3.324, kGridNodeRotation), NodeType.CONE, 6) );
-      add( new Node(new Pose2d(kGridNodePoseXPosition, 3.870, kGridNodeRotation), NodeType.CONE, 7) );
-      add( new Node(new Pose2d(kGridNodePoseXPosition, 4.416, kGridNodeRotation), NodeType.CUBE, 8) );
-      add( new Node(new Pose2d(kGridNodePoseXPosition, 4.962, kGridNodeRotation), NodeType.CONE, 9) );
-    }};           
+      add( new Node(new Pose2d(kGridNodePoseXPosition, 0.490, kGridNodeRotation), NodeType.CONE, 1) );
+      add( new Node(new Pose2d(kGridNodePoseXPosition, 1.050, kGridNodeRotation), NodeType.CUBE, 2) );
+      add( new Node(new Pose2d(kGridNodePoseXPosition, 1.600, kGridNodeRotation), NodeType.CONE, 3) );
+      add( new Node(new Pose2d(kGridNodePoseXPosition, 2.126, kGridNodeRotation), NodeType.CONE, 4) );
+      add( new Node(new Pose2d(kGridNodePoseXPosition, 2.721, kGridNodeRotation), NodeType.CUBE, 5) );
+      add( new Node(new Pose2d(kGridNodePoseXPosition, 3.264, kGridNodeRotation), NodeType.CONE, 6) );
+      add( new Node(new Pose2d(kGridNodePoseXPosition, 3.830, kGridNodeRotation), NodeType.CONE, 7) );
+      add( new Node(new Pose2d(kGridNodePoseXPosition, 4.426, kGridNodeRotation), NodeType.CUBE, 8) );
+      add( new Node(new Pose2d(kGridNodePoseXPosition, 4.990, kGridNodeRotation), NodeType.CONE, 9) );
+    }};         
+    
+    // LEFT
+    // 1.752
+    // 4.442
+    // -179.2
+
+    // RIGHT
+    // 1.766
+    // 4.409
+    // 179.9
   }
 
   public static final class Autonomous {
     
-    public static final double kMoveMaxVelocity = 3.0; // 3.0
+    public static final double kMoveMaxVelocity = 1.5; // 3.0
 
-    public static final double kMoveMaxAccel = 3.0; // 3.0
+    public static final double kMoveMaxAccel = 1.5; // 3.0
 
     public static final double kMoveToBalanceMaxVelocity = 2.0; // 2.0
 
@@ -381,6 +391,10 @@ public class Constants {
     public static final double kBalanceMaxVelocity = 1.0;
 
     public static final double kBalanceMaxAccel = 1.0;
+
+    public static final double kPickupMaxVelocity = 1.0;
+
+    public static final double kPickupMaxAccel = 1.0;
   }
 
 }

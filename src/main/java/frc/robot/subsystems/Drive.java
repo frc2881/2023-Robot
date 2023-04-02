@@ -225,7 +225,10 @@ public class Drive extends SubsystemBase {
   }
 
   public NodeType getNearesNodeType() {
-    return getNearestNode().nodeType;
+    NodeType nodeType = getNearestNode().nodeType;
+    SmartDashboard.putString("Drive/Vision/NodeType", nodeType.toString());
+    
+    return nodeType;
   }
 
   private void updateNodes() {

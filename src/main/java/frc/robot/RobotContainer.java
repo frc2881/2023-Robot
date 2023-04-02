@@ -22,10 +22,10 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.arm.ArmExtendOverride;
 import frc.robot.commands.arm.ArmTiltOverride;
 import frc.robot.commands.arm.ExtendArm;
-import frc.robot.commands.arm.PickUpCone;
 import frc.robot.commands.arm.TiltArm;
 import frc.robot.commands.arm.MoveTo.MoveToLow;
-import frc.robot.commands.arm.MoveTo.MoveToPickup;
+import frc.robot.commands.arm.MoveTo.MoveToPickupFloor;
+import frc.robot.commands.arm.MoveTo.MoveToPickupSubstation;
 import frc.robot.commands.arm.Score.ScoreHigh;
 import frc.robot.commands.arm.Score.ScoreMedium;
 import frc.robot.commands.auto.AutoBalance;
@@ -34,6 +34,7 @@ import frc.robot.commands.auto.Move;
 import frc.robot.commands.auto.MoveToBalance;
 import frc.robot.commands.auto.ScoreCone;
 import frc.robot.commands.auto.ScoreConeMove;
+import frc.robot.commands.auto.ScoreConeMovePickup;
 import frc.robot.commands.auto.ScoreConeMoveToBalance;
 import frc.robot.commands.auto.ScoreConeWaitMove;
 import frc.robot.commands.auto.ScoreCube;
@@ -68,8 +69,6 @@ public class RobotContainer {
   private final XboxController m_manipulatorController = new XboxController(Constants.Controllers.kManipulatorControllerPort);
 
   private final SendableChooser<Command> m_autonomousChooser = new SendableChooser<Command>();
-
-  public boolean m_isTesting = true;
  
   public RobotContainer() {
     setupDrive(); 
@@ -119,7 +118,7 @@ public class RobotContainer {
       .onTrue(new ToggleSuction(m_suction));
 
     new Trigger(m_manipulatorController::getYButton)
-      .onTrue(new PickUpCone(m_armTilt, m_armExtension, m_suction));
+      .onTrue(new MoveToPickupFloor(m_armTilt, m_armExtension, m_suction));
 
     /* Changes lights to different patterns */
     new Trigger(m_manipulatorController::getXButton)
@@ -159,7 +158,7 @@ public class RobotContainer {
       .whileTrue(new MoveToLow(m_armExtension, m_armTilt, 1.0));
 
     new Trigger(() -> m_manipulatorController.getPOV() == 270)
-      .whileTrue(new MoveToPickup(m_armExtension, m_armTilt, 1.0, m_suction));
+      .whileTrue(new MoveToPickupSubstation(m_armExtension, m_armTilt, 1.0, m_suction));
 
     // RUMBLES ============================================
 
@@ -178,7 +177,11 @@ public class RobotContainer {
     PathPlannerTrajectory moveDivider6Path = PathPlanner.loadPath("Move Divider 6", Constants.Autonomous.kMoveMaxVelocity, Constants.Autonomous.kMoveMaxAccel);
     PathPlannerTrajectory moveWall6Path = PathPlanner.loadPath("Move Wall 6", Constants.Autonomous.kMoveMaxVelocity, Constants.Autonomous.kMoveMaxAccel);
     PathPlannerTrajectory move9Path = PathPlanner.loadPath("Move 9", Constants.Autonomous.kMoveMaxVelocity, Constants.Autonomous.kMoveMaxAccel);
-
+    
+    PathPlannerTrajectory moveToCone9Path = PathPlanner.loadPath("Move To Cone 9", Constants.Autonomous.kMoveMaxVelocity, Constants.Autonomous.kMoveMaxAccel);
+    PathPlannerTrajectory return9Path = PathPlanner.loadPath("Return 9", Constants.Autonomous.kMoveMaxVelocity, Constants.Autonomous.kMoveMaxAccel);
+    
+    
     PathPlannerTrajectory moveToBalance1Path = PathPlanner.loadPath("Balance 1", Constants.Autonomous.kMoveToBalanceMaxVelocity, Constants.Autonomous.kMoveToBalanceMaxAccel);
     PathPlannerTrajectory moveToBalance5Path = PathPlanner.loadPath("Balance 5", Constants.Autonomous.kMoveToBalanceMaxVelocity, Constants.Autonomous.kMoveToBalanceMaxAccel);
     PathPlannerTrajectory moveToBalance6Path = PathPlanner.loadPath("Balance 6", Constants.Autonomous.kMoveToBalanceMaxVelocity, Constants.Autonomous.kMoveToBalanceMaxAccel);
@@ -187,29 +190,12 @@ public class RobotContainer {
     PathPlannerTrajectory balancePath = PathPlanner.loadPath("Balance", Constants.Autonomous.kBalanceMaxVelocity, Constants.Autonomous.kBalanceMaxAccel);
     PathPlannerTrajectory balanceMidPath = PathPlanner.loadPath("Mid Balance", Constants.Autonomous.kBalanceMaxVelocity, Constants.Autonomous.kBalanceMaxAccel);
 
+    PathPlannerTrajectory moveToPickupPath = PathPlanner.loadPath("Move to Pickup", Constants.Autonomous.kPickupMaxVelocity, Constants.Autonomous.kPickupMaxAccel);
+    
+
     PathPlannerTrajectory testPath = PathPlanner.loadPath("Test", 1.5, 1.5);
 
     m_autonomousChooser.setDefaultOption("None", null);
-
-    if (m_isTesting) {
-      m_autonomousChooser.addOption("Score Cone", 
-        new ScoreCone(m_suction, m_armExtension, m_armTilt));
-
-      m_autonomousChooser.addOption("Score Cube", 
-        new ScoreCube(m_suction, m_armExtension, m_armTilt));
-
-      m_autonomousChooser.addOption("1 - Move", 
-        new Move(m_drive, move1Path));
-
-      m_autonomousChooser.addOption("6 - Balance",
-        new MoveToBalance(m_drive, moveToBalance6Path, balanceMidPath, true));
-
-      m_autonomousChooser.addOption("9 - Move", 
-        new Move(m_drive, move9Path));
-
-      m_autonomousChooser.addOption("Test", 
-        new FollowTrajectory(testPath, false, m_drive));
-    }
 
     // Position 1 - Cone
     m_autonomousChooser.addOption("1 - Score Move", 
@@ -245,6 +231,29 @@ public class RobotContainer {
     m_autonomousChooser.addOption("9 - Score Balance", 
       new ScoreConeMoveToBalance(m_drive, m_suction, m_armExtension, m_armTilt, moveToBalance9Path, balancePath, false));
 
+    m_autonomousChooser.addOption("9 - Score Move Pickup", 
+      new ScoreConeMovePickup(m_drive, m_suction, m_armExtension, m_armTilt, moveToCone9Path, moveToPickupPath, return9Path));
+    
+    // TESTING
+
+    m_autonomousChooser.addOption("TEST: Score Cone", 
+      new ScoreCone(m_suction, m_armExtension, m_armTilt));
+
+    m_autonomousChooser.addOption("TEST: Score Cube", 
+      new ScoreCube(m_suction, m_armExtension, m_armTilt));
+
+    m_autonomousChooser.addOption("TEST: 1 - Move", 
+      new Move(m_drive, move1Path));
+
+    m_autonomousChooser.addOption("TEST: 6 - Balance",
+      new MoveToBalance(m_drive, moveToBalance6Path, balanceMidPath, true));
+
+    m_autonomousChooser.addOption("TEST: 9 - Move", 
+      new Move(m_drive, move9Path));
+
+    m_autonomousChooser.addOption("TEST: Test", 
+      new FollowTrajectory(testPath, false, m_drive));
+
 
     SmartDashboard.putData("Auto/Command", m_autonomousChooser);
   }
@@ -256,18 +265,18 @@ public class RobotContainer {
   private void setupLights() {
     m_lights.setPattern(Pattern.Heart, PanelLocation.Both);
 
-    new Trigger(() -> (DriverStation.getMatchTime() <= 35))
-      .onTrue(new InstantCommand(() -> { m_lights.setPattern(Pattern.Charge, PanelLocation.Both); }));  
+    new Trigger(() -> (DriverStation.getMatchTime() <= 15))
+      .whileTrue(new InstantCommand(() -> { m_lights.setPattern(Pattern.Charge, PanelLocation.Both); }));  
 
     // STARTING CONFIGURATION ============================================
 
     new Trigger(() -> (RobotState.isDisabled() && Utils.isValueBetween(m_armExtension.getEncoderPosition(), 3.35, 4.0)))
-      .whileTrue(Commands.run(() -> { m_lights.setPattern(Pattern.Cube, PanelLocation.Both); }).ignoringDisable(true))
-      .onFalse(Commands.run(() -> { m_lights.setPattern(Pattern.Heart, PanelLocation.Both); }).ignoringDisable(true));
+      .whileTrue(Commands.runOnce(() -> { m_lights.setPattern(Pattern.Cube, PanelLocation.Both); }).ignoringDisable(true))
+      .onFalse(Commands.runOnce(() -> { m_lights.setPattern(Pattern.Heart, PanelLocation.Both); }).ignoringDisable(true));
 
     new Trigger(() -> (RobotState.isDisabled() && Utils.isValueBetween(m_armExtension.getEncoderPosition(), 5.75, 5.85)))
-      .whileTrue(Commands.run(() -> { m_lights.setPattern(Pattern.Cone, PanelLocation.Both); }).ignoringDisable(true))
-      .onFalse(Commands.run(() -> { m_lights.setPattern(Pattern.Heart, PanelLocation.Both); }).ignoringDisable(true));
+      .whileTrue(Commands.runOnce(() -> { m_lights.setPattern(Pattern.Cone, PanelLocation.Both); }).ignoringDisable(true))
+      .onFalse(Commands.runOnce(() -> { m_lights.setPattern(Pattern.Heart, PanelLocation.Both); }).ignoringDisable(true));
    }
   
   public void resetRobot() {
