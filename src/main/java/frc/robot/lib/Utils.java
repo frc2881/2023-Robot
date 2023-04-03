@@ -5,6 +5,8 @@
 
 package frc.robot.lib;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import edu.wpi.first.math.geometry.Pose2d;
 
 public final class Utils {
@@ -29,6 +31,15 @@ public final class Utils {
         return 
             isValueBetween(value.getX(), minPose.getX(), maxPose.getX()) &&
             isValueBetween(value.getY(), minPose.getY(), maxPose.getY());
+    }
+
+    private static final ObjectMapper objectMapper = new ObjectMapper();
+    public static String objectToJson(Object o) {
+      try {
+        return objectMapper.writeValueAsString(o);
+      } catch (Exception ex) {
+        return "{}";
+      }
     }
 
 }
