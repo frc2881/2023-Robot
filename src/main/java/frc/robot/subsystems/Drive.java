@@ -216,7 +216,6 @@ public class Drive extends SubsystemBase {
   public Node getNearestNode() {
     Pose2d currentPose = m_poseEstimator.getEstimatedPosition();
     Pose2d nearestNodePose = currentPose.nearest(m_nodePoses);
-
     return m_nodes
       .stream()
       .filter(node -> nearestNodePose.equals(node.pose))
@@ -225,10 +224,7 @@ public class Drive extends SubsystemBase {
   }
 
   public NodeType getNearesNodeType() {
-    NodeType nodeType = getNearestNode().nodeType;
-    SmartDashboard.putString("Drive/Vision/NodeType", nodeType.toString());
-    
-    return nodeType;
+    return getNearestNode().nodeType;
   }
 
   private void updateNodes() {
@@ -242,6 +238,8 @@ public class Drive extends SubsystemBase {
         Constants.Vision.kNodesBlueAlliance;
       m_nodePoses = new ArrayList<Pose2d>();
       m_nodes.forEach((node) -> m_nodePoses.add(node.pose));
+
+      SmartDashboard.putString("Drive/Vision/Nodes", Utils.objectToJson(m_nodes));
     }
   }
 
