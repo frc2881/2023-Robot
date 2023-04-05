@@ -117,8 +117,8 @@ public class RobotContainer {
     new Trigger(m_manipulatorController::getAButton)
       .onTrue(new ToggleSuction(m_suction));
 
-    new Trigger(m_manipulatorController::getYButton)
-      .onTrue(new MoveToPickupFloor(m_armTilt, m_armExtension, m_suction));
+    // new Trigger(m_manipulatorController::getYButton)
+    //   .onTrue(new MoveToPickupFloor(m_armTilt, m_armExtension, m_suction));
 
     /* Changes lights to different patterns */
     new Trigger(m_manipulatorController::getXButton)

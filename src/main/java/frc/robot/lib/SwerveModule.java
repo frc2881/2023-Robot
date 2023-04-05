@@ -257,8 +257,8 @@ public class SwerveModule implements Sendable {
         new Rotation2d(m_turningEncoder.getPosition()));
 
     // Command driving and turning SPARKS MAX towards their respective setpoints.
-    m_drivingPIDController.setP(SmartDashboard.getNumber("P", Constants.SwerveModule.kDrivingP));
-    m_drivingPIDController.setD(SmartDashboard.getNumber("D", Constants.SwerveModule.kDrivingD));
+    // m_drivingPIDController.setP(SmartDashboard.getNumber("P", Constants.SwerveModule.kDrivingP)); ONLY FOR TESTING: CAUSES LOOP OVERRUNS
+    // m_drivingPIDController.setD(SmartDashboard.getNumber("D", Constants.SwerveModule.kDrivingD)); ONLY FOR TESTING: CAUSES LOOP OVERRUNS
     m_drivingPIDController.setReference(optimizedDesiredState.speedMetersPerSecond, CANSparkMax.ControlType.kVelocity);
     m_turningPIDController.setReference(optimizedDesiredState.angle.getRadians(), CANSparkMax.ControlType.kPosition);
 
