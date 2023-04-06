@@ -296,17 +296,17 @@ public class Constants {
     /*
       * The relative maximum pressure for vacuum state in PSI
       */
-    public static final double kMaximumPressure = 19.0;
+    public static final double kMaximumPressure = 18.0;
 
     /*
       * The relative target pressure for vacuum state in PSI
       */
-    public static final double kTargetPressure = 21.0;
+    public static final double kTargetPressure = 20.0;
 
     /*
       * The relative minimum pressure for vacuum state in PSI
       */
-    public static final double kMinimumPressure = 23.0;
+    public static final double kMinimumPressure = 22.0;
 
   }
 
