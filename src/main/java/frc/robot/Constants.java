@@ -340,31 +340,31 @@ public class Constants {
 
     // TODO: calibration of node poses below for each field is required for practice and competition
 
-    private static final double kGridNodePoseXPosition = 1.747;
+    private static final double kGridNodePoseXPosition = 1.762;
     private static final Rotation2d kGridNodeRotation = Rotation2d.fromDegrees(180);
 
     public static final List<Node> kNodesRedAlliance = new ArrayList<Node>(){{
-      add( new Node(new Pose2d(kGridNodePoseXPosition, 7.421, kGridNodeRotation), NodeType.CONE, 1) );
-      add( new Node(new Pose2d(kGridNodePoseXPosition, 6.875, kGridNodeRotation), NodeType.CUBE, 2) );
-      add( new Node(new Pose2d(kGridNodePoseXPosition, 6.329, kGridNodeRotation), NodeType.CONE, 3) );
-      add( new Node(new Pose2d(kGridNodePoseXPosition, 5.783, kGridNodeRotation), NodeType.CONE, 4) );
-      add( new Node(new Pose2d(kGridNodePoseXPosition, 5.237, kGridNodeRotation), NodeType.CUBE, 5) );
-      add( new Node(new Pose2d(kGridNodePoseXPosition, 4.691, kGridNodeRotation), NodeType.CONE, 6) );
-      add( new Node(new Pose2d(kGridNodePoseXPosition, 4.145, kGridNodeRotation), NodeType.CONE, 7) );
-      add( new Node(new Pose2d(kGridNodePoseXPosition, 3.599, kGridNodeRotation), NodeType.CUBE, 8) );
-      add( new Node(new Pose2d(kGridNodePoseXPosition, 3.053, kGridNodeRotation), NodeType.CONE, 9) );
+      add( new Node(new Pose2d(kGridNodePoseXPosition, 7.483, kGridNodeRotation), NodeType.CONE, 1) );
+      add( new Node(new Pose2d(kGridNodePoseXPosition, 6.984, kGridNodeRotation), NodeType.CUBE, 2) );
+      add( new Node(new Pose2d(kGridNodePoseXPosition, 6.391, kGridNodeRotation), NodeType.CONE, 3) );
+      add( new Node(new Pose2d(kGridNodePoseXPosition, 5.845, kGridNodeRotation), NodeType.CONE, 4) );
+      add( new Node(new Pose2d(kGridNodePoseXPosition, 5.305, kGridNodeRotation), NodeType.CUBE, 5) );
+      add( new Node(new Pose2d(kGridNodePoseXPosition, 4.723, kGridNodeRotation), NodeType.CONE, 6) );
+      add( new Node(new Pose2d(kGridNodePoseXPosition, 4.152, kGridNodeRotation), NodeType.CONE, 7) );
+      add( new Node(new Pose2d(kGridNodePoseXPosition, 3.622, kGridNodeRotation), NodeType.CUBE, 8) );
+      add( new Node(new Pose2d(kGridNodePoseXPosition, 3.042, kGridNodeRotation), NodeType.CONE, 9) );
     }};
 
     public static final List<Node> kNodesBlueAlliance = new ArrayList<Node>(){{
-      add( new Node(new Pose2d(kGridNodePoseXPosition, 0.490, kGridNodeRotation), NodeType.CONE, 1) );
-      add( new Node(new Pose2d(kGridNodePoseXPosition, 1.050, kGridNodeRotation), NodeType.CUBE, 2) );
-      add( new Node(new Pose2d(kGridNodePoseXPosition, 1.600, kGridNodeRotation), NodeType.CONE, 3) );
-      add( new Node(new Pose2d(kGridNodePoseXPosition, 2.126, kGridNodeRotation), NodeType.CONE, 4) );
-      add( new Node(new Pose2d(kGridNodePoseXPosition, 2.721, kGridNodeRotation), NodeType.CUBE, 5) );
-      add( new Node(new Pose2d(kGridNodePoseXPosition, 3.264, kGridNodeRotation), NodeType.CONE, 6) );
-      add( new Node(new Pose2d(kGridNodePoseXPosition, 3.830, kGridNodeRotation), NodeType.CONE, 7) );
-      add( new Node(new Pose2d(kGridNodePoseXPosition, 4.426, kGridNodeRotation), NodeType.CUBE, 8) );
-      add( new Node(new Pose2d(kGridNodePoseXPosition, 4.990, kGridNodeRotation), NodeType.CONE, 9) );
+      add( new Node(new Pose2d(kGridNodePoseXPosition, 0.534, kGridNodeRotation), NodeType.CONE, 1) );
+      add( new Node(new Pose2d(kGridNodePoseXPosition, 1.105, kGridNodeRotation), NodeType.CUBE, 2) );
+      add( new Node(new Pose2d(kGridNodePoseXPosition, 1.627, kGridNodeRotation), NodeType.CONE, 3) );
+      add( new Node(new Pose2d(kGridNodePoseXPosition, 2.184, kGridNodeRotation), NodeType.CONE, 4) );
+      add( new Node(new Pose2d(kGridNodePoseXPosition, 2.763, kGridNodeRotation), NodeType.CUBE, 5) );
+      add( new Node(new Pose2d(kGridNodePoseXPosition, 3.295, kGridNodeRotation), NodeType.CONE, 6) );
+      add( new Node(new Pose2d(kGridNodePoseXPosition, 3.875, kGridNodeRotation), NodeType.CONE, 7) );
+      add( new Node(new Pose2d(kGridNodePoseXPosition, 4.463, kGridNodeRotation), NodeType.CUBE, 8) );
+      add( new Node(new Pose2d(kGridNodePoseXPosition, 4.989, kGridNodeRotation), NodeType.CONE, 9) );
     }};         
     
     // LEFT
