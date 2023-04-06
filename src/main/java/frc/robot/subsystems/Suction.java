@@ -102,25 +102,25 @@ public class Suction extends SubsystemBase {
     m_solenoidRight = new Solenoid(PneumaticsModuleType.REVPH, Constants.Suction.kSolenoidRightId);
 
     DataLog log = DataLogManager.getLog();
-    m_logSuctionBottomPressure = new DoubleLogEntry(log, "/suction/bottom/pressure");
-    m_logSuctionBottomOutput = new DoubleLogEntry(log, "/suction/bottom/output");
-    m_logSuctionBottomBusVoltage = new DoubleLogEntry(log, "/suction/bottom/busVoltage");
-    m_logSuctionBottomCurrent = new DoubleLogEntry(log, "/suction/bottom/current");
+    m_logSuctionBottomPressure = new DoubleLogEntry(log, "/Suction/Bottom/Pressure");
+    m_logSuctionBottomOutput = new DoubleLogEntry(log, "/Suction/Bottom/Output");
+    m_logSuctionBottomBusVoltage = new DoubleLogEntry(log, "/Suction/Bottom/BusVoltage");
+    m_logSuctionBottomCurrent = new DoubleLogEntry(log, "/Suction/Bottom/Current");
 
-    m_logSuctionTopPressure = new DoubleLogEntry(log, "/suction/top/pressure");
-    m_logSuctionTopOutput = new DoubleLogEntry(log, "/suction/top/output");
-    m_logSuctionTopBusVoltage = new DoubleLogEntry(log, "/suction/top/busVoltage");
-    m_logSuctionTopCurrent = new DoubleLogEntry(log, "/suction/top/current");
+    m_logSuctionTopPressure = new DoubleLogEntry(log, "/Suction/Top/Pressure");
+    m_logSuctionTopOutput = new DoubleLogEntry(log, "/Suction/Top/Output");
+    m_logSuctionTopBusVoltage = new DoubleLogEntry(log, "/Suction/Top/BusVoltage");
+    m_logSuctionTopCurrent = new DoubleLogEntry(log, "/Suction/Top/Current");
 
-    m_logSuctionLeftPressure = new DoubleLogEntry(log, "/suction/left/pressure");
-    m_logSuctionLeftOutput = new DoubleLogEntry(log, "/suction/left/output");
-    m_logSuctionLeftBusVoltage = new DoubleLogEntry(log, "/suction/left/busVoltage");
-    m_logSuctionLeftCurrent = new DoubleLogEntry(log, "/suction/left/current");
+    m_logSuctionLeftPressure = new DoubleLogEntry(log, "/Suction/Left/Pressure");
+    m_logSuctionLeftOutput = new DoubleLogEntry(log, "/Suction/Left/Output");
+    m_logSuctionLeftBusVoltage = new DoubleLogEntry(log, "/Suction/Left/BusVoltage");
+    m_logSuctionLeftCurrent = new DoubleLogEntry(log, "/Suction/Left/Current");
 
-    m_logSuctionRightPressure = new DoubleLogEntry(log, "/suction/right/pressure");
-    m_logSuctionRightOutput = new DoubleLogEntry(log, "/suction/right/output");
-    m_logSuctionRightBusVoltage = new DoubleLogEntry(log, "/suction/right/busVoltage");
-    m_logSuctionRightCurrent = new DoubleLogEntry(log, "/suction/right/current");
+    m_logSuctionRightPressure = new DoubleLogEntry(log, "/Suction/Right/Pressure");
+    m_logSuctionRightOutput = new DoubleLogEntry(log, "/Suction/Right/Output");
+    m_logSuctionRightBusVoltage = new DoubleLogEntry(log, "/Suction/Right/BusVoltage");
+    m_logSuctionRightCurrent = new DoubleLogEntry(log, "/Suction/Right/Current");
     
     SmartDashboard.putNumber("Suction/Pressure/Minimum", Constants.Suction.kMinimumPressure);
     SmartDashboard.putNumber("Suction/Pressure/Target", Constants.Suction.kTargetPressure);

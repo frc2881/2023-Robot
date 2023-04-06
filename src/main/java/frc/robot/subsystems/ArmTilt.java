@@ -58,10 +58,10 @@ public class ArmTilt extends SubsystemBase {
                              Constants.Arm.kTiltMaxOutput);
 
     DataLog log = DataLogManager.getLog();
-    m_logTiltPosition = new DoubleLogEntry(log, "/armTilt/position");
-    m_logTiltAppliedOutput = new DoubleLogEntry(log, "/armTilt/output");
-    m_logTiltBusVoltage = new DoubleLogEntry(log, "/armTilt/busVoltage");
-    m_logTiltOutputCurrent = new DoubleLogEntry(log, "/armTilt/current");
+    m_logTiltPosition = new DoubleLogEntry(log, "/Arm/Tilt/Position");
+    m_logTiltAppliedOutput = new DoubleLogEntry(log, "/Arm/Tilt/Output");
+    m_logTiltBusVoltage = new DoubleLogEntry(log, "/Arm/Tilt/BusVoltage");
+    m_logTiltOutputCurrent = new DoubleLogEntry(log, "/Arm/Tilt/Current");
 
   }
 

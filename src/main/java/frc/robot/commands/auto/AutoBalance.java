@@ -70,12 +70,12 @@ public class AutoBalance extends CommandBase {
       {
         if(m_speed > 0.0){
           m_drive.drive(-m_speed/2, 0.0, 0.0);
-          m_repeat = 18;
+          m_repeat = 17;
           m_state = State.WaitToStop;
         }
         if(m_speed < 0.0){
           m_drive.drive(-m_speed/2, 0.0, 0.0);
-          m_repeat = 18;
+          m_repeat = 17;
           m_state = State.WaitToStop;
         }
         break;

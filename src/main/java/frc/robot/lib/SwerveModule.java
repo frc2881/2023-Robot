@@ -170,18 +170,18 @@ public class SwerveModule implements Sendable {
 
     DataLog log = DataLogManager.getLog();
 
-    m_logDrivingAppliedOutput = new DoubleLogEntry(log, "drive/" + m_location.toString() + "/driving/appliedOutput");
-    m_logDrivingBusVoltage = new DoubleLogEntry(log, "drive/" + m_location.toString() + "/driving/busVoltage");
-    m_logDrivingOutputCurrent = new DoubleLogEntry(log, "drive/" + m_location.toString() + "/driving/outputCurrent");
-    m_logDrivingVelocity = new DoubleLogEntry(log, "drive/" + m_location.toString() + "/driving/velocity");
+    m_logDrivingAppliedOutput = new DoubleLogEntry(log, "Drive/Swerve/" + m_location.toString() + "/Driving/AppliedOutput");
+    m_logDrivingBusVoltage = new DoubleLogEntry(log, "Drive/Swerve/" + m_location.toString() + "/Driving/BusVoltage");
+    m_logDrivingOutputCurrent = new DoubleLogEntry(log, "Drive/Swerve/" + m_location.toString() + "/Driving/OutputCurrent");
+    m_logDrivingVelocity = new DoubleLogEntry(log, "Drive/Swerve/" + m_location.toString() + "/Driving/Velocity");
 
-    m_logTurningAbsoluteEncoderPosition = new DoubleLogEntry(log, "drive/" + m_location.toString() + "/turning/absoluteEncoderPosition");
-    m_logTurningRelativeEncoderPosition = new DoubleLogEntry(log, "drive/"+ m_location.toString() + "/turning/relativeEncoderPosition");
-    m_logTurningAbsoluteEncoderAverage = new DoubleLogEntry(log, "drive/" + m_location.toString() + "/turning/absoluteEncoderAverage");
+    m_logTurningAbsoluteEncoderPosition = new DoubleLogEntry(log, "Drive/Swerve/" + m_location.toString() + "/Turning/AbsoluteEncoderPosition");
+    m_logTurningRelativeEncoderPosition = new DoubleLogEntry(log, "Drive/Swerve/"+ m_location.toString() + "/Turning/RelativeEncoderPosition");
+    m_logTurningAbsoluteEncoderAverage = new DoubleLogEntry(log, "Drive/Swerve/" + m_location.toString() + "/Turning/AbsoluteEncoderAverage");
 
-    m_logTurningAppliedOutput = new DoubleLogEntry(log, "drive/"+ m_location.toString() + "/turning/appliedOutput");
-    m_logTurningBusVoltage = new DoubleLogEntry(log, "drive/" + m_location.toString() + "/turning/busVoltage");
-    m_logTurningOutputCurrent = new DoubleLogEntry(log, "drive/" + m_location.toString() + "/turning/outputCurrent");
+    m_logTurningAppliedOutput = new DoubleLogEntry(log, "Drive/Swerve/"+ m_location.toString() + "/Turning/AppliedOutput");
+    m_logTurningBusVoltage = new DoubleLogEntry(log, "Drive/Swerve/" + m_location.toString() + "/Turning/BusVoltage");
+    m_logTurningOutputCurrent = new DoubleLogEntry(log, "Drive/Swerve/" + m_location.toString() + "/Turning/OutputCurrent");
   }
 
   public void sample(){

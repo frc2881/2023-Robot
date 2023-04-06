@@ -101,30 +101,32 @@ public class Drive extends SubsystemBase {
   private List<Node> m_nodes = null;
   List<Pose2d> m_nodePoses = null;
 
+  private Alliance m_alliance = Alliance.Invalid;
+
   public Drive() {
     DataLog log = DataLogManager.getLog();
-    m_logRoll = new DoubleLogEntry(log, "/Drive/roll");
-    m_logYaw = new DoubleLogEntry(log, "/Drive/yaw");
-    m_logPitch = new DoubleLogEntry(log, "/Drive/pitch");
+    m_logRoll = new DoubleLogEntry(log, "/Drive/Roll");
+    m_logYaw = new DoubleLogEntry(log, "/Drive/Yaw");
+    m_logPitch = new DoubleLogEntry(log, "/Drive/Pitch");
   }
 
   @Override
   public void periodic() {
-    updateNodes();
-    updatePhotonCameras();
+    Alliance alliance = DriverStation.getAlliance();
+    if(m_alliance != alliance){
+      m_alliance = alliance;
+      updateNodes();
+      updatePhotonCameras();
+    }
     updatePose();
     updateTelemetry();
     sampleModules();
+    logDrive();
   }
   
   private void updatePhotonCameras() {
-    if ( m_leftPhotonCamera != null &&  m_rightPhotonCamera != null) { return; }
-
-    Alliance alliance = DriverStation.getAlliance();
-
-    if (alliance != Alliance.Invalid) {
       Constants.Vision.kAprilTagFieldLayout.setOrigin(
-        alliance == Alliance.Red 
+        m_alliance == Alliance.Red 
           ? OriginPosition.kRedAllianceWallRightSide
           : OriginPosition.kBlueAllianceWallRightSide);
 
@@ -141,7 +143,6 @@ public class Drive extends SubsystemBase {
         PoseStrategy.MULTI_TAG_PNP,
         Constants.Vision.kAprilTagFieldLayout
       );  
-    }
   }
 
   public void resetPhotonCameras() {
@@ -228,19 +229,14 @@ public class Drive extends SubsystemBase {
   }
 
   private void updateNodes() {
-    if (m_nodes != null) { return; }
-
-    Alliance alliance = DriverStation.getAlliance();
-
-    if (alliance != Alliance.Invalid) {
-      m_nodes = alliance == Alliance.Red ? 
+      m_nodes = m_alliance == Alliance.Red ? 
         Constants.Vision.kNodesRedAlliance :
         Constants.Vision.kNodesBlueAlliance;
       m_nodePoses = new ArrayList<Pose2d>();
       m_nodes.forEach((node) -> m_nodePoses.add(node.pose));
 
       SmartDashboard.putString("Drive/Vision/Nodes", Utils.objectToJson(m_nodes));
-    }
+    
   }
 
   public PathPlannerTrajectory getTrajectoryForNearestNode() {
@@ -403,7 +399,6 @@ public class Drive extends SubsystemBase {
   private void updateTelemetry() {
     Pose2d pose = m_poseEstimator.getEstimatedPosition();
     SmartDashboard.putNumberArray("Drive/Pose",  new double[] { pose.getX(), pose.getY(), pose.getRotation().getDegrees() });
-    SmartDashboard.putNumber("Drive/Roll", m_gyro.getRoll());
   }
 
   public void logDrive() {

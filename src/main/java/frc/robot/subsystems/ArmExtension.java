@@ -60,10 +60,10 @@ public class ArmExtension extends SubsystemBase {
                                   Constants.Arm.kExtensionMaxOutput);
 
     DataLog log = DataLogManager.getLog();
-    m_logExtensionPosition = new DoubleLogEntry(log, "/armExtension/position");
-    m_logExtensionAppliedOutput = new DoubleLogEntry(log, "/armExtension/output");
-    m_logExtensionBusVoltage = new DoubleLogEntry(log, "/armExtension/busVoltage");
-    m_logExtensionOutputCurrent = new DoubleLogEntry(log, "/armExtension/current");
+    m_logExtensionPosition = new DoubleLogEntry(log, "/Arm/Extension/Position");
+    m_logExtensionAppliedOutput = new DoubleLogEntry(log, "/Arm/Extension/Output");
+    m_logExtensionBusVoltage = new DoubleLogEntry(log, "/Arm/Extension/BusVoltage");
+    m_logExtensionOutputCurrent = new DoubleLogEntry(log, "/Arm/Extension/Current");
 
   }
 

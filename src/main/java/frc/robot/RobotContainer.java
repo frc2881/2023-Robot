@@ -24,10 +24,13 @@ import frc.robot.commands.arm.ArmTiltOverride;
 import frc.robot.commands.arm.ExtendArm;
 import frc.robot.commands.arm.TiltArm;
 import frc.robot.commands.arm.MoveTo.MoveToLow;
-import frc.robot.commands.arm.MoveTo.MoveToPickupFloor;
 import frc.robot.commands.arm.MoveTo.MoveToPickupSubstation;
 import frc.robot.commands.arm.Score.ScoreHigh;
+import frc.robot.commands.arm.Score.ScoreHighCone;
+import frc.robot.commands.arm.Score.ScoreHighCube;
 import frc.robot.commands.arm.Score.ScoreMedium;
+import frc.robot.commands.arm.Score.ScoreMediumCone;
+import frc.robot.commands.arm.Score.ScoreMediumCube;
 import frc.robot.commands.auto.AutoBalance;
 import frc.robot.commands.auto.FollowTrajectory;
 import frc.robot.commands.auto.Move;
@@ -149,9 +152,13 @@ public class RobotContainer {
     
     /* Uses D-Pad to move the arm to position */
     new Trigger(() -> m_manipulatorController.getPOV() == 0)
+      .and(() -> m_manipulatorController.getRightTriggerAxis() < 0.1)
+      .and(() -> m_manipulatorController.getLeftTriggerAxis() < 0.1)
       .whileTrue(new ScoreHigh(m_armExtension, m_armTilt, m_drive, 1.0));
 
     new Trigger(() -> m_manipulatorController.getPOV() == 90)
+      .and(() -> m_manipulatorController.getRightTriggerAxis() < 0.1)
+      .and(() -> m_manipulatorController.getLeftTriggerAxis() < 0.1)
       .whileTrue(new ScoreMedium(m_armExtension, m_armTilt, m_drive, 1.0));
 
     new Trigger(() -> m_manipulatorController.getPOV() == 180)
@@ -159,6 +166,24 @@ public class RobotContainer {
 
     new Trigger(() -> m_manipulatorController.getPOV() == 270)
       .whileTrue(new MoveToPickupSubstation(m_armExtension, m_armTilt, 1.0, m_suction));
+
+
+    /* Scoring Manual Override */
+    new Trigger(() -> m_manipulatorController.getPOV() == 0)
+      .and(() -> m_manipulatorController.getRightTriggerAxis() > 0.1)
+      .whileTrue(new ScoreHighCone(m_armExtension, m_armTilt, 1.0));
+
+    new Trigger(() -> m_manipulatorController.getPOV() == 0)
+      .and(() -> m_manipulatorController.getLeftTriggerAxis() > 0.1)
+      .whileTrue(new ScoreHighCube(m_armExtension, m_armTilt, 1.0));
+
+    new Trigger(() -> m_manipulatorController.getPOV() == 90)
+      .and(() -> m_manipulatorController.getRightTriggerAxis() > 0.1)
+      .whileTrue(new ScoreMediumCone(m_armExtension, m_armTilt, 1.0));
+
+    new Trigger(() -> m_manipulatorController.getPOV() == 90)
+      .and(() -> m_manipulatorController.getLeftTriggerAxis() > 0.1)
+      .whileTrue(new ScoreMediumCube(m_armExtension, m_armTilt, 1.0));
 
     // RUMBLES ============================================
 

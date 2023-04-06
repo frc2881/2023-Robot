@@ -18,7 +18,7 @@ public class FollowTrajectory extends SequentialCommandGroup {
 	public FollowTrajectory(PathPlannerTrajectory trajectory, boolean isFirstPath, Drive drive) {
 		PIDController xPidController = new PIDController(0.01, 0, 0);
 		PIDController yPidController = new PIDController(0.01, 0, 0);
-		PIDController tPidController = new PIDController(0.45, 0, 0);
+		PIDController tPidController = new PIDController(2.5, 0, 0);
 		addCommands(
 			new InstantCommand(() -> {
 				// Reset odometry for the first path you run during auto
