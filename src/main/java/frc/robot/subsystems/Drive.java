@@ -165,20 +165,21 @@ public class Drive extends SubsystemBase {
         m_rearLeft.getPosition(),
         m_rearRight.getPosition()
     });
-    if (!RobotState.isAutonomous()) {
-      if (!updateVisionMeasurement(m_leftPhotonCamera)) {
-        updateVisionMeasurement(m_rightPhotonCamera);
-      }  
-    }     
+    if (RobotState.isAutonomous() && RobotState.isEnabled()) { return; }
+
+    if (!updateVisionMeasurement(m_leftPhotonCamera)) {
+      updateVisionMeasurement(m_rightPhotonCamera);
+    }  
+    
   }
 
   private boolean updateVisionMeasurement(PhotonCameraWrapper photonCamera) {
-    Pose2d estimatedPose = new Pose2d();
     if (photonCamera != null) {
       Optional<EstimatedRobotPose> pipelineResult = photonCamera.getEstimatedGlobalPose(m_poseEstimator.getEstimatedPosition());
       if (pipelineResult.isPresent()) {
         EstimatedRobotPose estimatedRobotPose = pipelineResult.get();
-        estimatedPose = estimatedRobotPose.estimatedPose.toPose2d();
+        Pose2d estimatedPose = estimatedRobotPose.estimatedPose.toPose2d();
+        // TODO: add estimatedPose to datalog
         if (Utils.isPoseInBounds(estimatedPose, Constants.Vision.kFieldMinPose, Constants.Vision.kFieldMaxPose)) {
           m_poseEstimator.addVisionMeasurement(estimatedPose, estimatedRobotPose.timestampSeconds);
           return true;
@@ -236,7 +237,6 @@ public class Drive extends SubsystemBase {
       m_nodes.forEach((node) -> m_nodePoses.add(node.pose));
 
       SmartDashboard.putString("Drive/Vision/Nodes", Utils.objectToJson(m_nodes));
-    
   }
 
   public PathPlannerTrajectory getTrajectoryForNearestNode() {

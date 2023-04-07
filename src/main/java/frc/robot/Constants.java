@@ -333,8 +333,8 @@ public class Constants {
       }
     }
 
-    public static final Pose2d kFieldMinPose = new Pose2d(1.50, 0.0, Rotation2d.fromDegrees(0));
-    public static final Pose2d kFieldMaxPose = new Pose2d(16.50, 8.0, Rotation2d.fromDegrees(0));
+    public static final Pose2d kFieldMinPose = new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0));
+    public static final Pose2d kFieldMaxPose = new Pose2d(16.54, 8.02, Rotation2d.fromDegrees(0));
 
     public static final Node kDefaultNode = new Node(new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0.0)), NodeType.CONE, 0);
 
