@@ -76,7 +76,7 @@ public class AutoBalance extends CommandBase {
             m_repeat = 14;
           }
           else {
-            m_repeat = 12;
+            m_repeat = 10;
           }
           
           m_state = State.WaitToStop;
@@ -87,7 +87,7 @@ public class AutoBalance extends CommandBase {
             m_repeat = 14;
           }
           else {
-            m_repeat = 12;
+            m_repeat = 10;
           }
 
           m_state = State.WaitToStop;
