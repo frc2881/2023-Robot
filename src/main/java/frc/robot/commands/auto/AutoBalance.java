@@ -5,6 +5,8 @@
 
 package frc.robot.commands.auto;
 
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.Drive;
@@ -70,12 +72,24 @@ public class AutoBalance extends CommandBase {
       {
         if(m_speed > 0.0){
           m_drive.drive(-m_speed/2, 0.0, 0.0);
-          m_repeat = 15;
+          if(DriverStation.getAlliance() == Alliance.Red){
+            m_repeat = 14;
+          }
+          else {
+            m_repeat = 12;
+          }
+          
           m_state = State.WaitToStop;
         }
         if(m_speed < 0.0){
           m_drive.drive(-m_speed/2, 0.0, 0.0);
-          m_repeat = 15;
+          if(DriverStation.getAlliance() == Alliance.Red){
+            m_repeat = 14;
+          }
+          else {
+            m_repeat = 12;
+          }
+
           m_state = State.WaitToStop;
         }
         break;
