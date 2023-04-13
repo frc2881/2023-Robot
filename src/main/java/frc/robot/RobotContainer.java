@@ -306,7 +306,6 @@ public class RobotContainer {
   
   public void resetRobot() {
       m_drive.resetSwerve();
-      //m_drive.resetPhotonCameras();
       m_suction.reset();
       m_armTilt.reset();
       m_armExtension.reset();
