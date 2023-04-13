@@ -28,7 +28,8 @@ public class PrettyLights extends SubsystemBase {
     Heart,
     Cone,
     Cube,
-    Charge
+    Charge,
+    Face
   }
 
   public static enum ColorPreset 
@@ -38,7 +39,8 @@ public class PrettyLights extends SubsystemBase {
     Charge(0x33001A), 
     Pink(0x33001A),
     Blue(0x000011),
-    Black(0x000000);
+    Black(0x000000),
+    White(0x111111);
   
     private int color;
     ColorPreset(int color) { this.color = color; }
@@ -120,6 +122,9 @@ public class PrettyLights extends SubsystemBase {
       case Charge:
         shape = m_shapeCharge;
         break;
+      case Face:
+        shape = m_shapeFace;
+        break;
       case None:
         shape = m_shapeBlank;
         break;
@@ -166,6 +171,7 @@ public class PrettyLights extends SubsystemBase {
   private final int CB = ColorPreset.Cube.getColor();
   private final int CH = ColorPreset.Charge.getColor();
   private final int BL = ColorPreset.Blue.getColor();
+  private final int WH = ColorPreset.White.getColor();
 
   private final int[] m_shapeBlank = {
     __, __, __, __, __, __, __, __,
@@ -220,6 +226,16 @@ public class PrettyLights extends SubsystemBase {
     __, __, __, __, CH, CH, __, __,
     __, __, __, __, CH, __, __, __,
     __, __, __, CH, __, __, __, __
+  };
+  private final int[] m_shapeFace = {
+    __, WH, __, __, __, __, WH, __,
+    __, __, WH, __, __, WH, __, __,
+    __, __, WH, __, __, WH, __, __,
+    __, __, WH, __, __, WH, __, __,
+    __, PK, __, __, __, __, PK, __,
+    __, __, __, __, __, __, __, __,
+    __, WH, __, __, __, __, WH, __,
+    __, __, WH, WH, WH, WH, __, __
   };
 
 }
