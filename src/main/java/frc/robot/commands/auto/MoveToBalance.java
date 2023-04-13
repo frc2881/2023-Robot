@@ -8,6 +8,7 @@ package frc.robot.commands.auto;
 import com.pathplanner.lib.PathPlannerTrajectory;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.commands.drive.FollowTrajectory;
 import frc.robot.commands.drive.SetXConfiguration;
 import frc.robot.commands.drive.ZeroHeadingToAng;
 import frc.robot.subsystems.Drive;

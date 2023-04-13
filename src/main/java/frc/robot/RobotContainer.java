@@ -32,7 +32,6 @@ import frc.robot.commands.arm.Score.ScoreMedium;
 import frc.robot.commands.arm.Score.ScoreMediumCone;
 import frc.robot.commands.arm.Score.ScoreMediumCube;
 import frc.robot.commands.auto.AutoBalance;
-import frc.robot.commands.auto.FollowTrajectory;
 import frc.robot.commands.auto.Move;
 import frc.robot.commands.auto.MoveToBalance;
 import frc.robot.commands.auto.ScoreCone;
@@ -47,6 +46,7 @@ import frc.robot.commands.controllers.RumbleControllers;
 import frc.robot.commands.controllers.RumbleControllers.RumblePattern;
 import frc.robot.commands.drive.DriveRobotCentric;
 import frc.robot.commands.drive.DriveWithJoysticks;
+import frc.robot.commands.drive.FollowTrajectory;
 import frc.robot.commands.drive.ResetSwerve;
 import frc.robot.commands.drive.ToggleXConfiguration;
 import frc.robot.commands.drive.ZeroHeading;
@@ -277,7 +277,7 @@ public class RobotContainer {
       new Move(m_drive, move9Path));
 
     m_autonomousChooser.addOption("TEST: Test", 
-      new FollowTrajectory(testPath, false, m_drive));
+      new FollowTrajectory(testPath, true, m_drive));
 
 
     SmartDashboard.putData("Auto/Command", m_autonomousChooser);
