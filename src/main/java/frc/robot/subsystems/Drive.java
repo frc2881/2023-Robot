@@ -50,6 +50,11 @@ public class Drive extends SubsystemBase {
     ROBOT_CENTRIC
   }
 
+  public static enum SwerveDriveSpeedMode {
+    NORMAL,
+    PRECISION
+  }
+
   private final SwerveModule m_frontLeft = new SwerveModule(
     SwerveModule.Location.FrontLeft,
     Constants.Drive.kFrontLeftDrivingCanId,
@@ -77,6 +82,8 @@ public class Drive extends SubsystemBase {
   private final NavX m_gyro = new NavX();
   
   private SwerveDriveMode m_swerveDriveMode = SwerveDriveMode.FIELD_CENTRIC;
+
+  private SwerveDriveSpeedMode m_swerveDriveSpeedMode = SwerveDriveSpeedMode.NORMAL;
 
   private boolean m_isXConfiguration = false;
 
@@ -271,6 +278,13 @@ public class Drive extends SubsystemBase {
     // xSpeed *= Constants.Drive.kMaxSpeedMetersPerSecond;
     // ySpeed *= Constants.Drive.kMaxSpeedMetersPerSecond;
     // rot *= Constants.Drive.kMaxAngularSpeed;
+
+    if(m_swerveDriveSpeedMode == SwerveDriveSpeedMode.PRECISION){
+      xSpeed *= Constants.Drive.precisionMultiplier;
+      ySpeed *= Constants.Drive.precisionMultiplier;
+      rot *= Constants.Drive.precisionMultiplier;
+    }
+    
     if(!m_isXConfiguration){
       var swerveModuleStates = Constants.Drive.kDriveKinematics.toSwerveModuleStates(
         (m_swerveDriveMode == SwerveDriveMode.FIELD_CENTRIC)
@@ -289,6 +303,11 @@ public class Drive extends SubsystemBase {
   public void setDriveMode(SwerveDriveMode driveMode) {
     m_swerveDriveMode = driveMode;
     SmartDashboard.putString("Drive/Swerve/Mode", m_swerveDriveMode.toString());
+  }
+
+  public void setSpeedMode(SwerveDriveSpeedMode driveSpeedMode) {
+    m_swerveDriveSpeedMode = driveSpeedMode;
+    SmartDashboard.putString("Drive/Swerve/SpeedMode", m_swerveDriveSpeedMode.toString());
   }
 
   /**

@@ -44,6 +44,7 @@ import frc.robot.commands.auto.ScoreCubeMoveToBalance;
 import frc.robot.commands.auto.ScoreCubeWaitMove;
 import frc.robot.commands.controllers.RumbleControllers;
 import frc.robot.commands.controllers.RumbleControllers.RumblePattern;
+import frc.robot.commands.drive.DrivePrecision;
 import frc.robot.commands.drive.DriveRobotCentric;
 import frc.robot.commands.drive.DriveWithJoysticks;
 import frc.robot.commands.drive.FollowTrajectory;
@@ -97,7 +98,7 @@ public class RobotContainer {
     // DRIVER CONTROLLER =========================
 
     new Trigger(() -> Math.abs(m_driverController.getRightTriggerAxis()) > 0.9)
-      .whileTrue(new DriveRobotCentric(m_drive));
+      .whileTrue(new DrivePrecision(m_drive));
 
     new Trigger(m_driverController::getBackButton)
       .onTrue(new ZeroHeading(m_drive));

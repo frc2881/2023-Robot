@@ -160,6 +160,8 @@ public class Constants {
 
     public static final double kMaxRoll = 14.0;
     public static final double kMinRoll = 13.0;
+
+    public static final double precisionMultiplier = 0.5;
   }
     
   public static final class SwerveModule {
