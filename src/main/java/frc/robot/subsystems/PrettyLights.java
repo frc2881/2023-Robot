@@ -40,7 +40,8 @@ public class PrettyLights extends SubsystemBase {
     Pink(0x33001A),
     Blue(0x000011),
     Black(0x000000),
-    White(0x111111);
+    White(0x111111),
+    Green(0x001100);
   
     private int color;
     ColorPreset(int color) { this.color = color; }
@@ -84,14 +85,14 @@ public class PrettyLights extends SubsystemBase {
 
   private void beginAnimationFrame(int index){
     m_animationFrameIndex = index;
-    if (index >= m_blinkle.length){
+    if (index >= m_currentAnimation.length){
       m_animationFrameIndex = 0;
     }
-    m_animationFrameTimer = m_blinkle[m_animationFrameIndex].getDuration();
+    m_animationFrameTimer = m_currentAnimation[m_animationFrameIndex].getDuration();
   }
   @Override
   public void periodic() {
-    // Blinkle
+    // howdy, this runs an animation when the robot's disabled :')
     if(RobotState.isDisabled()){
       double currentTimeStamp = Timer.getFPGATimestamp();
       double elapsedTime = currentTimeStamp - m_lastTimeStamp;
@@ -100,8 +101,8 @@ public class PrettyLights extends SubsystemBase {
         m_animationFrameTimer = m_animationFrameTimer - elapsedTime;
         if (m_animationFrameTimer <= 0) {
           beginAnimationFrame(m_animationFrameIndex + 1);
-          setShape(m_blinkle[m_animationFrameIndex].getShape(), PanelLocation.Front);
-          setShape(m_blinkle[m_animationFrameIndex].getShape(), PanelLocation.Rear);
+          setShape(m_currentAnimation[m_animationFrameIndex].getShape(), PanelLocation.Front);
+          setShape(m_currentAnimation[m_animationFrameIndex].getShape(), PanelLocation.Rear);
         }
       }
     }
@@ -189,6 +190,7 @@ public class PrettyLights extends SubsystemBase {
   private final int CH = ColorPreset.Charge.getColor();
   private final int BL = ColorPreset.Blue.getColor();
   private final int WH = ColorPreset.White.getColor();
+  private final int GR = ColorPreset.Green.getColor();
 
   private final int[] m_shapeBlank = {
     __, __, __, __, __, __, __, __,
@@ -245,48 +247,48 @@ public class PrettyLights extends SubsystemBase {
     __, __, __, CH, __, __, __, __
   };
   private final int[] m_shapeFace = {
-    __, WH, __, __, __, __, WH, __,
-    __, __, WH, __, __, WH, __, __,
-    __, __, WH, __, __, WH, __, __,
-    __, __, WH, __, __, WH, __, __,
-    __, PK, __, __, __, __, PK, __,
+    PK, PK, PK, __, __, PK, PK, PK,
+    WH, GR, GR, __, __, GR, GR, WH,
+    WH, GR, GR, __, __, GR, GR, WH,
+    WH, GR, GR, __, __, GR, GR, WH,
     __, __, __, __, __, __, __, __,
-    __, WH, __, __, __, __, WH, __,
-    __, __, WH, WH, WH, WH, __, __
+    __, __, __, __, __, __, __, __,
+    __, PK, __, __, __, __, PK, __,
+    __, __, PK, PK, PK, PK, __, __
   };
   private final int[] m_shapeFaceBlink1 = {
     __, __, __, __, __, __, __, __,
-    __, WH, __, __, __, __, WH, __,
-    __, __, WH, __, __, WH, __, __,
-    __, __, WH, __, __, WH, __, __,
-    __, PK, __, __, __, __, PK, __,
+    PK, PK, PK, __, __, PK, PK, PK,
+    WH, GR, GR, __, __, GR, GR, WH,
+    WH, GR, GR, __, __, GR, GR, WH,
     __, __, __, __, __, __, __, __,
-    __, WH, __, __, __, __, WH, __,
-    __, __, WH, WH, WH, WH, __, __
+    __, __, __, __, __, __, __, __,
+    __, PK, __, __, __, __, PK, __,
+    __, __, PK, PK, PK, PK, __, __
   };
   private final int[] m_shapeFaceBlink2 = {
     __, __, __, __, __, __, __, __,
     __, __, __, __, __, __, __, __,
-    __, WH, __, __, __, __, WH, __,
-    __, __, WH, __, __, WH, __, __,
-    __, PK, __, __, __, __, PK, __,
+    PK, PK, PK, __, __, PK, PK, PK,
+    WH, GR, GR, __, __, GR, GR, WH,
     __, __, __, __, __, __, __, __,
-    __, WH, __, __, __, __, WH, __,
-    __, __, WH, WH, WH, WH, __, __
+    __, __, __, __, __, __, __, __,
+    __, PK, __, __, __, __, PK, __,
+    __, __, PK, PK, PK, PK, __, __
   };
   private final int[] m_shapeFaceBlink3 = {
     __, __, __, __, __, __, __, __,
     __, __, __, __, __, __, __, __,
     __, __, __, __, __, __, __, __,
-    __, WH, WH, __, __, WH, WH, __,
-    __, PK, __, __, __, __, PK, __,
+    PK, PK, PK, __, __, PK, PK, PK,
     __, __, __, __, __, __, __, __,
-    __, WH, __, __, __, __, WH, __,
-    __, __, WH, WH, WH, WH, __, __
+    __, __, __, __, __, __, __, __,
+    __, PK, __, __, __, __, PK, __,
+    __, __, PK, PK, PK, PK, __, __
   };
 
-  private AnimationFrame[] m_blinkle = {
-    new AnimationFrame(m_shapeFace, 2, 10),
+  private AnimationFrame[] m_currentAnimation = {
+    new AnimationFrame(m_shapeFace, 1, 7),
     new AnimationFrame(m_shapeFaceBlink1, 0.0833, 0.0833),
     new AnimationFrame(m_shapeFaceBlink2, 0.0833, 0.0833),
     new AnimationFrame(m_shapeFaceBlink3, 0.0833, 0.0833),
