@@ -87,7 +87,9 @@ public class RobotContainer {
         m_drive,
         () -> Utils.applyDeadband(-m_driverController.getLeftY(), Constants.Controllers.kDeadband),
         () -> Utils.applyDeadband(-m_driverController.getLeftX(), Constants.Controllers.kDeadband),
-        () -> Utils.applyDeadband(-m_driverController.getRightX(), Constants.Controllers.kDeadband)
+        () -> Utils.applyDeadband(-m_driverController.getRightX(), Constants.Controllers.kDeadband),
+        () -> m_drive.getHeading(),
+        m_driverController::getRightBumper
       )
     );
     m_drive.resetSwerve();
