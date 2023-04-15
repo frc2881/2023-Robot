@@ -172,10 +172,10 @@ public class Drive extends SubsystemBase {
         m_rearLeft.getPosition(),
         m_rearRight.getPosition()
     });
-    if (RobotState.isAutonomous() && RobotState.isEnabled()) { return; }
-    if (!updateVisionMeasurement(m_leftPhotonCamera)) {
-      updateVisionMeasurement(m_rightPhotonCamera);
-    }  
+    // if (RobotState.isAutonomous() && RobotState.isEnabled()) { return; }
+    // if (!updateVisionMeasurement(m_leftPhotonCamera)) {
+    //   updateVisionMeasurement(m_rightPhotonCamera);
+    // }  
   }
 
   private boolean updateVisionMeasurement(PhotonCameraWrapper photonCamera) {
@@ -415,6 +415,7 @@ public class Drive extends SubsystemBase {
   private void updateTelemetry() {
     Pose2d pose = getPose();
     SmartDashboard.putNumberArray("Drive/Pose",  new double[] { pose.getX(), pose.getY(), pose.getRotation().getDegrees() });
+    SmartDashboard.putNumber("Drive/Pose/X",  pose.getX());
   }
 
   public void logDrive() {

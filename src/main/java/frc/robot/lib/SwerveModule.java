@@ -212,7 +212,7 @@ public class SwerveModule implements Sendable {
     if (!m_valid) { return; }
     double initialAngle = (m_sum / 50.0) - m_resetOffset;
     m_desiredState.angle = new Rotation2d(initialAngle);
-    m_drivingEncoder.setPosition(0.0);
+    //m_drivingEncoder.setPosition(0.0);
     m_turningEncoder.setPosition(initialAngle);
   }
 

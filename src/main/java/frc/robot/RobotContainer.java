@@ -42,6 +42,7 @@ import frc.robot.commands.auto.ScoreConeWaitMove;
 import frc.robot.commands.auto.ScoreCube;
 import frc.robot.commands.auto.ScoreCubeMoveToBalance;
 import frc.robot.commands.auto.ScoreCubeWaitMove;
+import frc.robot.commands.auto.TestAuto;
 import frc.robot.commands.controllers.RumbleControllers;
 import frc.robot.commands.controllers.RumbleControllers.RumblePattern;
 import frc.robot.commands.drive.DrivePrecision;
@@ -221,7 +222,7 @@ public class RobotContainer {
     PathPlannerTrajectory moveToPickupPath = PathPlanner.loadPath("Move to Pickup", Constants.Autonomous.kPickupMaxVelocity, Constants.Autonomous.kPickupMaxAccel);
     
 
-    PathPlannerTrajectory testPath = PathPlanner.loadPath("Test", 1.5, 1.5);
+    PathPlannerTrajectory testPath = PathPlanner.loadPath("Test", 2.0, 3.0);
 
     m_autonomousChooser.setDefaultOption("None", null);
 
@@ -280,7 +281,7 @@ public class RobotContainer {
       new Move(m_drive, move9Path));
 
     m_autonomousChooser.addOption("TEST: Test", 
-      new FollowTrajectory(testPath, true, m_drive));
+      new TestAuto(m_drive, testPath));
 
 
     SmartDashboard.putData("Auto/Command", m_autonomousChooser);
