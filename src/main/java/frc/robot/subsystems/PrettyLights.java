@@ -112,7 +112,42 @@ public class PrettyLights extends SubsystemBase {
       m_isBufferUpdated = false;
     }
   }
+/*
+  @Override
+  public void periodic() {
+    // Twinkle
+    if(RobotState.isDisabled()){
+      double currentTimeStamp = Timer.getFPGATimestamp();
 
+      if((currentTimeStamp - m_lastTimeStamp) > 0.1){
+        if(m_currentPattern == Pattern.Heart){
+          int[] shape = m_shapeHeart.clone();
+
+          for (int i = 0; i < 5; i += 1){
+            int color = 0x111111; // Gold: 0xFFD700, Light Pink: 0x66335A
+            int position = m_random.nextInt(64);
+
+            if(shape[position] == 0x000000){ //0x000000
+              shape[position] = color;
+            }
+            
+          }
+
+          setShape(shape, PanelLocation.Front);
+          setShape(shape, PanelLocation.Rear);
+
+          
+        }
+        m_lastTimeStamp = currentTimeStamp;
+    }
+  }
+    if (m_isBufferUpdated) {
+      m_led.setData(m_ledBuffer);
+      m_isBufferUpdated = false;
+    }
+  }
+
+ */
   private void setShape(int[] shape, PanelLocation panel) {
     for (int i = 0; i < 64; i += 1) {
       int position = panel == PanelLocation.Rear ? m_panelRear[i] + 64 : m_panelFront[i];
