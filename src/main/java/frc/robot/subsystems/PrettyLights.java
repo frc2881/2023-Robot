@@ -28,7 +28,8 @@ public class PrettyLights extends SubsystemBase {
     Heart,
     Cone,
     Cube,
-    Charge
+    Charge,
+    Smile
   }
 
   public static enum ColorPreset 
@@ -38,19 +39,40 @@ public class PrettyLights extends SubsystemBase {
     Charge(0x33001A), 
     Pink(0x33001A),
     Blue(0x000011),
-    Black(0x000000);
+    Black(0x000000),
+    White(0x111111),
+    Green(0x001100);
   
     private int color;
     ColorPreset(int color) { this.color = color; }
     public int getColor() { return color; }
   }
 
+  private class AnimationFrame {
+    private final int[] m_shape;
+    private final double m_minimumDuration;
+    private final double m_maximumDuration;
+
+    public AnimationFrame(int[] shape, double minimumDuration, double maximumDuration){
+      m_shape = shape;
+      m_minimumDuration = minimumDuration;
+      m_maximumDuration = maximumDuration;
+    }
+    public int[] getShape() {
+      return m_shape;
+    }
+    public double getDuration() {
+      return m_minimumDuration + Math.random() * (m_maximumDuration - m_minimumDuration);
+    }
+  }
   private final AddressableLED m_led;
   private final AddressableLEDBuffer m_ledBuffer;
   private boolean m_isBufferUpdated = false;
   private Pattern m_currentPattern = Pattern.None;
   private Random m_random = new Random();
   private double m_lastTimeStamp = Timer.getFPGATimestamp();
+  private int m_animationFrameIndex = 0;
+  private double m_animationFrameTimer = 0.0;
 
   public PrettyLights() {
     m_led = new AddressableLED(6);
@@ -60,6 +82,37 @@ public class PrettyLights extends SubsystemBase {
     m_led.start();
   }
 
+
+  private void beginAnimationFrame(int index){
+    m_animationFrameIndex = index;
+    if (index >= m_currentAnimation.length){
+      m_animationFrameIndex = 0;
+    }
+    m_animationFrameTimer = m_currentAnimation[m_animationFrameIndex].getDuration();
+  }
+  @Override
+  public void periodic() {
+    // howdy, this runs an animation when the robot's disabled :')
+    if(RobotState.isDisabled()){
+      double currentTimeStamp = Timer.getFPGATimestamp();
+      double elapsedTime = currentTimeStamp - m_lastTimeStamp;
+      m_lastTimeStamp = currentTimeStamp;
+      if (m_currentPattern == Pattern.Smile) {
+        m_animationFrameTimer = m_animationFrameTimer - elapsedTime;
+        if (m_animationFrameTimer <= 0) {
+          beginAnimationFrame(m_animationFrameIndex + 1);
+          setShape(m_currentAnimation[m_animationFrameIndex].getShape(), PanelLocation.Front);
+          setShape(m_currentAnimation[m_animationFrameIndex].getShape(), PanelLocation.Rear);
+        }
+      }
+    }
+
+    if (m_isBufferUpdated) {
+      m_led.setData(m_ledBuffer);
+      m_isBufferUpdated = false;
+    }
+  }
+/*
   @Override
   public void periodic() {
     // Twinkle
@@ -94,6 +147,7 @@ public class PrettyLights extends SubsystemBase {
     }
   }
 
+ */
   private void setShape(int[] shape, PanelLocation panel) {
     for (int i = 0; i < 64; i += 1) {
       int position = panel == PanelLocation.Rear ? m_panelRear[i] + 64 : m_panelFront[i];
@@ -119,6 +173,10 @@ public class PrettyLights extends SubsystemBase {
         break;
       case Charge:
         shape = m_shapeCharge;
+        break;
+      case Smile:
+        shape = m_shapeFace;
+        beginAnimationFrame(0);
         break;
       case None:
         shape = m_shapeBlank;
@@ -166,6 +224,8 @@ public class PrettyLights extends SubsystemBase {
   private final int CB = ColorPreset.Cube.getColor();
   private final int CH = ColorPreset.Charge.getColor();
   private final int BL = ColorPreset.Blue.getColor();
+  private final int WH = ColorPreset.White.getColor();
+  private final int GR = ColorPreset.Green.getColor();
 
   private final int[] m_shapeBlank = {
     __, __, __, __, __, __, __, __,
@@ -221,6 +281,55 @@ public class PrettyLights extends SubsystemBase {
     __, __, __, __, CH, __, __, __,
     __, __, __, CH, __, __, __, __
   };
+  private final int[] m_shapeFace = {
+    PK, PK, PK, __, __, PK, PK, PK,
+    WH, GR, GR, __, __, GR, GR, WH,
+    WH, GR, GR, __, __, GR, GR, WH,
+    WH, GR, GR, __, __, GR, GR, WH,
+    __, __, __, __, __, __, __, __,
+    __, __, __, __, __, __, __, __,
+    __, PK, __, __, __, __, PK, __,
+    __, __, PK, PK, PK, PK, __, __
+  };
+  private final int[] m_shapeFaceBlink1 = {
+    __, __, __, __, __, __, __, __,
+    PK, PK, PK, __, __, PK, PK, PK,
+    WH, GR, GR, __, __, GR, GR, WH,
+    WH, GR, GR, __, __, GR, GR, WH,
+    __, __, __, __, __, __, __, __,
+    __, __, __, __, __, __, __, __,
+    __, PK, __, __, __, __, PK, __,
+    __, __, PK, PK, PK, PK, __, __
+  };
+  private final int[] m_shapeFaceBlink2 = {
+    __, __, __, __, __, __, __, __,
+    __, __, __, __, __, __, __, __,
+    PK, PK, PK, __, __, PK, PK, PK,
+    WH, GR, GR, __, __, GR, GR, WH,
+    __, __, __, __, __, __, __, __,
+    __, __, __, __, __, __, __, __,
+    __, PK, __, __, __, __, PK, __,
+    __, __, PK, PK, PK, PK, __, __
+  };
+  private final int[] m_shapeFaceBlink3 = {
+    __, __, __, __, __, __, __, __,
+    __, __, __, __, __, __, __, __,
+    __, __, __, __, __, __, __, __,
+    PK, PK, PK, __, __, PK, PK, PK,
+    __, __, __, __, __, __, __, __,
+    __, __, __, __, __, __, __, __,
+    __, PK, __, __, __, __, PK, __,
+    __, __, PK, PK, PK, PK, __, __
+  };
 
+  private AnimationFrame[] m_currentAnimation = {
+    new AnimationFrame(m_shapeFace, 1, 7),
+    new AnimationFrame(m_shapeFaceBlink1, 0.0833, 0.0833),
+    new AnimationFrame(m_shapeFaceBlink2, 0.0833, 0.0833),
+    new AnimationFrame(m_shapeFaceBlink3, 0.0833, 0.0833),
+    new AnimationFrame(m_shapeFaceBlink2, 0.0833, 0.0833),
+    new AnimationFrame(m_shapeFaceBlink1, 0.0833, 0.0833),
+
+  };
 }
 
