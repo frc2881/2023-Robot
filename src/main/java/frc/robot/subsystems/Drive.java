@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.photonvision.EstimatedRobotPose;
+import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 
 import com.pathplanner.lib.PathConstraints;
@@ -150,6 +151,8 @@ public class Drive extends SubsystemBase {
         PoseStrategy.MULTI_TAG_PNP,
         Constants.Vision.kAprilTagFieldLayout
       );  
+
+      new PhotonCamera(Constants.Vision.kDriverCameraName).setDriverMode(true);
   }
 
   public void resetPhotonCameras() {
@@ -172,10 +175,10 @@ public class Drive extends SubsystemBase {
         m_rearLeft.getPosition(),
         m_rearRight.getPosition()
     });
-    // if (RobotState.isAutonomous() && RobotState.isEnabled()) { return; }
-    // if (!updateVisionMeasurement(m_leftPhotonCamera)) {
-    //   updateVisionMeasurement(m_rightPhotonCamera);
-    // }  
+    if (RobotState.isAutonomous() && RobotState.isEnabled()) { return; }
+    if (!updateVisionMeasurement(m_leftPhotonCamera)) {
+      updateVisionMeasurement(m_rightPhotonCamera);
+    }  
   }
 
   private boolean updateVisionMeasurement(PhotonCameraWrapper photonCamera) {
@@ -415,7 +418,6 @@ public class Drive extends SubsystemBase {
   private void updateTelemetry() {
     Pose2d pose = getPose();
     SmartDashboard.putNumberArray("Drive/Pose",  new double[] { pose.getX(), pose.getY(), pose.getRotation().getDegrees() });
-    SmartDashboard.putNumber("Drive/Pose/X",  pose.getX());
   }
 
   public void logDrive() {

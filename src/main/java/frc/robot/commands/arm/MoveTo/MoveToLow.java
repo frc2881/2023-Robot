@@ -31,7 +31,7 @@ public class MoveToLow extends SequentialCommandGroup {
         
       new TiltArmToHeight(armTilt, speed, 6.0, false)
         .withTimeout(Constants.Arm.kTiltTimeOut),
-      new ExtendArmToLength(armExtension, speed, 10.5)
+      new ExtendArmToLength(armExtension, speed, 8.5)
         .withTimeout(Constants.Arm.kExtensionTimeOut)
     );
   }

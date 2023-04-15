@@ -31,10 +31,10 @@ public class ScoreMediumCube extends SequentialCommandGroup {
         () -> (armExtension.getEncoderPosition() > Constants.Arm.kExtendReverseLimit)),
     
       new ParallelRaceGroup(
-        new TiltArmToHeight(armTilt, speed, 10.5, true),
+        new TiltArmToHeight(armTilt, speed, 9.5, true),
         new SequentialCommandGroup(
           new WaitUntilCommand(() -> armTilt.getEncoderPosition() >= 9.0),
-          new ExtendArmToLength(armExtension, speed, 3.0)
+          new ExtendArmToLength(armExtension, speed, 8.0)
             .withTimeout(Constants.Arm.kExtensionTimeOut)))
     );
   }
