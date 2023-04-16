@@ -8,6 +8,7 @@ package frc.robot.commands.auto;
 import com.pathplanner.lib.PathPlannerTrajectory;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.drive.FollowTrajectory;
 import frc.robot.commands.drive.SetXConfiguration;
 import frc.robot.commands.drive.ZeroHeadingToAng;
@@ -19,13 +20,14 @@ public class MoveToBalance extends SequentialCommandGroup {
     Drive drive,
     PathPlannerTrajectory moveTrajectory, 
     PathPlannerTrajectory balanceTrajectory,
-    boolean isForward
+    boolean reversed
   ) {
     addCommands(
       new ZeroHeadingToAng(drive, 180),
       new FollowTrajectory(moveTrajectory, true, drive),
       new FollowTrajectory(balanceTrajectory, false, drive),
-      new AutoBalance(drive, isForward),
+      new WaitCommand(0.2),
+      new AutoBalance2(drive, reversed),
       new SetXConfiguration(drive)
     );
   }

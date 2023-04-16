@@ -9,6 +9,7 @@ import com.pathplanner.lib.PathPlannerTrajectory;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.arm.ResetArm;
 import frc.robot.commands.drive.FollowTrajectory;
 import frc.robot.commands.drive.SetXConfiguration;
@@ -26,17 +27,18 @@ public class ScoreCubeMoveToBalance extends SequentialCommandGroup {
     ArmTilt armTilt,
     PathPlannerTrajectory moveTrajectory, 
     PathPlannerTrajectory balanceTrajectory,
-    boolean isForward
+    boolean reversed
   ) {
     addCommands(
       new ZeroHeadingToAng(drive, 180),
       new ScoreCube(suction, armExtension, armTilt),
+      new WaitCommand(0.5),
       new ParallelCommandGroup(
         new ResetArm(armExtension, armTilt, 1.0),
         new FollowTrajectory(moveTrajectory, true, drive)
       ),
       new FollowTrajectory(balanceTrajectory, false, drive),
-      new AutoBalance(drive, isForward),
+      new AutoBalance2(drive, reversed),
       new SetXConfiguration(drive)
     );
   }

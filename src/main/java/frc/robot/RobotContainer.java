@@ -42,12 +42,11 @@ import frc.robot.commands.auto.ScoreConeWaitMove;
 import frc.robot.commands.auto.ScoreCube;
 import frc.robot.commands.auto.ScoreCubeMoveToBalance;
 import frc.robot.commands.auto.ScoreCubeWaitMove;
+import frc.robot.commands.auto.TestAuto;
 import frc.robot.commands.controllers.RumbleControllers;
 import frc.robot.commands.controllers.RumbleControllers.RumblePattern;
 import frc.robot.commands.drive.DrivePrecision;
-import frc.robot.commands.drive.DriveRobotCentric;
 import frc.robot.commands.drive.DriveWithJoysticks;
-import frc.robot.commands.drive.FollowTrajectory;
 import frc.robot.commands.drive.ResetSwerve;
 import frc.robot.commands.drive.ToggleXConfiguration;
 import frc.robot.commands.drive.ZeroHeading;
@@ -221,7 +220,7 @@ public class RobotContainer {
     PathPlannerTrajectory moveToPickupPath = PathPlanner.loadPath("Move to Pickup", Constants.Autonomous.kPickupMaxVelocity, Constants.Autonomous.kPickupMaxAccel);
     
 
-    PathPlannerTrajectory testPath = PathPlanner.loadPath("Test", 1.5, 1.5);
+    PathPlannerTrajectory testPath = PathPlanner.loadPath("Test", 2.0, 3.0);
 
     m_autonomousChooser.setDefaultOption("None", null);
 
@@ -230,7 +229,7 @@ public class RobotContainer {
       new ScoreConeMove(m_drive, m_suction, m_armExtension, m_armTilt, move1Path));
 
     m_autonomousChooser.addOption("1 - Score Balance", 
-      new ScoreConeMoveToBalance(m_drive, m_suction, m_armExtension, m_armTilt, moveToBalance1Path, balancePath, false));
+      new ScoreConeMoveToBalance(m_drive, m_suction, m_armExtension, m_armTilt, moveToBalance1Path, balancePath, true));
 
     // Position 5 - Cube
     m_autonomousChooser.addOption("5 - Score Wait Move Divider",
@@ -257,7 +256,7 @@ public class RobotContainer {
       new ScoreConeMove(m_drive, m_suction, m_armExtension, m_armTilt, move9Path));
 
     m_autonomousChooser.addOption("9 - Score Balance", 
-      new ScoreConeMoveToBalance(m_drive, m_suction, m_armExtension, m_armTilt, moveToBalance9Path, balancePath, false));
+      new ScoreConeMoveToBalance(m_drive, m_suction, m_armExtension, m_armTilt, moveToBalance9Path, balancePath, true));
 
     m_autonomousChooser.addOption("9 - Score Move Pickup", 
       new ScoreConeMovePickup(m_drive, m_suction, m_armExtension, m_armTilt, moveToCone9Path, moveToPickupPath, return9Path));
@@ -276,11 +275,15 @@ public class RobotContainer {
     m_autonomousChooser.addOption("TEST: 6 - Balance",
       new MoveToBalance(m_drive, moveToBalance6Path, balanceMidPath, true));
 
+    m_autonomousChooser.addOption("TEST: 5 - Balance",
+      new MoveToBalance(m_drive, moveToBalance5Path, balanceMidPath, true));
+
+
     m_autonomousChooser.addOption("TEST: 9 - Move", 
       new Move(m_drive, move9Path));
 
     m_autonomousChooser.addOption("TEST: Test", 
-      new FollowTrajectory(testPath, true, m_drive));
+      new TestAuto(m_drive, testPath));
 
 
     SmartDashboard.putData("Auto/Command", m_autonomousChooser);

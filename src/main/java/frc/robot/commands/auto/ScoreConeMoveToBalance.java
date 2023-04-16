@@ -26,7 +26,7 @@ public class ScoreConeMoveToBalance extends SequentialCommandGroup {
     ArmTilt armTilt,
     PathPlannerTrajectory moveTrajectory, 
     PathPlannerTrajectory balanceTrajectory,
-    boolean isForward
+    boolean reversed
   ) {
     addCommands(
       new ZeroHeadingToAng(drive, 180),
@@ -36,7 +36,7 @@ public class ScoreConeMoveToBalance extends SequentialCommandGroup {
         new FollowTrajectory(moveTrajectory, true, drive)
       ),
       new FollowTrajectory(balanceTrajectory, false, drive),
-      new AutoBalance(drive, isForward),
+      new AutoBalance2(drive, reversed),
       new SetXConfiguration(drive)
     );
   }

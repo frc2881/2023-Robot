@@ -27,28 +27,34 @@ public class RumbleControllers extends SequentialCommandGroup {
     if (pattern == RumblePattern.GOOD) {
       addCommands(
         new InstantCommand(() -> {
+          driverController.setRumble(RumbleType.kBothRumble, 1);
           manipulatorController.setRumble(RumbleType.kBothRumble, 1);
         }),
         new WaitCommand(1),
         new InstantCommand(() -> {
+          driverController.setRumble(RumbleType.kBothRumble, 0);
           manipulatorController.setRumble(RumbleType.kBothRumble, 0);
         }) 
       );
    } else {
       addCommands(
         new InstantCommand(() -> {
+          driverController.setRumble(RumbleType.kBothRumble, 1);
           manipulatorController.setRumble(RumbleType.kBothRumble, 1);
         }),
         new WaitCommand(0.25),
         new InstantCommand(() -> {
+          driverController.setRumble(RumbleType.kBothRumble, 0);
           manipulatorController.setRumble(RumbleType.kBothRumble, 0);
         }),
         new WaitCommand(0.25),
         new InstantCommand(() -> {
+          driverController.setRumble(RumbleType.kBothRumble, 1);
           manipulatorController.setRumble(RumbleType.kBothRumble, 1);
         }),
         new WaitCommand(0.25),
         new InstantCommand(() -> {
+          driverController.setRumble(RumbleType.kBothRumble, 0);
           manipulatorController.setRumble(RumbleType.kBothRumble, 0);
         })
       );

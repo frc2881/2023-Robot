@@ -140,10 +140,10 @@ public class Constants {
         new Translation2d(-kWheelBase / 2, -kTrackWidth / 2));
 
     // Angular offsets of the modules relative to the chassis in radians
-    public static final double kFrontLeftChassisAngularOffset = 5.9213; 
-    public static final double kFrontRightChassisAngularOffset = 2.8246; 
-    public static final double kRearLeftChassisAngularOffset =  1.5790; 
-    public static final double kRearRightChassisAngularOffset = 4.4441; 
+    public static final double kFrontLeftChassisAngularOffset = 5.9212; 
+    public static final double kFrontRightChassisAngularOffset = 2.8296; 
+    public static final double kRearLeftChassisAngularOffset =  1.5758; 
+    public static final double kRearRightChassisAngularOffset = 4.4566; 
 
     // SPARK MAX CAN IDs
     public static final int kFrontLeftDrivingCanId = 15;
@@ -161,7 +161,7 @@ public class Constants {
     public static final double kMaxRoll = 14.0;
     public static final double kMinRoll = 13.0;
 
-    public static final double precisionMultiplier = 0.5;
+    public static final double precisionMultiplier = 0.7;
   }
     
   public static final class SwerveModule {
@@ -298,21 +298,23 @@ public class Constants {
     /*
       * The relative maximum pressure for vacuum state in PSI
       */
-    public static final double kMaximumPressure = 18.0;
+    public static final double kMaximumPressure = 24.0;
 
     /*
       * The relative target pressure for vacuum state in PSI
       */
-    public static final double kTargetPressure = 20.0;
+    public static final double kTargetPressure = 30.0;
 
     /*
       * The relative minimum pressure for vacuum state in PSI
       */
-    public static final double kMinimumPressure = 22.0;
+    public static final double kMinimumPressure = 40.0;
 
   }
 
   public static final class Vision {
+
+    public static final String kDriverCameraName = "DRIVER";
 
     public static final String kLeftCameraName = "LEFT";
     public static final Transform3d kLeftRobotToCamera =
@@ -342,7 +344,7 @@ public class Constants {
 
     // TODO: calibration of node poses below for each field is required for practice and competition
 
-    private static final double kGridNodePoseXPosition = 1.762;
+    private static final double kGridNodePoseXPosition = 1.74;
     private static final Rotation2d kGridNodeRotation = Rotation2d.fromDegrees(180);
 
     public static final List<Node> kNodesRedAlliance = new ArrayList<Node>(){{
@@ -353,16 +355,16 @@ public class Constants {
       add( new Node(new Pose2d(kGridNodePoseXPosition, 5.305, kGridNodeRotation), NodeType.CUBE, 5) );
       add( new Node(new Pose2d(kGridNodePoseXPosition, 4.723, kGridNodeRotation), NodeType.CONE, 6) );
       add( new Node(new Pose2d(kGridNodePoseXPosition, 4.152, kGridNodeRotation), NodeType.CONE, 7) );
-      add( new Node(new Pose2d(kGridNodePoseXPosition, 3.622, kGridNodeRotation), NodeType.CUBE, 8) );
+      add( new Node(new Pose2d(kGridNodePoseXPosition, 3.600, kGridNodeRotation), NodeType.CUBE, 8) );
       add( new Node(new Pose2d(kGridNodePoseXPosition, 3.042, kGridNodeRotation), NodeType.CONE, 9) );
     }};
 
     public static final List<Node> kNodesBlueAlliance = new ArrayList<Node>(){{
       add( new Node(new Pose2d(kGridNodePoseXPosition, 0.534, kGridNodeRotation), NodeType.CONE, 1) );
-      add( new Node(new Pose2d(kGridNodePoseXPosition, 1.105, kGridNodeRotation), NodeType.CUBE, 2) );
-      add( new Node(new Pose2d(kGridNodePoseXPosition, 1.627, kGridNodeRotation), NodeType.CONE, 3) );
+      add( new Node(new Pose2d(kGridNodePoseXPosition, 1.070, kGridNodeRotation), NodeType.CUBE, 2) );
+      add( new Node(new Pose2d(kGridNodePoseXPosition, 1.626, kGridNodeRotation), NodeType.CONE, 3) );
       add( new Node(new Pose2d(kGridNodePoseXPosition, 2.184, kGridNodeRotation), NodeType.CONE, 4) );
-      add( new Node(new Pose2d(kGridNodePoseXPosition, 2.763, kGridNodeRotation), NodeType.CUBE, 5) );
+      add( new Node(new Pose2d(kGridNodePoseXPosition, 2.745, kGridNodeRotation), NodeType.CUBE, 5) );
       add( new Node(new Pose2d(kGridNodePoseXPosition, 3.295, kGridNodeRotation), NodeType.CONE, 6) );
       add( new Node(new Pose2d(kGridNodePoseXPosition, 3.875, kGridNodeRotation), NodeType.CONE, 7) );
       add( new Node(new Pose2d(kGridNodePoseXPosition, 4.463, kGridNodeRotation), NodeType.CUBE, 8) );
