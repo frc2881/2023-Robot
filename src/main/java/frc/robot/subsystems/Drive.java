@@ -295,6 +295,7 @@ public class Drive extends SubsystemBase {
           : new ChassisSpeeds(xSpeed, ySpeed, rot));
 
       SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.Drive.kMaxSpeedMetersPerSecond);
+      
 
       m_frontLeft.setDesiredState(swerveModuleStates[0]);
       m_frontRight.setDesiredState(swerveModuleStates[1]);
@@ -331,6 +332,15 @@ public class Drive extends SubsystemBase {
     }
     m_isXConfiguration = !m_isXConfiguration;
     SmartDashboard.putBoolean("Drive/Swerve/IsXConfiguration", m_isXConfiguration);
+  }
+
+
+  public SwerveModuleState[] convertToModuleStates(double xTranslation, double yTranslation, double rotation) {
+    ChassisSpeeds chassisSpeeds = new ChassisSpeeds(xTranslation, yTranslation, rotation);
+
+    SwerveModuleState[] moduleStates = Constants.Drive.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
+
+    return moduleStates;
   }
 
   /**

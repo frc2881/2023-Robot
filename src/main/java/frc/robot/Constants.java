@@ -140,10 +140,10 @@ public class Constants {
         new Translation2d(-kWheelBase / 2, -kTrackWidth / 2));
 
     // Angular offsets of the modules relative to the chassis in radians
-    public static final double kFrontLeftChassisAngularOffset = 5.9283; 
-    public static final double kFrontRightChassisAngularOffset = 2.8248; 
-    public static final double kRearLeftChassisAngularOffset =  1.5808; 
-    public static final double kRearRightChassisAngularOffset = 4.4442; 
+    public static final double kFrontLeftChassisAngularOffset = 5.9212; 
+    public static final double kFrontRightChassisAngularOffset = 2.8296; 
+    public static final double kRearLeftChassisAngularOffset =  1.5758; 
+    public static final double kRearRightChassisAngularOffset = 4.4566; 
 
     // SPARK MAX CAN IDs
     public static final int kFrontLeftDrivingCanId = 15;
@@ -298,17 +298,17 @@ public class Constants {
     /*
       * The relative maximum pressure for vacuum state in PSI
       */
-    public static final double kMaximumPressure = 19.0;
+    public static final double kMaximumPressure = 24.0;
 
     /*
       * The relative target pressure for vacuum state in PSI
       */
-    public static final double kTargetPressure = 21.0;
+    public static final double kTargetPressure = 30.0;
 
     /*
       * The relative minimum pressure for vacuum state in PSI
       */
-    public static final double kMinimumPressure = 30.0;
+    public static final double kMinimumPressure = 40.0;
 
   }
 

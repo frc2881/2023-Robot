@@ -46,9 +46,7 @@ import frc.robot.commands.auto.TestAuto;
 import frc.robot.commands.controllers.RumbleControllers;
 import frc.robot.commands.controllers.RumbleControllers.RumblePattern;
 import frc.robot.commands.drive.DrivePrecision;
-import frc.robot.commands.drive.DriveRobotCentric;
 import frc.robot.commands.drive.DriveWithJoysticks;
-import frc.robot.commands.drive.FollowTrajectory;
 import frc.robot.commands.drive.ResetSwerve;
 import frc.robot.commands.drive.ToggleXConfiguration;
 import frc.robot.commands.drive.ZeroHeading;
@@ -275,7 +273,11 @@ public class RobotContainer {
       new Move(m_drive, move1Path));
 
     m_autonomousChooser.addOption("TEST: 6 - Balance",
-      new MoveToBalance(m_drive, moveToBalance6Path, balanceMidPath, true));
+      new MoveToBalance(m_drive, moveToBalance6Path, balanceMidPath, false));
+
+    m_autonomousChooser.addOption("TEST: 5 - Balance",
+      new MoveToBalance(m_drive, moveToBalance5Path, balanceMidPath, false));
+
 
     m_autonomousChooser.addOption("TEST: 9 - Move", 
       new Move(m_drive, move9Path));
