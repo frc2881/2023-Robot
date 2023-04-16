@@ -229,7 +229,7 @@ public class RobotContainer {
       new ScoreConeMove(m_drive, m_suction, m_armExtension, m_armTilt, move1Path));
 
     m_autonomousChooser.addOption("1 - Score Balance", 
-      new ScoreConeMoveToBalance(m_drive, m_suction, m_armExtension, m_armTilt, moveToBalance1Path, balancePath, false));
+      new ScoreConeMoveToBalance(m_drive, m_suction, m_armExtension, m_armTilt, moveToBalance1Path, balancePath, true));
 
     // Position 5 - Cube
     m_autonomousChooser.addOption("5 - Score Wait Move Divider",
@@ -256,7 +256,7 @@ public class RobotContainer {
       new ScoreConeMove(m_drive, m_suction, m_armExtension, m_armTilt, move9Path));
 
     m_autonomousChooser.addOption("9 - Score Balance", 
-      new ScoreConeMoveToBalance(m_drive, m_suction, m_armExtension, m_armTilt, moveToBalance9Path, balancePath, false));
+      new ScoreConeMoveToBalance(m_drive, m_suction, m_armExtension, m_armTilt, moveToBalance9Path, balancePath, true));
 
     m_autonomousChooser.addOption("9 - Score Move Pickup", 
       new ScoreConeMovePickup(m_drive, m_suction, m_armExtension, m_armTilt, moveToCone9Path, moveToPickupPath, return9Path));
@@ -273,10 +273,10 @@ public class RobotContainer {
       new Move(m_drive, move1Path));
 
     m_autonomousChooser.addOption("TEST: 6 - Balance",
-      new MoveToBalance(m_drive, moveToBalance6Path, balanceMidPath, false));
+      new MoveToBalance(m_drive, moveToBalance6Path, balanceMidPath, true));
 
     m_autonomousChooser.addOption("TEST: 5 - Balance",
-      new MoveToBalance(m_drive, moveToBalance5Path, balanceMidPath, false));
+      new MoveToBalance(m_drive, moveToBalance5Path, balanceMidPath, true));
 
 
     m_autonomousChooser.addOption("TEST: 9 - Move", 

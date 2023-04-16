@@ -16,8 +16,8 @@ import frc.robot.subsystems.Drive;
 
 public class FollowTrajectory extends SequentialCommandGroup {
 	public FollowTrajectory(PathPlannerTrajectory trajectory, boolean isFirstPath, Drive drive) {
-		PIDController xPidController = new PIDController(18.0, 0, 0);
-		PIDController yPidController = new PIDController(18.0, 0, 0);
+		PIDController xPidController = new PIDController(0.01, 0, 0);
+		PIDController yPidController = new PIDController(0.0, 0, 0);
 		PIDController tPidController = new PIDController(2.5, 0, 0);
 		addCommands(
 			new InstantCommand(() -> {

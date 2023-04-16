@@ -31,7 +31,7 @@ public class ScoreMediumCube extends SequentialCommandGroup {
         () -> (armExtension.getEncoderPosition() > Constants.Arm.kExtendReverseLimit)),
     
       new ParallelRaceGroup(
-        new TiltArmToHeight(armTilt, speed, 9.5, true),
+        new TiltArmToHeight(armTilt, speed, 10.0, true),
         new SequentialCommandGroup(
           new WaitUntilCommand(() -> armTilt.getEncoderPosition() >= 9.0),
           new ExtendArmToLength(armExtension, speed, 8.0)

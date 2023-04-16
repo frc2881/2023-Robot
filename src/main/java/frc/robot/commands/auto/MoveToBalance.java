@@ -26,7 +26,7 @@ public class MoveToBalance extends SequentialCommandGroup {
       new ZeroHeadingToAng(drive, 180),
       new FollowTrajectory(moveTrajectory, true, drive),
       new FollowTrajectory(balanceTrajectory, false, drive),
-      new WaitCommand(0.5),
+      new WaitCommand(0.2),
       new AutoBalance2(drive, reversed),
       new SetXConfiguration(drive)
     );
