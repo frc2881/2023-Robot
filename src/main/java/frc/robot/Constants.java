@@ -392,9 +392,9 @@ public class Constants {
 
     public static final double kMoveToBalanceMaxAccel = 3.0; // 3.0
 
-    public static final double kBalanceMaxVelocity = 1.0;
+    public static final double kBalanceMaxVelocity = 1.5;
 
-    public static final double kBalanceMaxAccel = 1.0;
+    public static final double kBalanceMaxAccel = 1.5;
 
     public static final double kPickupMaxVelocity = 1.0;
 
