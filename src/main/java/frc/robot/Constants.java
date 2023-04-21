@@ -308,7 +308,7 @@ public class Constants {
     /*
       * The relative minimum pressure for vacuum state in PSI
       */
-    public static final double kMinimumPressure = 42.0;
+    public static final double kMinimumPressure = 38.0;
 
   }
 

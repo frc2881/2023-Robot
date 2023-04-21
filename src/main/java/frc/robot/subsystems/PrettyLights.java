@@ -90,6 +90,7 @@ public class PrettyLights extends SubsystemBase {
     }
     m_animationFrameTimer = m_currentAnimation[m_animationFrameIndex].getDuration();
   }
+  /* 
   @Override
   public void periodic() {
     // howdy, this runs an animation when the robot's disabled :')
@@ -111,8 +112,8 @@ public class PrettyLights extends SubsystemBase {
       m_led.setData(m_ledBuffer);
       m_isBufferUpdated = false;
     }
-  }
-/*
+  }*/
+
   @Override
   public void periodic() {
     // Twinkle
@@ -147,7 +148,7 @@ public class PrettyLights extends SubsystemBase {
     }
   }
 
- */
+ 
   private void setShape(int[] shape, PanelLocation panel) {
     for (int i = 0; i < 64; i += 1) {
       int position = panel == PanelLocation.Rear ? m_panelRear[i] + 64 : m_panelFront[i];
