@@ -314,19 +314,18 @@ public class Constants {
 
   public static final class Vision {
 
-    public static final String kDriverCameraName = "DRIVER";
-
-    public static final String kLeftCameraName = "LEFT";
+    public static final String kLeftCameraName = "FRONT";
     public static final Transform3d kLeftRobotToCamera =
       new Transform3d(
-        new Translation3d(-0.16390, 0.18440, 0.59055),
-        new Rotation3d(0, 0, Units.degreesToRadians(10))); 
+        new Translation3d(-0.16390, 0.18440, 1.19055),
+        new Rotation3d(0, 0, Units.degreesToRadians(0))); 
 
-    public static final String kRightCameraName = "RIGHT";
+    public static final String kRightCameraName = "BACK";
     public static final Transform3d kRightRobotToCamera =
       new Transform3d(
-        new Translation3d(-0.16390, -0.18298, 0.59055),
-        new Rotation3d(0, 0, Units.degreesToRadians(-10))); 
+    
+        new Translation3d(-0.18290, 0.18298, 1.19055),
+        new Rotation3d(0, 0, Units.degreesToRadians(180))); 
 
     public static AprilTagFieldLayout kAprilTagFieldLayout = null;
     static {

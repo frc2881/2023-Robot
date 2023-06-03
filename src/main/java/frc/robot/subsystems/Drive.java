@@ -150,9 +150,7 @@ public class Drive extends SubsystemBase {
         Constants.Vision.kRightRobotToCamera,
         PoseStrategy.MULTI_TAG_PNP,
         Constants.Vision.kAprilTagFieldLayout
-      );  
-
-      new PhotonCamera(Constants.Vision.kDriverCameraName).setDriverMode(true);
+      );
   }
 
   public void resetPhotonCameras() {
