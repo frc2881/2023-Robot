@@ -32,17 +32,6 @@ import frc.robot.commands.arm.Score.ScoreMedium;
 import frc.robot.commands.arm.Score.ScoreMediumCone;
 import frc.robot.commands.arm.Score.ScoreMediumCube;
 import frc.robot.commands.auto.AutoBalance;
-import frc.robot.commands.auto.Move;
-import frc.robot.commands.auto.MoveToBalance;
-import frc.robot.commands.auto.ScoreCone;
-import frc.robot.commands.auto.ScoreConeMove;
-import frc.robot.commands.auto.ScoreConeMovePickup;
-import frc.robot.commands.auto.ScoreConeMoveToBalance;
-import frc.robot.commands.auto.ScoreConeWaitMove;
-import frc.robot.commands.auto.ScoreCube;
-import frc.robot.commands.auto.ScoreCubeMoveToBalance;
-import frc.robot.commands.auto.ScoreCubeWaitMove;
-import frc.robot.commands.auto.TestAuto;
 import frc.robot.commands.controllers.RumbleControllers;
 import frc.robot.commands.controllers.RumbleControllers.RumblePattern;
 import frc.robot.commands.drive.DrivePrecision;
@@ -51,6 +40,7 @@ import frc.robot.commands.drive.ResetSwerve;
 import frc.robot.commands.drive.ToggleXConfiguration;
 import frc.robot.commands.drive.ZeroHeading;
 import frc.robot.commands.suction.ToggleSuction;
+import frc.robot.lib.Logger;
 import frc.robot.lib.Utils;
 import frc.robot.subsystems.ArmExtension;
 import frc.robot.subsystems.ArmTilt;
@@ -71,7 +61,8 @@ public class RobotContainer {
   private final XboxController m_driverController = new XboxController(Constants.Controllers.kDriverControllerPort);
   private final XboxController m_manipulatorController = new XboxController(Constants.Controllers.kManipulatorControllerPort);
 
-  private final SendableChooser<Command> m_autonomousChooser = new SendableChooser<Command>();
+  private final SendableChooser<Integer> m_autonomousChooserPosition = new SendableChooser<Integer>();
+  private Integer prev = -1; 
  
   public RobotContainer() {
     setupDrive(); 
@@ -222,9 +213,17 @@ public class RobotContainer {
 
     PathPlannerTrajectory testPath = PathPlanner.loadPath("Test", 2.0, 3.0);
 
-    m_autonomousChooser.setDefaultOption("None", null);
+    m_autonomousChooserPosition.setDefaultOption("None", Integer.valueOf(-1));
+    m_autonomousChooserPosition.addOption("2", Integer.valueOf(2));
+    m_autonomousChooserPosition.addOption("3", Integer.valueOf(3));
+    m_autonomousChooserPosition.addOption("1", Integer.valueOf(1));
+    /*m_autonomousChooserPosition.addOption("4", Integer.valueOf(4));
+    m_autonomousChooserPosition.addOption("5", Integer.valueOf(5));
+    m_autonomousChooserPosition.addOption("6", Integer.valueOf(6));
+    m_autonomousChooserPosition.addOption("7", Integer.valueOf(7));
+    m_autonomousChooserPosition.addOption("8", Integer.valueOf(8));*/
 
-    // Position 1 - Cone
+    /*// Position 1 - Cone
     m_autonomousChooser.addOption("1 - Score Move", 
       new ScoreConeMove(m_drive, m_suction, m_armExtension, m_armTilt, move1Path));
 
@@ -283,14 +282,31 @@ public class RobotContainer {
       new Move(m_drive, move9Path));
 
     m_autonomousChooser.addOption("TEST: Test", 
-      new TestAuto(m_drive, testPath));
+      new TestAuto(m_drive, testPath));*/
 
 
-    SmartDashboard.putData("Auto/Command", m_autonomousChooser);
+
+    SmartDashboard.putData("Auto/Position", m_autonomousChooserPosition);
+  }
+
+  public void isChooserChanged() {
+    Logger.log("im in here"); 
+    if (!m_autonomousChooserPosition.getSelected().equals(prev)) {
+      SendableChooser<Command> m_autonomousChooserTarget = new SendableChooser<Command>();
+      if (m_autonomousChooserPosition.getSelected().equals(Integer.valueOf(1))) {
+        m_autonomousChooserTarget.addOption("A", null);
+      } else if (m_autonomousChooserPosition.getSelected().equals(Integer.valueOf(2))) {
+        m_autonomousChooserTarget.addOption("B", null);
+      } else {
+        m_autonomousChooserTarget.addOption("C", null);
+      }
+      SmartDashboard.putData("Auto/Command", m_autonomousChooserTarget);
+      prev = m_autonomousChooserPosition.getSelected();
+    }
   }
 
   public Command getAutonomousCommand() {
-    return m_autonomousChooser.getSelected();
+    return null;
   }
 
   private void setupLights() {
