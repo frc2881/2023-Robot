@@ -314,14 +314,14 @@ public class Constants {
 
   public static final class Vision {
 
-    public static final String kLeftCameraName = "FRONT";
-    public static final Transform3d kLeftRobotToCamera =
+    public static final String kFrontCameraName = "FRONT";
+    public static final Transform3d kFrontRobotToCamera =
       new Transform3d(
         new Translation3d(-0.16390, 0.18440, 1.19055),
         new Rotation3d(0, 0, Units.degreesToRadians(0))); 
 
-    public static final String kRightCameraName = "BACK";
-    public static final Transform3d kRightRobotToCamera =
+    public static final String kBackCameraName = "BACK";
+    public static final Transform3d kBackRobotToCamera =
       new Transform3d(
     
         new Translation3d(-0.18290, 0.18298, 1.19055),
