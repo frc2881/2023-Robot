@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.photonvision.EstimatedRobotPose;
-import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 
 import com.pathplanner.lib.PathConstraints;
@@ -88,8 +87,8 @@ public class Drive extends SubsystemBase {
 
   private boolean m_isXConfiguration = false;
 
-  public PhotonCameraWrapper m_leftPhotonCamera;
-  public PhotonCameraWrapper m_rightPhotonCamera;
+  public PhotonCameraWrapper m_frontPhotonCamera;
+  public PhotonCameraWrapper m_backPhotonCamera;
 
   private final DoubleLogEntry m_logRoll;
   private final DoubleLogEntry m_logYaw;
@@ -138,29 +137,29 @@ public class Drive extends SubsystemBase {
           ? OriginPosition.kRedAllianceWallRightSide
           : OriginPosition.kBlueAllianceWallRightSide);
 
-      m_leftPhotonCamera = new PhotonCameraWrapper(
-        Constants.Vision.kLeftCameraName,
-        Constants.Vision.kLeftRobotToCamera,
+      m_frontPhotonCamera = new PhotonCameraWrapper(
+        Constants.Vision.kFrontCameraName,
+        Constants.Vision.kFrontRobotToCamera,
         PoseStrategy.MULTI_TAG_PNP,
         Constants.Vision.kAprilTagFieldLayout
       );
 
-      m_rightPhotonCamera = new PhotonCameraWrapper(
-        Constants.Vision.kRightCameraName,
-        Constants.Vision.kRightRobotToCamera,
+      m_backPhotonCamera = new PhotonCameraWrapper(
+        Constants.Vision.kBackCameraName,
+        Constants.Vision.kBackRobotToCamera,
         PoseStrategy.MULTI_TAG_PNP,
         Constants.Vision.kAprilTagFieldLayout
       );
   }
 
   public void resetPhotonCameras() {
-    if (m_leftPhotonCamera != null) {
-      m_leftPhotonCamera.dispose();
-      m_leftPhotonCamera = null;
+    if (m_frontPhotonCamera != null) {
+      m_frontPhotonCamera.dispose();
+      m_frontPhotonCamera = null;
     }
-    if (m_rightPhotonCamera != null) {
-      m_rightPhotonCamera.dispose();
-      m_rightPhotonCamera = null;
+    if (m_backPhotonCamera != null) {
+      m_backPhotonCamera.dispose();
+      m_backPhotonCamera = null;
     }
   }
 
@@ -174,9 +173,11 @@ public class Drive extends SubsystemBase {
         m_rearRight.getPosition()
     });
     if (RobotState.isAutonomous() && RobotState.isEnabled()) { return; }
-    if (!updateVisionMeasurement(m_leftPhotonCamera)) {
-      updateVisionMeasurement(m_rightPhotonCamera);
-    }  
+
+    boolean isBackCameraPriority = Math.abs(m_gyro.getRotation2d().getDegrees()) <= 90;
+   if (!updateVisionMeasurement(isBackCameraPriority ? m_backPhotonCamera : m_frontPhotonCamera)) {
+      updateVisionMeasurement(isBackCameraPriority ? m_frontPhotonCamera : m_backPhotonCamera);
+   }  
   }
 
   private boolean updateVisionMeasurement(PhotonCameraWrapper photonCamera) {
@@ -187,6 +188,7 @@ public class Drive extends SubsystemBase {
         Pose2d estimatedPose = estimatedRobotPose.estimatedPose.toPose2d();
         if (Utils.isPoseInBounds(estimatedPose, Constants.Vision.kFieldMinPose, Constants.Vision.kFieldMaxPose)) {
           m_poseEstimator.addVisionMeasurement(estimatedPose, estimatedRobotPose.timestampSeconds);
+          SmartDashboard.putString("This is the camera that was last used", photonCamera.getCameraName());
           return true;
         } 
       }
