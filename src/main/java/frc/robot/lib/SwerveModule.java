@@ -12,6 +12,7 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxAnalogSensor;
 import com.revrobotics.SparkMaxAnalogSensor.Mode;
 import com.revrobotics.SparkMaxPIDController;
+import com.revrobotics.CANSparkMax.IdleMode;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -284,6 +285,11 @@ public class SwerveModule implements Sendable {
 
   public double getDrivingVelocity(){
     return m_drivingEncoder.getVelocity();
+  }
+
+  public void setIdleMode(IdleMode mode){
+    m_drivingSparkMax.setIdleMode(mode);
+    m_turningSparkMax.setIdleMode(mode);
   }
 
   @Override

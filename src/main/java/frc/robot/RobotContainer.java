@@ -7,6 +7,7 @@ package frc.robot;
 
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
+import com.revrobotics.CANSparkMax.IdleMode;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PowerDistribution;
@@ -92,6 +93,10 @@ public class RobotContainer {
       )
     );
     m_drive.resetSwerve();
+
+    new Trigger(() -> (RobotState.isDisabled() &&  m_armTilt.getEncoderPosition() > 6.0))
+      .whileTrue(Commands.runOnce(() -> { m_drive.setIdleMode(IdleMode.kCoast); }).ignoringDisable(true))
+      .onFalse(Commands.runOnce(() -> { m_drive.setIdleMode(IdleMode.kBrake); }).ignoringDisable(true));
   }
 
   private void setupControllers() {

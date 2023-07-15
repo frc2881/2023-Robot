@@ -16,6 +16,7 @@ import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.PathPoint;
+import com.revrobotics.CANSparkMax.IdleMode;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout.OriginPosition;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
@@ -409,6 +410,13 @@ public class Drive extends SubsystemBase {
 
   public double getRoll() {
     return m_gyro.getRoll();
+  }
+
+  public void setIdleMode(IdleMode mode){
+    m_frontLeft.setIdleMode(mode);
+    m_frontRight.setIdleMode(mode);
+    m_rearLeft.setIdleMode(mode);
+    m_rearRight.setIdleMode(mode);
   }
 
   @Override
