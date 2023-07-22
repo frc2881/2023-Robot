@@ -437,6 +437,8 @@ public class Drive extends SubsystemBase {
   private void updateTelemetry() {
     Pose2d pose = getPose();
     SmartDashboard.putNumberArray("Drive/Pose",  new double[] { pose.getX(), pose.getY(), pose.getRotation().getDegrees() });
+    SmartDashboard.putNumber("Drive/Pose/Rotation", pose.getRotation().getDegrees());
+
   }
 
   public void logDrive() {

@@ -343,7 +343,7 @@ public class Constants {
 
     // TODO: calibration of node poses below for each field is required for practice and competition
 
-    private static final double kGridNodePoseXPosition = 1.7;
+    private static final double kGridNodePoseXPosition = 2.058;
     private static final Rotation2d kGridNodeRotation = Rotation2d.fromDegrees(180);
 
     public static final List<Node> kNodesRedAlliance = new ArrayList<Node>(){{
@@ -363,7 +363,7 @@ public class Constants {
       add( new Node(new Pose2d(kGridNodePoseXPosition, 1.090, kGridNodeRotation), NodeType.CUBE, 2) );
       add( new Node(new Pose2d(kGridNodePoseXPosition, 1.618, kGridNodeRotation), NodeType.CONE, 3) );
       add( new Node(new Pose2d(kGridNodePoseXPosition, 2.187, kGridNodeRotation), NodeType.CONE, 4) );
-      add( new Node(new Pose2d(kGridNodePoseXPosition, 2.813, kGridNodeRotation), NodeType.CUBE, 5) );
+      add( new Node(new Pose2d(kGridNodePoseXPosition, 2.840, kGridNodeRotation), NodeType.CUBE, 5) );
       add( new Node(new Pose2d(kGridNodePoseXPosition, 3.358, kGridNodeRotation), NodeType.CONE, 6) );
       add( new Node(new Pose2d(kGridNodePoseXPosition, 3.854, kGridNodeRotation), NodeType.CONE, 7) );
       add( new Node(new Pose2d(kGridNodePoseXPosition, 4.431, kGridNodeRotation), NodeType.CUBE, 8) );
