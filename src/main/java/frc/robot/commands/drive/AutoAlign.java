@@ -68,7 +68,7 @@ public class AutoAlign extends CommandBase {
           pidMaxSpeed);
     
     ;
-
+ // INVERT - GOING THE WRONG WAY
     SmartDashboard.putNumberArray("Drive/Velocities", new double[] {yVel, rotationVel});
     SmartDashboard.putNumber("Drive/yVel", yVel);
     SmartDashboard.putNumberArray("Drive/Pose/Delta",  new double[] { delta.getX(), delta.getY(), delta.getRotation().getDegrees() });
