@@ -25,13 +25,13 @@ public class AutoAlign extends CommandBase {
   public AutoAlign(Drive drive) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_drive = drive;
-    m_thetaController = new PIDController(0.025, 0, 0.0015);
+    m_thetaController = new PIDController(0.75, 0, 0.0075);
     m_thetaController.enableContinuousInput(-180.0, 180.0);
-    m_thetaController.setTolerance(0.1, 0.5);
+    m_thetaController.setTolerance(0.5);
     m_thetaController.setSetpoint(180.0);
 
     m_yController = new PIDController(0.1, 0, 0);
-    m_yController.setTolerance(0.1, 0.5);
+    m_yController.setTolerance(10.0, 0.5);
     m_yController.setSetpoint(0.0);
 
     m_xController = new PIDController(0.01, 0, 0);
@@ -59,6 +59,7 @@ public class AutoAlign extends CommandBase {
     Transform2d delta = m_nearestNodePose.minus(currentPose);
     
     double rotationVel = m_thetaController.calculate(currentRotation.getDegrees());
+    rotationVel += Math.copySign(0.15, rotationVel); 
 
     double pidMaxSpeed = 0.75;
 
@@ -84,9 +85,9 @@ public class AutoAlign extends CommandBase {
     if(Math.abs(delta.getX()) < 1 && Math.abs(delta.getY()) < 1){
 
       m_drive.setModuleStates(m_drive.convertToModuleStates(
-            0.0,
-            yVel,
-            0.0)); //rotationVel)); 
+            0.0, 0.0,
+            //yVel,
+            rotationVel)); ; 
 
     }
 
