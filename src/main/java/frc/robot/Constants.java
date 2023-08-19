@@ -318,14 +318,14 @@ public class Constants {
     public static final Transform3d kFrontRobotToCamera =
       new Transform3d(
         new Translation3d(-0.16390, 0.18440, 1.19055),
-        new Rotation3d(0, Units.degreesToRadians(20), Units.degreesToRadians(0))); 
+        new Rotation3d(0, Units.degreesToRadians(35), Units.degreesToRadians(0))); 
 
     public static final String kBackCameraName = "BACK";
     public static final Transform3d kBackRobotToCamera =
       new Transform3d(
     
         new Translation3d(-0.18290, 0.18298, 1.19055),
-        new Rotation3d(0, Units.degreesToRadians(20), Units.degreesToRadians(180))); 
+        new Rotation3d(0, Units.degreesToRadians(35), Units.degreesToRadians(180))); 
 
     public static AprilTagFieldLayout kAprilTagFieldLayout = null;
     static {
@@ -343,7 +343,7 @@ public class Constants {
 
     // TODO: calibration of node poses below for each field is required for practice and competition
 
-    private static final double kGridNodePoseXPosition = 2.058;
+    private static final double kGridNodePoseXPosition = 1.799;
     private static final Rotation2d kGridNodeRotation = Rotation2d.fromDegrees(180);
 
     public static final List<Node> kNodesRedAlliance = new ArrayList<Node>(){{
@@ -363,7 +363,7 @@ public class Constants {
       add( new Node(new Pose2d(kGridNodePoseXPosition, 1.090, kGridNodeRotation), NodeType.CUBE, 2) );
       add( new Node(new Pose2d(kGridNodePoseXPosition, 1.618, kGridNodeRotation), NodeType.CONE, 3) );
       add( new Node(new Pose2d(kGridNodePoseXPosition, 2.187, kGridNodeRotation), NodeType.CONE, 4) );
-      add( new Node(new Pose2d(kGridNodePoseXPosition, 2.840, kGridNodeRotation), NodeType.CUBE, 5) );
+      add( new Node(new Pose2d(kGridNodePoseXPosition, 2.800, kGridNodeRotation), NodeType.CUBE, 5) );
       add( new Node(new Pose2d(kGridNodePoseXPosition, 3.358, kGridNodeRotation), NodeType.CONE, 6) );
       add( new Node(new Pose2d(kGridNodePoseXPosition, 3.854, kGridNodeRotation), NodeType.CONE, 7) );
       add( new Node(new Pose2d(kGridNodePoseXPosition, 4.431, kGridNodeRotation), NodeType.CUBE, 8) );

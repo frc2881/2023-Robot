@@ -25,16 +25,18 @@ public class AutoAlign extends CommandBase {
   public AutoAlign(Drive drive) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_drive = drive;
-    m_thetaController = new PIDController(0.75, 0, 0.0075);
+    m_thetaController = new PIDController(0.100, 0, 0.01);
     m_thetaController.enableContinuousInput(-180.0, 180.0);
     m_thetaController.setTolerance(0.5);
     m_thetaController.setSetpoint(180.0);
 
-    m_yController = new PIDController(0.1, 0, 0);
-    m_yController.setTolerance(10.0, 0.5);
+    m_yController = new PIDController(0.3, 0, 0.03);
+    m_yController.setTolerance(0.01);
     m_yController.setSetpoint(0.0);
 
-    m_xController = new PIDController(0.01, 0, 0);
+    m_xController = new PIDController(0.3, 0, .03);
+    m_xController.setTolerance(0.01);
+    m_xController.setSetpoint(0.0);
 
     addRequirements(m_drive);
     
@@ -67,6 +69,11 @@ public class AutoAlign extends CommandBase {
           m_yController.calculate((delta.getY() * 10)), 
           -pidMaxSpeed, 
           pidMaxSpeed);
+
+    double xVel = MathUtil.clamp(
+          m_xController.calculate((delta.getX() * 10)), 
+          -pidMaxSpeed, 
+          pidMaxSpeed);
     
     ;
  // INVERT - GOING THE WRONG WAY
@@ -82,11 +89,15 @@ public class AutoAlign extends CommandBase {
       yVel = 0.0;
     }
 
+    if(m_xController.atSetpoint()){
+      xVel = 0.0;
+    }
+
     if(Math.abs(delta.getX()) < 1 && Math.abs(delta.getY()) < 1){
 
       m_drive.setModuleStates(m_drive.convertToModuleStates(
-            0.0, 0.0,
-            //yVel,
+            -xVel,
+            -yVel, 
             rotationVel)); ; 
 
     }
