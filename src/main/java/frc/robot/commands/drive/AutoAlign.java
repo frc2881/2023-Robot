@@ -46,6 +46,7 @@ public class AutoAlign extends CommandBase {
   @Override
   public void initialize() {
     m_nearestNodePose = m_drive.getNearestNode().pose;
+    m_drive.setIsAutoAlignStarted(true);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -89,11 +90,19 @@ public class AutoAlign extends CommandBase {
           -xVel,
           -yVel, 
           rotationVel));
+
+    if (rotationVel <= 0.1 && xVel <= 0.1 && yVel <= 0.1) {
+      m_drive.setIsAutoAlignCompleted(true);
+    } else {
+      m_drive.setIsAutoAlignCompleted(false);
+    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    m_drive.setIsAutoAlignStarted(false);
+  }
 
   // Returns true when the command should end.
   @Override

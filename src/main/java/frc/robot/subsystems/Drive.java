@@ -87,6 +87,8 @@ public class Drive extends SubsystemBase {
   private SwerveDriveSpeedMode m_swerveDriveSpeedMode = SwerveDriveSpeedMode.NORMAL;
 
   private boolean m_isXConfiguration = false;
+  private boolean m_isAutoAlignStarted = false; 
+  private boolean m_isAutoAlignCompleted = false; 
 
   public PhotonCameraWrapper m_frontPhotonCamera;
   public PhotonCameraWrapper m_backPhotonCamera;
@@ -446,4 +448,21 @@ public class Drive extends SubsystemBase {
     m_logYaw.append(m_gyro.getYaw());
     m_logPitch.append(m_gyro.getPitch());
   }
+
+  public boolean isAutoAlignStarted() {
+    return m_isAutoAlignStarted; 
+  }
+
+  public void setIsAutoAlignStarted(boolean isAutoAlignStarted) {
+    m_isAutoAlignStarted = isAutoAlignStarted; 
+  }
+
+  public boolean isAutoAlignCompleted() {
+    return m_isAutoAlignCompleted; 
+  }
+
+  public void setIsAutoAlignCompleted(boolean isAutoAlignCompleted) {
+    m_isAutoAlignCompleted = isAutoAlignCompleted; 
+  }
+  
 }

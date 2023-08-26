@@ -44,8 +44,8 @@ import frc.robot.commands.auto.ScoreCube;
 import frc.robot.commands.auto.ScoreCubeMoveToBalance;
 import frc.robot.commands.auto.ScoreCubeWaitMove;
 import frc.robot.commands.auto.TestAuto;
+import frc.robot.commands.controllers.RumbleController;
 import frc.robot.commands.controllers.RumbleControllers;
-import frc.robot.commands.controllers.RumbleControllers.RumblePattern;
 import frc.robot.commands.drive.AutoAlign;
 import frc.robot.commands.drive.DrivePrecision;
 import frc.robot.commands.drive.DriveWithJoysticks;
@@ -196,10 +196,16 @@ public class RobotContainer {
     // RUMBLES ============================================
 
     new Trigger(() -> (RobotState.isTeleop() && (m_suction.isVacuumEnabledForCone() || m_suction.isVacuumEnabledForCube())))
-      .onTrue(new RumbleControllers(m_driverController, m_manipulatorController, RumblePattern.GOOD));
+      .onTrue(new RumbleControllers(m_driverController, m_manipulatorController, RumbleControllers.RumblePattern.GOOD));
 
     new Trigger(() -> (RobotState.isTeleop() && m_suction.isVacuumDisabled()))
-      .onTrue(new RumbleControllers(m_driverController, m_manipulatorController, RumblePattern.BAD));
+      .onTrue(new RumbleControllers(m_driverController, m_manipulatorController, RumbleControllers.RumblePattern.BAD));
+
+    new Trigger(() -> (RobotState.isTeleop() && m_drive.isAutoAlignCompleted()))
+      .onTrue(new RumbleController(m_driverController, RumbleController.RumblePattern.GOOD));
+
+    new Trigger(() -> (RobotState.isTeleop() && m_drive.isAutoAlignStarted()))
+      .onTrue(new RumbleController(m_manipulatorController, RumbleController.RumblePattern.GOOD));
   }
 
   public void setupAuto() {
