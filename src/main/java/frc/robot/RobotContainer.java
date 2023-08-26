@@ -46,6 +46,7 @@ import frc.robot.commands.auto.ScoreCubeWaitMove;
 import frc.robot.commands.auto.TestAuto;
 import frc.robot.commands.controllers.RumbleControllers;
 import frc.robot.commands.controllers.RumbleControllers.RumblePattern;
+import frc.robot.commands.drive.AutoAlign;
 import frc.robot.commands.drive.DrivePrecision;
 import frc.robot.commands.drive.DriveWithJoysticks;
 import frc.robot.commands.drive.ResetSwerve;
@@ -112,8 +113,8 @@ public class RobotContainer {
     new Trigger(m_driverController::getStartButton)
       .onTrue(new ResetSwerve(m_drive));
 
-    // new Trigger(m_driverController::getAButton)
-    //   .onTrue(new AlignToNearestNode(m_drive, m_drive::getTrajectoryForNearestNode));
+    new Trigger(m_driverController::getAButton)
+      .whileTrue(new AutoAlign(m_drive));
 
     new Trigger(m_driverController::getBButton)
       .whileTrue(new AutoBalance(m_drive, false));

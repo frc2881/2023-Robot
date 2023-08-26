@@ -19,6 +19,7 @@ import com.pathplanner.lib.PathPoint;
 import com.revrobotics.CANSparkMax.IdleMode;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout.OriginPosition;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -35,14 +36,13 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
 import frc.robot.Constants;
 import frc.robot.lib.NavX;
 import frc.robot.lib.Node;
+import frc.robot.lib.Node.NodeType;
 import frc.robot.lib.PhotonCameraWrapper;
 import frc.robot.lib.SwerveModule;
 import frc.robot.lib.Utils;
-import frc.robot.lib.Node.NodeType;
 
 public class Drive extends SubsystemBase {
 
@@ -116,6 +116,8 @@ public class Drive extends SubsystemBase {
     m_logRoll = new DoubleLogEntry(log, "/Drive/Roll");
     m_logYaw = new DoubleLogEntry(log, "/Drive/Yaw");
     m_logPitch = new DoubleLogEntry(log, "/Drive/Pitch");
+
+    
   }
 
   @Override
@@ -189,7 +191,6 @@ public class Drive extends SubsystemBase {
         Pose2d estimatedPose = estimatedRobotPose.estimatedPose.toPose2d();
         if (Utils.isPoseInBounds(estimatedPose, Constants.Vision.kFieldMinPose, Constants.Vision.kFieldMaxPose)) {
           m_poseEstimator.addVisionMeasurement(estimatedPose, estimatedRobotPose.timestampSeconds);
-          SmartDashboard.putString("This is the camera that was last used", photonCamera.getCameraName());
           return true;
         } 
       }
@@ -436,6 +437,8 @@ public class Drive extends SubsystemBase {
   private void updateTelemetry() {
     Pose2d pose = getPose();
     SmartDashboard.putNumberArray("Drive/Pose",  new double[] { pose.getX(), pose.getY(), pose.getRotation().getDegrees() });
+    SmartDashboard.putNumber("Drive/Pose/Rotation", pose.getRotation().getDegrees());
+
   }
 
   public void logDrive() {

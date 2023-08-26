@@ -51,7 +51,7 @@ public class AutoBalance2 extends CommandBase {
     m_drive.setModuleStates(
       m_drive.convertToModuleStates(
         MathUtil.clamp(
-            (m_reversed?-1:1)*pidController.calculate(m_drive.getRoll(), 0.0), 
+            (m_reversed ? -1 : 1) * pidController.calculate(m_drive.getRoll(), 0.0), 
             -pidMaxSpeed, 
             pidMaxSpeed), 
         0.0, 
