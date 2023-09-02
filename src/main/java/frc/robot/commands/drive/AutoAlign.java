@@ -31,7 +31,7 @@ public class AutoAlign extends CommandBase {
     m_thetaController.setTolerance(0.5);
     m_thetaController.setSetpoint(180.0);
 
-    m_yController = new PIDController(0.3, 0, 0.03);
+    m_yController = new PIDController(0.6, 0, 0.06);
     m_yController.setTolerance(0.25);
     m_yController.setSetpoint(0.0);
 
