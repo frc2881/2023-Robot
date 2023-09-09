@@ -5,8 +5,12 @@
 
 package frc.robot.commands.arm;
 
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Constants;
+import frc.robot.commands.controllers.RumbleController;
+import frc.robot.commands.controllers.RumbleController.RumblePattern;
 import frc.robot.subsystems.ArmExtension;
 import frc.robot.subsystems.ArmTilt;
 
@@ -14,12 +18,13 @@ public class ResetArm extends SequentialCommandGroup {
   
   public ResetArm(ArmExtension armExtension, ArmTilt armTilt, Double speed) {
     addCommands(
-      new TiltArmToHeight(armTilt, speed, 14.0, false)
-        .withTimeout(1.0),
-      new ExtendArmToLength(armExtension, speed, Constants.Arm.kExtendReverseLimit)
-        .withTimeout(2.5), 
-      new TiltArmToHeight(armTilt, speed, Constants.Arm.kTiltReverseLimit, false)
-        .withTimeout(2.5)
+      new ParallelCommandGroup(
+        new ExtendArmToLength(armExtension, speed, Constants.Arm.kExtendReverseLimit).withTimeout(Constants.Arm.kExtensionTimeOut),
+        new SequentialCommandGroup(
+          new WaitUntilCommand(() -> armExtension.getEncoderPosition() <= 15),
+          new TiltArmToHeight(armTilt, speed, Constants.Arm.kTiltReverseLimit, false)
+            .withTimeout(Constants.Arm.kTiltTimeOut))
+        )
     );
   }
 }

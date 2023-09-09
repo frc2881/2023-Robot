@@ -10,7 +10,7 @@ import com.pathplanner.lib.PathPlannerTrajectory;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
-import frc.robot.commands.arm.ResetArm;
+import frc.robot.commands.arm.ResetArmAuto;
 import frc.robot.commands.drive.FollowTrajectory;
 import frc.robot.commands.drive.ZeroHeadingToAng;
 import frc.robot.subsystems.ArmExtension;
@@ -29,7 +29,7 @@ public class ScoreConeWaitMove extends SequentialCommandGroup {
     addCommands(
       new ZeroHeadingToAng(drive, 180),
       new ScoreCone(suction, armExtension, armTilt),
-      new ResetArm(armExtension, armTilt, 1.0),
+      new ResetArmAuto(armExtension, armTilt, 1.0),
       new WaitUntilCommand(() -> DriverStation.getMatchTime() < 6),
       new FollowTrajectory(trajectory, true, drive)
     );

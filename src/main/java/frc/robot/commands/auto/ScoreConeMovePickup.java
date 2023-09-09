@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.Constants;
-import frc.robot.commands.arm.ResetArm;
+import frc.robot.commands.arm.ResetArmAuto;
 import frc.robot.commands.arm.TiltArmToHeight;
 import frc.robot.commands.arm.MoveTo.MoveToPickupFloor;
 import frc.robot.commands.drive.FollowTrajectory;
@@ -45,7 +45,7 @@ public class ScoreConeMovePickup extends SequentialCommandGroup {
       new ZeroHeadingToAng(drive, 180),
       new ScoreCone(suction, armExtension, armTilt),
       new ParallelCommandGroup(
-        new ResetArm(armExtension, armTilt, 1.0),
+        new ResetArmAuto(armExtension, armTilt, 1.0),
         new FollowTrajectory(moveTrajectory, true, drive)),
       new MoveToPickupFloor(armTilt, armExtension, suction),
       new ParallelRaceGroup(

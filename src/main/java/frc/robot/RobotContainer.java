@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.arm.ArmExtendOverride;
 import frc.robot.commands.arm.ArmTiltOverride;
 import frc.robot.commands.arm.ExtendArm;
+import frc.robot.commands.arm.ResetArm;
 import frc.robot.commands.arm.TiltArm;
 import frc.robot.commands.arm.MoveTo.MoveToLow;
 import frc.robot.commands.arm.MoveTo.MoveToPickupSubstation;
@@ -46,6 +47,7 @@ import frc.robot.commands.auto.ScoreCubeWaitMove;
 import frc.robot.commands.auto.TestAuto;
 import frc.robot.commands.controllers.RumbleController;
 import frc.robot.commands.controllers.RumbleControllers;
+import frc.robot.commands.controllers.RumbleController.RumblePattern;
 import frc.robot.commands.drive.AutoAlign;
 import frc.robot.commands.drive.DrivePrecision;
 import frc.robot.commands.drive.DriveWithJoysticks;
@@ -136,7 +138,8 @@ public class RobotContainer {
       .onTrue(new InstantCommand(() -> {m_lights.setPattern(Pattern.Heart, PanelLocation.Both);}));
 
     new Trigger(m_manipulatorController::getBButton)
-      .onTrue(new InstantCommand(() -> {m_lights.setPattern(Pattern.None, PanelLocation.Both);}));
+      .onTrue(new RumbleController(m_driverController, RumblePattern.GOOD))
+      .whileTrue(new ResetArm(m_armExtension, m_armTilt, 1.0));
 
     new Trigger(m_manipulatorController::getLeftBumper)
       .onTrue(new InstantCommand(() -> {m_lights.setPattern(Pattern.Cube, PanelLocation.Both);}));

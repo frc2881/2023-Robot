@@ -6,6 +6,10 @@
 package frc.robot.commands.arm.MoveTo;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import frc.robot.commands.arm.TiltArmToHeight;
 import frc.robot.commands.suction.EnableSuction;
 import frc.robot.subsystems.ArmExtension;
@@ -22,8 +26,12 @@ public class MoveToPickupSubstation extends ParallelCommandGroup {
   ) {
     addCommands(
       new EnableSuction(suction),
-      new TiltArmToHeight(armTilt, speed, 12.6, true)
-      
+      new SequentialCommandGroup(
+        new ParallelRaceGroup(
+          new TiltArmToHeight(armTilt, speed, 12.6, true),
+          new WaitUntilCommand(() -> suction.isVacuumEnabled())),
+        new TiltArmToHeight(armTilt, speed, 13.5, true)
+      ).withTimeout(10.0)
     );
   }
 }

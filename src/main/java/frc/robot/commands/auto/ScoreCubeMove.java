@@ -9,7 +9,7 @@ import com.pathplanner.lib.PathPlannerTrajectory;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.commands.arm.ResetArm;
+import frc.robot.commands.arm.ResetArmAuto;
 import frc.robot.commands.drive.FollowTrajectory;
 import frc.robot.commands.drive.ZeroHeadingToAng;
 import frc.robot.subsystems.ArmExtension;
@@ -29,7 +29,7 @@ public class ScoreCubeMove extends SequentialCommandGroup {
       new ZeroHeadingToAng(drive, 180),
       new ScoreCube(suction, armExtension, armTilt),
       new ParallelCommandGroup(
-        new ResetArm(armExtension, armTilt, 1.0),
+        new ResetArmAuto(armExtension, armTilt, 1.0),
         new FollowTrajectory(trajectory, true, drive)
       )
     );

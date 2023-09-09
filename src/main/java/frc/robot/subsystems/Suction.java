@@ -252,6 +252,10 @@ public class Suction extends SubsystemBase {
       m_currentPressureRight <= Constants.Suction.kMinimumPressure;
   }
 
+  public boolean isVacuumEnabled() {
+    return  isVacuumEnabledForCone() || isVacuumEnabledForCube();
+  }
+
   public boolean isVacuumDisabled() {
     return 
       m_currentPressureBottom > Constants.Suction.kMinimumPressure && 
