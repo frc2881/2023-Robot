@@ -128,7 +128,7 @@ public class Drive extends SubsystemBase {
     if(m_alliance != alliance){
       m_alliance = alliance;
       updateNodes();
-      updatePhotonCameras();
+      //updatePhotonCameras();
     }
     updatePose();
     updateTelemetry();
@@ -179,10 +179,10 @@ public class Drive extends SubsystemBase {
     });
     if (RobotState.isAutonomous() && RobotState.isEnabled()) { return; }
 
-    boolean isBackCameraPriority = Math.abs(m_gyro.getRotation2d().getDegrees()) <= 90;
-   if (!updateVisionMeasurement(isBackCameraPriority ? m_backPhotonCamera : m_frontPhotonCamera)) {
-      updateVisionMeasurement(isBackCameraPriority ? m_frontPhotonCamera : m_backPhotonCamera);
-   }  
+  //   boolean isBackCameraPriority = Math.abs(m_gyro.getRotation2d().getDegrees()) <= 90;
+  //  if (!updateVisionMeasurement(isBackCameraPriority ? m_backPhotonCamera : m_frontPhotonCamera)) {
+  //     updateVisionMeasurement(isBackCameraPriority ? m_frontPhotonCamera : m_backPhotonCamera);
+  //  }  
   }
 
   private boolean updateVisionMeasurement(PhotonCameraWrapper photonCamera) {
